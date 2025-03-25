@@ -17,11 +17,4 @@ Thumbs.db
 .vscode/
 
 # 缓存文件
-/data/cache/
-/data/sessions*/
-/data/tplcache/
-/data/backupdata/
-/data/uploadtmp/
-/data/textdata/
-/data/sessions/
-/data/ziptmp/
+/data/
