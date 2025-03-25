@@ -1,0 +1,772 @@
+/* 全局样式 */
+body {
+    background: #f7f8fa;
+    margin: 0;
+    padding: 0;
+    font-family: "PT Sans", Helvetica, Arial, sans-serif;
+}
+
+@font-face {
+    font-family: 'PT Mono';
+    src: url('../fonts/PTMono-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'AlimamaFangYuanTiVF';
+    src: url('../fonts/AlimamaFangYuanTiVF-Thin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'HarmonySans SC';
+    src: url('../fonts/HarmonyOS_Sans_SC_Regular.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+}
+/* 在线链接服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
+@font-face {
+  font-family: 'iconfont';  /* Project id 4858194 */
+  src: 
+       url('//at.alicdn.com/t/c/font_4858194_yq2vd02g5c.woff2?t=1742658262493') format('woff2'),
+       url('//at.alicdn.com/t/c/font_4858194_yq2vd02g5c.woff?t=1742658262493') format('woff'),
+       url('//at.alicdn.com/t/c/font_4858194_yq2vd02g5c.ttf?t=1742658262493') format('truetype');
+}
+
+.iconfont {
+    font-family:"iconfont" !important;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* 页面包装器 */
+.page-wrapper {
+    max-width: 1536px;
+    margin: 0 auto;
+}
+
+/* 导航栏 */
+.navigation {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    height: 100%;
+    -webkit-justify-content: center;
+    justify-content: center;
+    position: fixed;
+    text-align: right;
+    z-index: 3;
+}
+
+.home-active .home {
+    color: #ae812b;
+}
+
+a.active,
+h6.active {
+    color: #ae812b;
+}
+
+.navigation a {
+    margin-bottom: 36px;
+}
+
+/* 头部区域 */
+.header {
+    display: flex;
+    padding: 2vw 0;
+    margin-left: 384px;
+    width: 1152px;
+    z-index: 3;
+    margin-bottom: 32px;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.header-text-wrapper {
+    padding: 0;
+    width: 44.4444%;
+    z-index: 4;
+    box-sizing: border-box;
+    max-width: 44.4444% !important;
+}
+
+.header-text {
+    color: rgba(33, 36, 44, 0.64);
+    font-size: 56px;
+    line-height: 1.15;
+    padding: 0 16px;
+    width: 100%;
+    z-index: 4;
+    margin-bottom: 16px;
+    max-width: 100% !important;
+    box-sizing: border-box;
+    font-family: "PT Sans", Helvetica, Arial, sans-serif;
+}
+
+.highlighter strong {
+    color: rgb(33, 36, 44);
+}
+
+.navigation a:hover {
+    text-decoration: underline;
+}
+
+.header-image-wrapper {
+    padding: 0 16px;
+    margin-left: -128px;
+    width: 44.4444%;
+    box-sizing: border-box;
+    overflow: hidden;
+    z-index: 2;
+}
+
+/* 文本选中样式 */
+::selection {
+    background: #54ff9670;
+    /* 使用主题色 #ae812b 的半透明版本 */
+}
+
+::-moz-selection {
+    background: #54ff9670;
+    /* Firefox 浏览器兼容 */
+}
+
+.header-image {
+    border-radius: 8px;
+    height: 550px;
+    box-sizing: border-box;
+}
+
+.main-image {
+    width: 100%;
+    object-fit: cover;
+}
+
+.sparkle {
+    position: relative;
+    right: -384px;
+    top: -150px;
+    width: 150px;
+    vertical-align: baseline;
+    box-sizing: border-box;
+}
+
+/* 项目区域 */
+.projects-wrapper {
+    background: #c4d1c4;
+    position: absolute;
+    left: 0;
+    right: 0;
+    padding: 90px 0;
+    margin-top: -115px;
+    z-index: 1;
+}
+
+.projects-container {
+    max-width: 1536px;
+    margin: 0 auto;
+}
+
+.projects {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.projects,
+.projects-wrapper {
+    display: flex;
+}
+
+.col-1,
+.col-2,
+.col-3,
+.col-4,
+.col-5,
+.col-6,
+.col-7,
+.col-8,
+.col-9,
+.col-10,
+.col-11,
+.column {
+    padding: 0 16px;
+    box-sizing: border-box;
+}
+
+li,
+p {
+    font-size: 18px;
+    line-height: 1.3;
+}
+
+ol,
+ul {
+    list-style: none;
+}
+
+.offset-1 {
+    margin-left: 128px;
+}
+
+.offset-3 {
+    margin-left: 384px;
+}
+
+.offset-4 {
+    margin-left: 512px;
+}
+
+.project-header {
+    max-width: 100%;
+    max-height: 500px;
+}
+
+.project-title {
+    margin-top: 30px;
+    margin-bottom: 8px;
+}
+
+.project .project-link.fixed {
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    display: -webkit-flex;
+    display: flex;
+}
+
+h1 strong,
+h2 strong,
+h3 strong,
+h4 strong,
+h5 strong,
+h6 strong {
+    font-weight: 700;
+}
+
+.image {
+    border-radius: 8px;
+}
+
+/* 列布局 */
+.col-1 {
+    width: 128px;
+}
+
+.col-2 {
+    width: 256px;
+}
+
+.col-3 {
+    width: 384px;
+}
+
+.col-4 {
+    width: 512px;
+}
+
+.col-7 {
+    width: 896px;
+}
+
+.col-8 {
+    width: 1024px;
+}
+
+.col-10 {
+    width: 1280px;
+}
+
+.offset-2 {
+    margin-left: 256px;
+}
+
+.nested {
+    padding: 0;
+}
+
+.offset-neg-1 {
+    margin-left: -128px;
+}
+
+.next-shelf .shelf-project-link {
+    -webkit-align-items: center;
+    align-items: center;
+    display: -webkit-flex;
+    display: flex;
+}
+
+.next-shelf .shelf-project-link:hover h2 {
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: #ae812b;
+}
+
+h3 {
+    color: #ae812b;
+    font-family: PT Mono, sans-serif, monospace;
+    font-size: 26px;
+}
+
+.Content-Type h3 {
+    font-family: 'AlimamaFangYuanTiVF';
+    font-variation-settings: 'wght' 600, 'ROND' 0;
+}
+
+.Content-Type p {
+    font-family: 'AlimamaFangYuanTiVF';
+    font-variation-settings: 'wght' 380, 'ROND' 0;
+    color: rgba(33, 36, 44, .84);
+    line-height: 1.5em;
+    margin: 20px 0;
+}
+
+.image-caption {
+    text-align: center;
+    font-style: italic;
+    color: #00000078;
+    font-size: 17px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    font-family: 'AlimamaFangYuanTiVF';
+    font-variation-settings: 'wght' 380, 'ROND' 0;
+}
+
+h4 {
+    text-align: center;
+    margin-top: -10px !important;
+    font-size: 17px;
+    font-family: HarmonySans SC;
+    color: #00000085;
+    font-weight: initial !important;
+    font-style: italic;
+}
+
+.design {
+    z-index: 2;
+    position: relative;
+}
+
+.design img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.Content-Type img {
+    margin: 3px 0;
+    border-radius: 10px;
+    height: auto !important;
+    max-width: 100%;
+    width: 100%;
+    cursor: pointer; /* 添加指针样式提示可点击 */
+    transition: transform 0.3s ease; /* 添加过渡效果 */
+}
+
+.col-4 {
+    width: 512px;
+}
+
+.col-4.text-right {
+    text-align: right;
+}
+
+.next-shelf .right-text {
+    text-align: right;
+}
+
+#project-2 {
+    flex-direction: column;
+    margin-top: 72px;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: -4px;
+}
+
+#project-3 {
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    margin-top: -32px;
+}
+
+#project-4 {
+    display: -webkit-flex;
+    display: flex;
+    margin-top: 200px;
+    flex-direction: row-reverse;
+}
+
+#project-5 {
+    margin-top: 32px;
+}
+
+#project-6 {
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    margin-top: 72px;
+}
+
+.project-number {
+    text-align: right;
+}
+
+#project-6 .project-number {
+    margin-bottom: 16px;
+}
+
+#project-2 .project-number {
+    text-align: left;
+    margin-bottom: 16px;
+}
+
+#project-3 .project-number {
+    text-align: left;
+    margin-bottom: 16px;
+}
+
+#project-4 .project-link {
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-flex-direction: row-reverse;
+    flex-direction: row-reverse;
+}
+
+#project-4 .project-number {
+    text-align: left;
+    padding-bottom: 15px;
+}
+
+.project .project-link {
+    position: relative;
+}
+
+/* 项目缩略图 */
+#project-1 .project-thumb {
+    max-height: 300px;
+    min-height: 200px;
+}
+
+#project-2 .project-thumb {
+    max-height: 350px;
+    min-height: 200px;
+}
+
+#project-3 .project-thumb {
+    max-height: 300px;
+    min-height: 200px;
+}
+
+#project-4 .project-thumb {
+    max-height: 500px;
+    min-height: 300px;
+}
+
+#project-5 .project-thumb {
+    max-height: 300px;
+    min-height: 200px;
+}
+
+#project-6 .project-thumb {
+    max-height: 300px;
+    min-height: 200px;
+}
+
+.project-thumb.small {
+    width: 352px;
+}
+
+.project-thumb.smaller {
+    width: 224px;
+}
+
+.project .project-thumb {
+    background: #fff;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.project-thumb-fixed .project-thumb {
+    height: 210px;
+    object-fit: cover;
+}
+
+a, abbr, acronym, address, applet, article, aside, audio, b, big, blockquote, body, canvas, caption, center, cite, code, dd, del, details, dfn, div, dl, dt, em, embed, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, html, i, iframe, img, ins, kbd, label, legend, li, mark, menu, nav, object, ol, output, p, pre, q, ruby, s, samp, section, small, span, strike, strong, sub, summary, sup, table, tbody, td, tfoot, th, thead, time, tr, tt, u, ul, var, video {
+    margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: normal;
+}
+
+h1 a strong,
+h1 strong {
+    color: #21242c;
+}
+
+h1,
+h1 a {
+    color: #21242c;
+    font-family: PT Sans, Helvetica, Arial, sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.15;
+}
+
+a,
+h6 {
+    display: block;
+    font-family: PT Mono, HarmonySans SC;
+    font-size: 17px;
+    margin-bottom: 8px;
+    text-decoration: none;
+}
+
+a,
+h6,
+li,
+p {
+    color: #21242c;
+}
+
+a.active,
+h6.active {
+    color: #ae812b;
+}
+
+.project-description {
+    color: rgba(33, 36, 44, .64);
+    font-weight: 300;
+}
+
+.next-shelf {
+    -webkit-align-items: center;
+    align-items: center;
+    display: -webkit-flex;
+    display: flex;
+    margin-top: 90px;
+}
+
+h2 {
+    color: #21242c;
+    font-family: PT Sans, Helvetica, Arial, sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 8px;
+}
+
+.project .project-link:hover h2 {
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: #ae812b;
+}
+
+/* 段落样式 */
+p {
+    font-size: 18px;
+    line-height: 1.5em;
+    color: rgba(33, 36, 44, 0.64);
+    font-family: "PT Sans", Helvetica, Arial, sans-serif;
+}
+
+/* 特定项目布局样式 */
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.project-col-custom {
+    padding: 0px 16px;
+    width: 256px;
+    box-sizing: border-box;
+}
+
+/* 背景图片样式 */
+.bg-image {
+    background-image: url('../images/home-head.jpg');
+}
+
+.project {
+    box-sizing: border-box;
+    display: -webkit-flex;
+    display: flex;
+}
+
+.pagelist {
+    display: flex;
+    justify-content: center;
+}
+
+.pagelist li {
+    margin: 0 10px;
+}
+
+.pageinfo {
+    display: block;
+    font-family: PT Mono, HarmonySans SC;
+    font-size: 17px;
+    margin-bottom: 8px;
+    text-decoration: none;
+    color: #21242c5c;
+}
+
+.artheader  {
+    padding: 2vw 0px;
+    margin-bottom: 48px;
+}
+
+.about-header {
+    padding: 2vw 0px;
+    margin-bottom: 48px;
+}
+
+.pagelist .thisclass a {
+    color: #ae812b;
+}
+
+.pagelist a:hover {
+    color: #fff;
+}
+
+.project-area img {
+    z-index: 2;
+    position: relative;
+}
+
+.project-area .projects-wrapper {
+    padding-top: 150px;
+}
+
+.project-area .projects {
+    display: block;
+}
+
+.project-area h1 {
+    color: #21242c;
+    padding-bottom: 20px;
+    font-weight: 700;
+}
+
+.project-area h2 {
+    padding-bottom: 20px;
+    color: #21242cb0;
+}
+
+.project-area h3 {
+    padding-bottom: 20px;
+    font-weight: 800;
+}
+
+.project-area p {
+    padding-bottom: 20px;
+    font-family: 'AlimamaFangYuanTiVF';
+    font-variation-settings: 'wght' 450, 'ROND' 0;
+}
+
+p strong {
+    color: #ae812b;
+    padding: 2px 2px;
+    margin: 0 2px;
+    font-weight: normal;
+}
+
+h3 strong {
+    background-color: #f7ff6373;
+}
+
+.Content-Type h3 strong {
+    font-weight: normal!important;
+}
+
+.project-area h6, .content-icon h6, .tagtheader h6 {
+    font-size: 50px;
+    position: absolute;
+    margin-left: -80px;
+}
+
+.project-area a {
+    color: #ae812b;
+    font-size: 22px;
+    display: contents;
+}
+
+.project-area a:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: #ae812b;
+}
+
+/* 标签列表样式 */
+.tags {
+    margin-bottom: 50px;
+    padding-top: 8px;
+}
+
+.tags ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tags li a {
+    padding: 6px 12px;
+    background: #0000000d;
+    border-radius: 4px;
+    color: #666;
+    font-family: 'PT Mono', sans-serif;
+    font-size: 14px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    margin-bottom: 0!important;
+}
+
+.tags li a:hover {
+    background: #e0e0e0;
+    color: #ae812b;
+}
+
+.tagtheader {
+    padding-top: 50px;
+}
+.tagtheader .tags {
+    margin-bottom: 0px !important;
+}
+
+.tagtheader h3 {
+    padding: 10px 0;
+}
+
+.tagtheader ul {
+    padding: 10px 0;
+}
+
+.translation {
+    color: #8b807e;
+    font-size: 0.9em;
+    font-weight: revert;
+    font-family: 'PT Mono', sans-serif;
+}
+
+.tag-list {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

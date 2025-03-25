@@ -1,0 +1,220 @@
+/* 移动端自适应样式 */
+@media screen and (max-width: 768px) {
+    /* 通用布局调整 */
+    .mobile-full {
+        width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+        box-sizing: border-box !important;
+    }
+    
+    .mobile-half {
+        width: 50% !important;
+        float: left !important;
+        box-sizing: border-box !important;
+    }
+    
+    .mobile-no-offset {
+        margin-left: 0 !important;
+    }
+    
+    .about-img {
+        width: 100% !important;
+    }
+
+    .project-area img {
+        max-height: 400px !important;
+    }
+
+    .about-header {
+        padding-top: 55px !important;
+        padding-bottom: 20px !important;
+        margin-bottom: 0 !important;
+    }
+
+    .project-area h6, .content-icon h6, .tagtheader h6 {
+        position: relative;
+        margin-left: 0;
+    }
+
+    .tagtheader .tags {
+        margin-bottom: 0px !important;
+        padding: 20px 0 0 0 !important;
+    }
+
+    .mobile-hidden {
+        display: none !important;
+    }
+    
+    .mobile-reset {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+    }
+    
+    .project-thumb-fixed .project-thumb {
+        width: 100%!important;
+        height: 200px!important;
+    }
+
+    .project-title {
+        margin-top: 0!important;
+    }
+
+    /* 导航菜单 */
+    .mobile-menu-toggle {
+        display: block;
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        width: 30px;
+        height: 25px;
+        cursor: pointer;
+    }
+    
+    .mobile-menu-toggle span {
+        display: block;
+        width: 100%;
+        height: 3px;
+        background-color: #333;
+        margin-bottom: 5px;
+        transition: all 0.3s;
+    }
+    
+    .mobile-nav {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 80% !important;
+        height: 100vh;
+        background-color: #46635fdb;
+        z-index: 999;
+        padding: 60px 20px 20px !important;
+        transition: left 0.3s;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    
+    .home-active .home {
+        color: #ffcd6d;
+    }
+
+    .header {
+        margin-left: 0;
+        width: 100%;
+        padding: 55px 15px;
+    }
+
+    .projects-wrapper {
+        margin-top: -135px !important;
+    }
+
+    .actcontent-header {
+        padding: 55px 0 0 0 !important;
+        margin-bottom: 32px !important;
+    }
+
+    .actcontent-header .project-title {
+        margin-bottom: 15px !important;
+    }
+
+    .header-image {
+        height: 240px !important;
+    }
+
+    .mobile-nav.active {
+        left: 0;
+    }
+    
+    .mobile-nav a {
+        display: block;
+        margin: 15px 0;
+        font-size: 22px;
+        color: #fff;
+    }
+    
+    .mobile-flex-column {
+        flex-direction: column !important;
+        width: 100% !important;
+    }
+    
+    .mobile-unflip {
+        flex-direction: column !important;
+    }
+    
+    /* 图片调整 */
+    .project-thumb, .header-image img {
+        width: 100% !important;
+    }
+
+    .mob-over {
+        padding: 0 !important;
+    }
+
+    #project-1 .project-number,#project-5 .project-number {
+        width: 48px !important;
+    }
+    
+    #project-2, #project-3, #project-4, #project-5, #project-6 {
+        margin-top: 20px !important;
+    }
+
+    #project-4 a {
+        width: 300px !important;
+    }
+    /* 文字大小调整 */
+    h1 {
+        font-size: 32px !important;
+    }
+    
+    h2 {
+        font-size: 20px !important;
+    }
+    
+    h3 {
+        font-size: 24px !important;
+    }
+    
+    h4 {
+        font-size: 14px !important;
+    }
+
+    p {
+        font-size: 16px !important;
+    }
+    
+    /* 页脚调整 */
+    .mobile-footer {
+        width: 100% !important;
+        padding: 15px !important;
+        text-align: center !important;
+    }
+    
+    /* 分页调整 */
+    .pagelist {
+        text-align: center !important;
+    }
+    
+    .pagelist a, .pagelist span {
+        margin: 0 3px !important;
+        padding: 3px 8px !important;
+    }
+
+    .next-shelf .shelf-project-link {
+        display: block;
+    }
+
+    .next-shelf-label {
+        text-align: right;
+    }
+
+    .image-caption {
+        font-size: 14px !important;
+    }
+
+    .tagtheader {
+        padding-bottom: 0 !important;
+    }
+}

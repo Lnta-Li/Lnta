@@ -1,0 +1,20 @@
+<style>
+  .header-image:hover {
+    cursor: url({dede:global.cfg_cursor/}), pointer;
+}
+</style>
+
+<div class="page-wrapper">
+  <div class="mobile-menu-toggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  <nav class="navigation col-2 mobile-nav">
+    <a class="home" href="{dede:global.cfg_indexurl/}">Home</a>
+    {dede:channel type='top' row='10' currentstyle="<a class='active' href='~typelink~'
+      ~rel~><span>~typename~</span></a>"}
+    <a class="" href="[field:typeurl/]">[field:typename/]</a>
+    {/dede:channel}
+  </nav>
+</div>

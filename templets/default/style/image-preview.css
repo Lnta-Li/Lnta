@@ -1,0 +1,209 @@
+/* 图片预览模态框样式 */
+.img-preview-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    overflow: auto;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.img-preview-modal.active {
+    display: flex;
+    opacity: 1;
+    justify-content: center;
+    align-items: center;
+}
+
+.img-preview-content {
+    position: relative;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.img-preview-img {
+    max-height: 80vh;
+    max-width: 90vw;
+    object-fit: contain;
+    border-radius: 4px;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+    clip-path: inset(3px);
+}
+
+.img-preview-modal.active .img-preview-img {
+    transform: scale(1);
+}
+
+.img-preview-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.img-preview-modal.active {
+    display: flex;
+    flex-direction: column;
+    opacity: 1;
+}
+
+.img-preview-img {
+    max-width: 90%;
+    max-height: 80vh;
+    cursor: move;
+    transform-origin: center;
+    transition: transform 0.1s ease;
+}
+
+.img-preview-close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 1001;
+    transition: color 0.2s;
+}
+
+.img-preview-close:hover {
+    color: #ae812b;
+}
+
+.img-preview-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 16px;
+    cursor: pointer;
+    font-size: 18px;
+    z-index: 10000;
+    transition: background-color 0.3s;
+}
+
+.img-preview-nav:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.img-preview-nav.prev {
+    left: 20px;
+}
+
+.img-preview-nav.next {
+    right: 20px;
+}
+
+.img-preview-thumbnails {
+    height: 100px;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 4px;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    width: 100%;
+    position: relative;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.img-preview-thumbnails:active {
+    cursor: grabbing;
+}
+
+.img-preview-thumbnails-wrapper {
+    display: flex;
+    gap: 10px;
+    padding: 0 10px;
+    pointer-events: none;
+}
+
+.img-preview-thumbnail {
+    pointer-events: auto;
+    height: 80px;
+    width: auto;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+}
+
+.img-preview-thumbnail:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.05);
+}
+
+.img-preview-thumbnail.active {
+    border-color: #fff;
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.img-zoom-info {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #f1f1f1;
+    font-size: 14px;
+    opacity: 0.7;
+    font-family: PT Mono, monospace;
+}
+
+.img-preview-caption {
+    position: absolute;
+    top: 21px;
+    text-align: center;
+    color: #f1f1f1;
+    font-size: 16px;
+    font-family: 'AlimamaFangYuanTiVF';
+    font-variation-settings: 'wght' 380, 'ROND' 0;
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.5);
+    margin: 0 auto;
+    max-width: 80%;
+    border-radius: 4px;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}
+
+.img-preview-caption:hover {
+    opacity: 1;
+}

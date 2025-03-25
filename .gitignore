@@ -1,0 +1,32 @@
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 开发环境
+/phpstudy_pro/
+/vendor/
+.env
+*.log
+*.backup
+
+# 缓存文件
+/data/
+/templets/default/style/*.map
+/templets/cache/
+/member/templets/cache/
+
+# 第三方应用
+/phpMyAdmin4.8.5/
+
+# 编辑器配置
+.idea/
+.vscode/
+
+# DedeCMS模板和JS
+/templets/default/index-原始.htm
+/member/templets/js/
+/plus/task.php
+
+# 数据库备份
+*.sql
+*.bak

@@ -1,0 +1,26 @@
+#dedecms电脑端目录结构apache伪静态
+RewriteEngine On
+RewriteBase /
+
+# 排除phpMyAdmin目录
+RewriteRule ^phpMyAdmin4.8.5/ - [L]
+
+#首页
+RewriteRule ^index\.html$ index\.php
+#TAG标签
+RewriteRule ^tags\.html$ tags\.php
+RewriteRule ^tags/([^/]+)\.html$ tags\.php\?\/$1 [L]
+RewriteRule ^tags/([^/]+)/$ tags\.php\?\/$1 [L]
+RewriteRule ^tags/([^/]+)/([0-9]+)\.html$ tags\.php\?\/$1\/$2 [L]
+RewriteRule ^tags/([^/]+)/([0-9]+)/$ tags\.php\?\/$1\/$2 [L]
+#列表栏目
+RewriteRule ^(.*)/$ /plus/list.php?tid=$1
+#列表栏目分页
+RewriteRule ^(.*)/list_([0-9]+)_([0-9]+)\.html$ /plus/list.php?tid=$1&PageNo=$2
+#文章页
+RewriteRule ^(.*)/([0-9]+)\.html$ /plus/view.php?aid=$1
+#文章页分页
+RewriteRule ^(.*)/([0-9]+)_([0-9]+)\.html$ /plus/view.php?aid=$1&pageno=$2
+#搜索页
+RewriteRule ^search/(.*)-([0-9]+)\.html$  /plus/search.php?q=$1&PageNo=$2&pagesize=10&searchtype=title
+RewriteRule ^search/(.*)\.html$  /plus/search.php?q=$1&pagesize=10&searchtype=title

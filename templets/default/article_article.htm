@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset={dede:global.cfg_soft_lang/}" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>{dede:field.title/}_{dede:global.cfg_webname/}</title>
+<meta name="keywords" content="{dede:field.keywords/}" />
+<meta name="description" content="{dede:field.description function='html2text(@me)'/}" />
+<meta http-equiv="mobile-agent" content="format=xhtml;url={dede:global.cfg_mobileurl/}/view.php?aid={dede:field.id/}">
+<link href="{dede:global.cfg_templets_skin/}/style/Lnta-style.css" rel="stylesheet" media="screen" type="text/css" />
+<link href="{dede:global.cfg_templets_skin/}/style/Lnta-mobile.css" rel="stylesheet" media="screen" type="text/css" />
+</head>
+<body class="articleview">
+{dede:include filename="head.htm"/}
+
+  <div class="page-wrapper">
+    <div class="col-7 offset-3 nested mobile-full" style="padding: 2vw 0px;">
+      <div id="project-area">
+        <header class="col-7 nested mobile-full actcontent-header">
+          <div class="col-7 project-title mobile-full"><img class="image project-header" alt="{dede:field.title/}" src="{dede:field.litpic/}"></div>
+          <h1 class="col-7 project-title mobile-full"><strong>{dede:field.title/}</strong></h1>
+          <h2 class="col-7 project-description mobile-full">{dede:field.description/}</h2>
+          <div class="tags col-7 mobile-full">
+            <ul>{dede:tag}<li><a href='[field:link/]'>[field:tag /]</a></li>{/dede:tag}</ul>
+          </div>
+        </header>
+        <section class="col-7 Content-Type mobile-full content-icon">
+          {dede:field.body/}
+        </section>
+        <section class="col-8 nested offset-neg-1 next-shelf mobile-full">
+          <li class="project col-4 nested prev-project mobile-half"><a class="shelf-project-link"
+              href="{dede:prenext get='preurl'/}">
+              <div class="col-1 mobile-full">
+                <h6 class="active">Previous</h6>
+              </div>
+              <div class="col-3 mobile-full">
+                <h2>{dede:prenext get='prename'/} </h2>
+              </div>
+            </a></li>
+          <li class="project col-4 nested next-project mobile-half"><a class="shelf-project-link"
+              href="{dede:prenext get='nexturl'/}">
+              <div class="right-text col-3 mobile-full">
+                <h2>{dede:prenext get='nextname'/}</h2>
+              </div>
+              <div class="next-shelf-label col-1 mobile-full">
+                <h6 class="active">Next</h6>
+              </div>
+            </a></li>
+        </section>
+      </div>
+    </div>
+  </div>
+  
+<script src="{dede:global.cfg_templets_skin/}/js/image-preview.js"></script>
+<link href="{dede:global.cfg_templets_skin/}/style/image-preview.css" rel="stylesheet" media="screen" type="text/css" />
+<script src="{dede:global.cfg_templets_skin/}/js/image-caption.js"></script>
+<script src="{dede:global.cfg_templets_skin/}/js/mobile-menu.js"></script>
+</body>
