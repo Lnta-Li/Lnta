@@ -24,14 +24,15 @@ body {
     font-weight: 100;
     font-style: normal;
 }
+
 /* 在线链接服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
 @font-face {
-  font-family: 'iconfont';  /* Project id 4858194 */
-  src: 
-       url('//at.alicdn.com/t/c/font_4858194_yq2vd02g5c.woff2?t=1742658262493') format('woff2'),
-       url('//at.alicdn.com/t/c/font_4858194_yq2vd02g5c.woff?t=1742658262493') format('woff'),
-       url('//at.alicdn.com/t/c/font_4858194_yq2vd02g5c.ttf?t=1742658262493') format('truetype');
-}
+    font-family: 'iconfont';  /* Project id 4858194 */
+    src: 
+         url('//at.alicdn.com/t/c/font_4858194_p223v1afiso.woff2?t=1742899883582') format('woff2'),
+         url('//at.alicdn.com/t/c/font_4858194_p223v1afiso.woff?t=1742899883582') format('woff'),
+         url('//at.alicdn.com/t/c/font_4858194_p223v1afiso.ttf?t=1742899883582') format('truetype');
+  }
 
 .iconfont {
     font-family:"iconfont" !important;
@@ -769,4 +770,36 @@ h3 strong {
 .tag-list {
     margin-top: 20px;
     margin-bottom: 20px;
+}
+
+iframe {
+    width: 720px;
+    aspect-ratio: 1/0.57; 
+    border-radius: 8px; 
+    max-width: 100%;
+}
+
+.Content-Type blockquote {
+    position: relative;
+    padding: 10px 30px;
+    margin: 40px auto;
+    max-width: 800px;
+    font-family: 'AlimamaFangYuanTiVF';
+    font-size: 1.2em;
+    line-height: 2.6;
+    color: rgba(33, 36, 44, 0.84);
+    background: rgba(174, 129, 43, 0.1);
+    border-left: 4px solid #ae812b;
+}
+
+.Content-Type blockquote::before {
+    content: "“";
+    position: absolute;
+    left: 20px;
+    top: -10px;
+    font-family: Arial;
+    font-size: 120px;
+    color: rgba(174, 129, 43, 0.3);
+    line-height: 1;
+    z-index: 1;
 }
