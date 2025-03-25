@@ -17,4 +17,5 @@ Thumbs.db
 .vscode/
 
 # 缓存文件
-/data/
+/data/*
+!/data/backupdata/
