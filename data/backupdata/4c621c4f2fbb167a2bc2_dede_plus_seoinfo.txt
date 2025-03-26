@@ -21,3 +21,5 @@ INSERT INTO `dede_plus_seoinfo` VALUES('20','1742726965','0','0','0','0','0');
 INSERT INTO `dede_plus_seoinfo` VALUES('21','1742754474','0','0','0','0','0');
 INSERT INTO `dede_plus_seoinfo` VALUES('22','1742787031','0','0','0','0','0');
 INSERT INTO `dede_plus_seoinfo` VALUES('23','1742872649','0','0','0','0','0');
+INSERT INTO `dede_plus_seoinfo` VALUES('24','1742898416','0','0','0','0','0');
+INSERT INTO `dede_plus_seoinfo` VALUES('25','1742953846','0','0','0','0','0');
