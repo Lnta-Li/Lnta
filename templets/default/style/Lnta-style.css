@@ -264,6 +264,10 @@ h6 strong {
     width: 384px;
 }
 
+.col-3-5 {
+    width: 400px;
+}
+
 .col-4 {
     width: 512px;
 }
@@ -284,8 +288,24 @@ h6 strong {
     margin-left: 256px;
 }
 
+.offset-2-5 {
+    margin-left: 320px;
+}
+
 .nested {
     padding: 0;
+}
+
+.fillblack-1 {
+    height: 70px;
+}
+
+.fillblack-2 {
+    height: 50px;
+}
+
+.fillblack-3 {
+    height: 30px;
 }
 
 .offset-neg-1 {
@@ -379,6 +399,12 @@ h4 {
 
 .next-shelf .right-text {
     text-align: right;
+    margin: 0 15px;
+}
+
+.left-text {
+    text-align: left;
+    margin: 0 15px;
 }
 
 #project-2 {
@@ -557,7 +583,6 @@ h6.active {
     align-items: center;
     display: -webkit-flex;
     display: flex;
-    margin-top: 90px;
 }
 
 h2 {
