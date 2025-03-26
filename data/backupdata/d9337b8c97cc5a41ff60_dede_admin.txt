@@ -1,1 +1,0 @@
-INSERT INTO `dede_admin` VALUES('1','10','Lntadmin','b3706e86663d850a7605','Lnta','','','','1742953841','0.0.0.0');

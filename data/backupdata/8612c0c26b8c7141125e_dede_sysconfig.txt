@@ -65,7 +65,7 @@ INSERT INTO `dede_sysconfig` VALUES('64','cfg_check_title','发布文档时是�
 INSERT INTO `dede_sysconfig` VALUES('65','cfg_album_row','图集多行多列样式默认行数','3','number','3');
 INSERT INTO `dede_sysconfig` VALUES('66','cfg_album_col','图集多行多列样式默认列数','3','number','4');
 INSERT INTO `dede_sysconfig` VALUES('67','cfg_album_pagesize','图集多页多图每页显示最大数','3','number','12');
-INSERT INTO `dede_sysconfig` VALUES('68','cfg_album_style','图集默认样式<br />1为多页多图,2为多页单图,3为缩略图列表','3','number','2');
+INSERT INTO `dede_sysconfig` VALUES('68','cfg_album_style','图集默认样式<br />1为多页多图,2为多页单图,3为缩略图列表','3','number','1');
 INSERT INTO `dede_sysconfig` VALUES('69','cfg_album_ddwidth','图集默认缩略图大小','3','number','200');
 INSERT INTO `dede_sysconfig` VALUES('70','cfg_mb_notallow','不允许注册的会员id','4','bstring','www,bbs,ftp,mail,user,users,admin,administrator');
 INSERT INTO `dede_sysconfig` VALUES('71','cfg_mb_idmin','用户id最小长度','4','number','3');
