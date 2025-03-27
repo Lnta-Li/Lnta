@@ -26,7 +26,7 @@
     max-width: 100%;
     height: 100%;
     min-height: 500px;
-    max-height: 920px;
+    max-height: 80vh;
     display: block;
     object-fit: cover;
     object-position: center;
@@ -133,5 +133,6 @@
     
     .carousel-item img {
         min-height: 200px; 
+        max-height: 65vh;
     }
 }

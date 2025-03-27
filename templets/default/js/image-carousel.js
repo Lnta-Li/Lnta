@@ -80,41 +80,37 @@ class ImageCarousel {
             });
         });
 
-        // 添加鼠标拖拽事件
-        let isDragging = false;
-        let startX = 0;
-        let currentTranslate = 0;
-        
+        // 统一处理拖拽和触摸事件
         const container = this.container.querySelector('.carousel-container');
-        
-        // 禁用浏览器默认的图片拖拽行为
         container.setAttribute('draggable', 'false');
         container.style.userSelect = 'none';
         
-        container.addEventListener('mousedown', (e) => {
-            e.preventDefault(); // 阻止默认行为
+        let isDragging = false;
+        let startPos = 0;
+        let currentTranslate = 0;
+        
+        // 通用事件处理函数
+        const handleStart = (pos) => {
             isDragging = true;
-            startX = e.clientX;
+            startPos = pos;
             currentTranslate = -this.currentIndex * 100;
             container.style.transition = 'none';
-        });
+        };
         
-        document.addEventListener('mousemove', (e) => {
+        const handleMove = (pos) => {
             if (!isDragging) return;
-            
-            const deltaX = e.clientX - startX;
-            const movePercent = (deltaX / container.offsetWidth) * 100;
+            const delta = pos - startPos;
+            const movePercent = (delta / container.offsetWidth) * 100;
             container.style.transform = `translateX(${currentTranslate + movePercent}%)`;
-        });
+        };
         
-        document.addEventListener('mouseup', (e) => {
+        const handleEnd = (pos) => {
             if (!isDragging) return;
-            
             isDragging = false;
             container.style.transition = 'transform 0.3s';
             
-            const deltaX = e.clientX - startX;
-            const movePercent = (deltaX / container.offsetWidth) * 100;
+            const delta = pos - startPos;
+            const movePercent = (delta / container.offsetWidth) * 100;
             
             if (Math.abs(movePercent) > 20) {
                 if (movePercent > 0 && this.currentIndex > 0) {
@@ -127,45 +123,36 @@ class ImageCarousel {
             } else {
                 this.updateCarousel();
             }
-        });
-
-        // 添加触摸事件支持
-        let touchStartX = 0;
-        let touchMoveX = 0;
+        };
         
+        // 鼠标事件
+        container.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            handleStart(e.clientX);
+        });
+        
+        document.addEventListener('mousemove', (e) => {
+            handleMove(e.clientX);
+        });
+        
+        document.addEventListener('mouseup', (e) => {
+            handleEnd(e.clientX);
+        });
+        
+        // 触摸事件
         container.addEventListener('touchstart', (e) => {
             e.preventDefault();
-            touchStartX = e.touches[0].clientX;
-            currentTranslate = -this.currentIndex * 100;
-            container.style.transition = 'none';
-        });
+            handleStart(e.touches[0].clientX);
+        }, { passive: false });
         
-        container.addEventListener('touchmove', (e) => {
+        this.container.addEventListener('touchmove', (e) => {
             e.preventDefault();
-            touchMoveX = e.touches[0].clientX;
-            const deltaX = touchMoveX - touchStartX;
-            const movePercent = (deltaX / container.offsetWidth) * 100;
-            container.style.transform = `translateX(${currentTranslate + movePercent}%)`;
-        });
+            handleMove(e.touches[0].clientX);
+        }, { passive: false });
         
         container.addEventListener('touchend', (e) => {
             e.preventDefault();
-            container.style.transition = 'transform 0.3s';
-            
-            const deltaX = touchMoveX - touchStartX;
-            const movePercent = (deltaX / container.offsetWidth) * 100;
-            
-            if (Math.abs(movePercent) > 20) {
-                if (movePercent > 0 && this.currentIndex > 0) {
-                    this.prev();
-                } else if (movePercent < 0 && this.currentIndex < this.totalItems - 1) {
-                    this.next();
-                } else {
-                    this.updateCarousel();
-                }
-            } else {
-                this.updateCarousel();
-            }
+            handleEnd(e.changedTouches[0].clientX);
         });
     }
     
