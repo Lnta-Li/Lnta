@@ -27,11 +27,10 @@ Thumbs.db
 !/data/module/
 !/data/payment/
 !/data/rss/
-!/data/safe
-!/data/tag
-!/data/textdata
-!/data/tplcache
-!/data/vote
+!/data/safe/
+!/data/tag/
+!/data/textdata/
+!/data/vote/
 !/data/common.inc.php
 !/data/config.cache.bak.php
 !/data/config.cache.inc.php
