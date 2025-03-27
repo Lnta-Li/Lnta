@@ -1,4 +1,12 @@
 /* 移动端自适应样式 */
+@media screen and (max-width: 1024px) {
+    .project-area h6, .content-icon h6, .tagtheader h6 {
+        font-size: 50px;
+        position: relative;
+        margin-left: 0;
+        padding-bottom: 4px;
+    }
+}
 @media screen and (max-width: 768px) {
     /* 通用布局调整 */
     .mobile-full {
@@ -36,6 +44,7 @@
 
     .project-area h6, .content-icon h6, .tagtheader h6 {
         position: relative;
+        margin-top: -30px;
         margin-left: 0;
     }
 
@@ -88,13 +97,17 @@
         position: fixed;
         top: 0;
         left: -100%;
-        width: 80% !important;
+        width: 66vw !important;
         height: 100vh;
         background-color: #46635fdb;
         z-index: 999;
         padding: 60px 20px 20px !important;
         transition: left 0.3s;
         box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    
+    .navwidth {
+       max-width: none; 
     }
     
     .home-active .home {
@@ -216,5 +229,37 @@
 
     .tagtheader {
         padding-bottom: 0 !important;
+    }
+
+    .fillheight-1 {
+        display: none;
+    }
+
+    .content-width {
+        width: 100%!important; 
+    }
+
+    .fillwidth-1 {
+       height: 57px; 
+    }
+    
+    .content-area {
+       padding: 0 4vw!important;
+    }
+    
+    .image-carousel {
+        border-radius: 0!important; 
+    }
+
+    .default-img {
+        border-radius: 0!important; 
+    }
+
+    .pagtype-arc .content-width {
+        min-width: 0!important;
+    }
+
+    .project-header {
+        width: 100vw!important;
     }
 }

@@ -4,6 +4,7 @@
     overflow: hidden;
     padding: 0;
     border-radius: 8px;
+    background-color: #e1e6e3;
 }
 
 .carousel-container {
@@ -15,13 +16,20 @@
 .carousel-item {
     flex: 0 0 100%;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }
 
 .carousel-item img {
-    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    min-height: 500px;
     max-height: 920px;
     display: block;
     object-fit: cover;
+    object-position: center;
 }
 
 .carousel-nav {
@@ -30,7 +38,7 @@
     transform: translateY(-50%);
     width: 40px;
     height: 40px;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgb(128 128 128 / 50%);
     color: white;
     border: none;
     border-radius: 50%;
@@ -39,19 +47,38 @@
     align-items: center;
     justify-content: center;
     font-size: 20px;
-    transition: background 0.3s;
+    transition: all 0.3s ease;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    pointer-events: none;
 }
 
 .carousel-nav:hover {
-    background: rgba(0, 0, 0, 0.8);
+    background: rgb(128 128 128 / 80%);
 }
 
 .carousel-prev {
-    left: 20px;
+    left: 0;
+    transform: translate(-100%, -50%);
 }
 
 .carousel-next {
-    right: 20px;
+    right: 0;
+    transform: translate(100%, -50%);
+}
+
+.image-carousel:hover .carousel-nav {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.image-carousel:hover .carousel-prev {
+    transform: translate(20px, -50%);
+}
+
+.image-carousel:hover .carousel-next {
+    transform: translate(-20px, -50%);
 }
 
 .carousel-dots {
@@ -70,6 +97,8 @@
     background: rgba(255, 255, 255, 0.5);
     cursor: pointer;
     transition: background 0.3s;
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
 }
 
 .carousel-dot.active {
@@ -81,12 +110,28 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(90deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
-    background: -webkit-linear-gradient(90deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+    background: linear-gradient(0deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
+    background: -webkit-linear-gradient(90deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 100%);
     padding: 30px 16px 16px;
     text-align: left;
     color: #ffffff;
     font-size: 17px;
     font-family: 'AlimamaFangYuanTiVF';
     font-variation-settings: 'wght' 380, 'ROND' 0;
+}
+
+
+
+@media screen and (max-width: 768px) {
+    .carousel-dot {
+        width: 7px;
+        height: 7px;
+    }
+    .carousel-nav {
+       display: none; 
+    }
+    
+    .carousel-item img {
+        min-height: 200px; 
+    }
 }

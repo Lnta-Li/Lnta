@@ -1,3 +1,12 @@
+/**
+ * 图片轮播组件
+ * 实现了一个可自动播放的图片轮播效果，包含以下功能：
+ * - 上一张/下一张导航按钮
+ * - 轮播指示器圆点
+ * - 自动播放功能
+ * - 鼠标悬停暂停
+ */
+
 class ImageCarousel {
     constructor(container) {
         this.container = container;
@@ -5,30 +14,27 @@ class ImageCarousel {
         this.currentIndex = 0;
         this.totalItems = this.items.length;
         
-        // Create navigation buttons
+        // 创建导航按钮
         this.createNavigationButtons();
         
-        // Create dots
+        // 创建指示器圆点
         this.createDots();
         
-        // Initialize carousel
+        // 初始化轮播
         this.updateCarousel();
         
-        // Add event listeners
+        // 添加事件监听
         this.addEventListeners();
-        
-        // Optional: Auto-play
-        this.startAutoPlay();
     }
     
     createNavigationButtons() {
         const prevBtn = document.createElement('button');
         prevBtn.className = 'carousel-nav carousel-prev';
-        prevBtn.innerHTML = '&lt;';
+        prevBtn.innerHTML = `<svg viewBox="0 0 24 24" width="24" height="24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/></svg>`;
         
         const nextBtn = document.createElement('button');
         nextBtn.className = 'carousel-nav carousel-next';
-        nextBtn.innerHTML = '&gt;';
+        nextBtn.innerHTML = `<svg viewBox="0 0 24 24" width="24" height="24"><path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z" fill="currentColor"/></svg>`;
         
         this.container.appendChild(prevBtn);
         this.container.appendChild(nextBtn);
@@ -53,11 +59,11 @@ class ImageCarousel {
     }
     
     updateCarousel() {
-        // Update container position
+        // 更新容器位置
         const container = this.container.querySelector('.carousel-container');
         container.style.transform = `translateX(-${this.currentIndex * 100}%)`;
         
-        // Update dots
+        // 更新指示器圆点
         this.dots.forEach((dot, index) => {
             dot.classList.toggle('active', index === this.currentIndex);
         });
@@ -73,20 +79,108 @@ class ImageCarousel {
                 this.goToSlide(index);
             });
         });
+
+        // 添加鼠标拖拽事件
+        let isDragging = false;
+        let startX = 0;
+        let currentTranslate = 0;
         
-        // Pause auto-play on hover
-        this.container.addEventListener('mouseenter', () => this.pauseAutoPlay());
-        this.container.addEventListener('mouseleave', () => this.startAutoPlay());
+        const container = this.container.querySelector('.carousel-container');
+        
+        // 禁用浏览器默认的图片拖拽行为
+        container.setAttribute('draggable', 'false');
+        container.style.userSelect = 'none';
+        
+        container.addEventListener('mousedown', (e) => {
+            e.preventDefault(); // 阻止默认行为
+            isDragging = true;
+            startX = e.clientX;
+            currentTranslate = -this.currentIndex * 100;
+            container.style.transition = 'none';
+        });
+        
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            
+            const deltaX = e.clientX - startX;
+            const movePercent = (deltaX / container.offsetWidth) * 100;
+            container.style.transform = `translateX(${currentTranslate + movePercent}%)`;
+        });
+        
+        document.addEventListener('mouseup', (e) => {
+            if (!isDragging) return;
+            
+            isDragging = false;
+            container.style.transition = 'transform 0.3s';
+            
+            const deltaX = e.clientX - startX;
+            const movePercent = (deltaX / container.offsetWidth) * 100;
+            
+            if (Math.abs(movePercent) > 20) {
+                if (movePercent > 0 && this.currentIndex > 0) {
+                    this.prev();
+                } else if (movePercent < 0 && this.currentIndex < this.totalItems - 1) {
+                    this.next();
+                } else {
+                    this.updateCarousel();
+                }
+            } else {
+                this.updateCarousel();
+            }
+        });
+
+        // 添加触摸事件支持
+        let touchStartX = 0;
+        let touchMoveX = 0;
+        
+        container.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            touchStartX = e.touches[0].clientX;
+            currentTranslate = -this.currentIndex * 100;
+            container.style.transition = 'none';
+        });
+        
+        container.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            touchMoveX = e.touches[0].clientX;
+            const deltaX = touchMoveX - touchStartX;
+            const movePercent = (deltaX / container.offsetWidth) * 100;
+            container.style.transform = `translateX(${currentTranslate + movePercent}%)`;
+        });
+        
+        container.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            container.style.transition = 'transform 0.3s';
+            
+            const deltaX = touchMoveX - touchStartX;
+            const movePercent = (deltaX / container.offsetWidth) * 100;
+            
+            if (Math.abs(movePercent) > 20) {
+                if (movePercent > 0 && this.currentIndex > 0) {
+                    this.prev();
+                } else if (movePercent < 0 && this.currentIndex < this.totalItems - 1) {
+                    this.next();
+                } else {
+                    this.updateCarousel();
+                }
+            } else {
+                this.updateCarousel();
+            }
+        });
     }
     
     prev() {
-        this.currentIndex = (this.currentIndex - 1 + this.totalItems) % this.totalItems;
-        this.updateCarousel();
+        if (this.currentIndex > 0) {
+            this.currentIndex--;
+            this.updateCarousel();
+        }
     }
     
     next() {
-        this.currentIndex = (this.currentIndex + 1) % this.totalItems;
-        this.updateCarousel();
+        if (this.currentIndex < this.totalItems - 1) {
+            this.currentIndex++;
+            this.updateCarousel();
+        }
     }
     
     goToSlide(index) {
@@ -94,19 +188,13 @@ class ImageCarousel {
         this.updateCarousel();
     }
     
-    startAutoPlay() {
-        this.autoPlayInterval = setInterval(() => this.next(), 5000);
-    }
-    
-    pauseAutoPlay() {
-        clearInterval(this.autoPlayInterval);
-    }
+
 }
 
-// Initialize carousel when DOM is loaded
+// DOM加载完成后初始化轮播
 document.addEventListener('DOMContentLoaded', () => {
     const carouselContainers = document.querySelectorAll('.image-carousel');
     carouselContainers.forEach(container => {
         new ImageCarousel(container);
     });
-}); 
+});
