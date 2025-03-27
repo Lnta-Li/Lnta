@@ -18,4 +18,28 @@ Thumbs.db
 
 # 缓存文件
 /data/*
+!/data/admin/
 !/data/backupdata/
+!/data/enums/
+!/data/js/
+!/data/mail/
+!/data/mark/
+!/data/module/
+!/data/payment/
+!/data/rss/
+!/data/safe
+!/data/tag
+!/data/textdata
+!/data/tplcache
+!/data/vote
+!/data/common.inc.php
+!/data/config.cache.bak.php
+!/data/config.cache.inc.php
+!/data/config.file.inc.php
+!/data/downmix.data.php
+!/data/helper.inc.php
+!/data/login.data.php
+!/data/password.data.php
+!/data/safequestions.php
+!/data/smiley.data.php
+!/data/template.rand.php
