@@ -90,6 +90,7 @@ class ImageCarousel {
         // 禁用浏览器默认的图片拖拽行为
         container.setAttribute('draggable', 'false');
         container.style.userSelect = 'none';
+        container.style.touchAction = 'none';
         
         container.addEventListener('mousedown', (e) => {
             e.preventDefault(); // 阻止默认行为
@@ -135,21 +136,24 @@ class ImageCarousel {
         
         container.addEventListener('touchstart', (e) => {
             e.preventDefault();
+            e.stopPropagation();
             touchStartX = e.touches[0].clientX;
             currentTranslate = -this.currentIndex * 100;
             container.style.transition = 'none';
-        });
+        }, { passive: false });
         
         container.addEventListener('touchmove', (e) => {
             e.preventDefault();
+            e.stopPropagation();
             touchMoveX = e.touches[0].clientX;
             const deltaX = touchMoveX - touchStartX;
             const movePercent = (deltaX / container.offsetWidth) * 100;
             container.style.transform = `translateX(${currentTranslate + movePercent}%)`;
-        });
+        }, { passive: false });
         
         container.addEventListener('touchend', (e) => {
             e.preventDefault();
+            e.stopPropagation();
             container.style.transition = 'transform 0.3s';
             
             const deltaX = touchMoveX - touchStartX;

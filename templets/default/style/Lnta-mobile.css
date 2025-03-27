@@ -101,7 +101,7 @@
         height: 100vh;
         background-color: #46635fdb;
         z-index: 999;
-        padding: 60px 20px 20px !important;
+        padding: 0 20px !important;
         transition: left 0.3s;
         box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
@@ -261,5 +261,9 @@
 
     .project-header {
         width: 100vw!important;
+    }
+
+    .default-img img {
+        border-radius: 0!important; 
     }
 }
