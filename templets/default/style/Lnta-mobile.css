@@ -264,6 +264,7 @@
     }
 
     .default-img img {
-        border-radius: 0!important; 
-    }
+        border-radius: 0 !important;
+        min-height: 25vh;
+        object-fit: cover;
 }
