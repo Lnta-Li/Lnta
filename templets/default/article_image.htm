@@ -9,6 +9,8 @@
 <link href="{dede:global.cfg_templets_skin/}/style/Lnta-style.css" rel="stylesheet" media="screen" type="text/css" />
 <link href="{dede:global.cfg_templets_skin/}/style/Lnta-mobile.css" rel="stylesheet" media="screen" type="text/css" />
 <link href="{dede:global.cfg_templets_skin/}/style/image-carousel.css" rel="stylesheet" media="screen" type="text/css" />
+<link href="{dede:global.cfg_templets_skin/}/style/feedback.css" rel="stylesheet" media="screen" type="text/css" />
+<script language="javascript" type="text/javascript" src="{dede:global.cfg_cmsurl/}/include/dedeajax2.js"></script>
 </head>
 <body class="articleview">
 
@@ -67,9 +69,7 @@
       <section class="Content-Type content-icon">
         {dede:field.body/}
       </section>
-    
-      <div class="fillwidth-1"></div>
-    
+
       <section class="next-shelf">
         <li class="project" style="max-width: 70%;">
           <a class="shelf-project-link" href="{dede:prenext get='preurl'/}">
@@ -84,6 +84,9 @@
           </a>
         </li>
       </section>
+
+      <div class="fillwidth-1"></div>
+      {dede:include file='ajaxfeedback.htm' /}
       <div class="fillwidth-1"></div>
       
     </div>

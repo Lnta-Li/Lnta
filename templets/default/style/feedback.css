@@ -1,0 +1,126 @@
+.dcmp-userinfo button {
+    width: 91px;
+    height: 40px;
+    display: inline-block;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-sizing: border-box;
+    color: rgb(255 255 255);
+    background-color: #c4d1c4;
+    margin-right: 0px;
+    font-size: 16px;
+    float: right;
+    font-family: 'AlimamaFangYuanTiVF';
+    font-variation-settings: 'wght' 380, 'ROND' 0;
+}
+
+.dcmp-userinfo button:hover {
+    background-color: #ae812b;
+}
+
+.dcmp-userinfo input {
+    font-size: 16px;
+    border: 1px solid rgb(221, 221, 221);
+    border-radius: 8px;
+    font-family: PT Mono, HarmonySans SC;
+    color: #525557;
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+.dcmp-content textarea {
+    position: relative;
+    width: 100%;
+    font-size: 16px;
+    border: 1px solid rgb(221, 221, 221);
+    border-radius: 8px;
+    resize: none;
+    font-family: PT Mono, HarmonySans SC;
+    color: #525557;
+    box-sizing: border-box;
+    padding: 12px;
+}
+
+.dcmp-userinfo {
+   margin-top: 8px; 
+}
+
+.dcmp-userinfo img {
+    vertical-align: middle;
+    height: 30px;
+}
+
+.decmt-box2 {
+    display: flex;
+    background-color: #fff;
+    border-radius: 8px;
+    margin: 10px 0;
+    padding: 15px;
+    height: fit-content;
+    width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.decmt-box2 img {
+    border-radius: 3px; 
+}
+
+.content {
+  margin-left: 15px; 
+}
+
+.fl {
+    color: #a4a8aa;
+    font-size: 14px;
+}
+
+.text {
+    padding-top: 8px;
+    clear:both;
+    font-family: HarmonySans SC;
+    font-size: 16px;
+    color: #5d5d5d;
+}
+
+.dcmp-userinfo #dcmp-submit-guest {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+}
+
+.dcmp-userinfo label {
+    vertical-align: middle;
+}
+
+#commetpages {
+    display: flex;
+    color: #a4a8aa;
+    font-size: 14px;
+    font-family: PT Mono, HarmonySans SC;
+    margin: 20px 0;
+}
+
+#commetpages a {
+    color: #2c2e2f;
+    font-size: 14px;
+    font-family: PT Mono, HarmonySans SC;
+}
+
+#commetpages span,strong,a {
+    margin: 0 5px;
+}
+
+textarea:focus-visible, input:focus-visible {
+    outline-offset: 0;
+    outline-style: dashed;
+    outline-width: initial;
+    outline-color: #c4d1c4;
+}

@@ -42,6 +42,10 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+a:focus-visible {
+    outline: none; 
+}
+
 /* 页面包装器 */
 .page-wrapper {
     max-width: 1536px;
