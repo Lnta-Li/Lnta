@@ -11,6 +11,10 @@ Thumbs.db
 # 日志和缓存文件
 *.log
 
+# 数据库管理文件
+/phpMyAdmin4.8.5/
+
+# 系统缓存
 /data/*
 !/data/admin/
 !/data/backupdata/
