@@ -1,1 +1,0 @@
-<img src='[field:imgsrc/]' alt='[field:alttext /]' />[field:title /]

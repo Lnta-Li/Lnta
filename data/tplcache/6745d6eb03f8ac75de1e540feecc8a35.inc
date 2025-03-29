@@ -1,1 +1,0 @@
-@me = empty(@me) ? "<img class='image project-header' alt='{dede:field.title/}' src='{dede:field.litpic/}'>" : "<img class='image project-header' alt='{dede:field.title/}' src='[field:imgsrc/]'>";
