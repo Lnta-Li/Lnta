@@ -228,7 +228,7 @@ textarea:focus-visible, input:focus-visible {
 
 .author-stats {
     display: flex;
-    gap: 40px;
+    gap: 6%;
     justify-content: center;
     position: relative;
     height: 50px;
@@ -298,9 +298,9 @@ textarea:focus-visible, input:focus-visible {
 }
 
 .conversation-starters h3 {
-    font-size: 18px;
-    color: rgb(64, 65, 66);
-    margin-bottom: 16px;
+    font-size: 24px;
+    color: rgb(57 96 48 / 30%);
+    font-weight: bold;
 }
 
 .starter-items {

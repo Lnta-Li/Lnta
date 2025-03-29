@@ -14,7 +14,7 @@
 <link href="{dede:global.cfg_templets_skin/}/style/feedback.css" rel="stylesheet" media="screen" type="text/css" />
 <script language="javascript" type="text/javascript" src="{dede:global.cfg_cmsurl/}/include/dedeajax2.js"></script>
 <script language="javascript" type="text/javascript">
-  <!-
+  <!--
   function CheckLogin(){
     var taget_obj = document.getElementById('_ajax_feedback');
     myajax = new DedeAjax(taget_obj,false,false,'','','');
@@ -155,10 +155,10 @@
           
           if (goodItem && badItem) {
               // 更新Like数据
-              goodItem.querySelector('.stat-value i').nextSibling.textContent = data.goodper + '%';
+              goodItem.querySelector('.stat-value i').nextSibling.textContent = Math.floor(data.goodper) + '%';
               goodItem.querySelector('.stat-label').textContent = 'Like (' + data.goodpost + ')';
               // 更新Dislike数据
-              badItem.querySelector('.stat-value i').nextSibling.textContent = data.badper + '%';
+              badItem.querySelector('.stat-value i').nextSibling.textContent = Math.floor(data.badper) + '%';
               badItem.querySelector('.stat-label').textContent = 'Dislike (' + data.badpost + ')';
               
               // 更新按钮状态
@@ -201,13 +201,13 @@
       getDigg(aid);
     
   });
-   ->
+  //-->
 </script>
 </head>
 
 <body class="articleview">
 
-  <!--加载Nav-->
+  <!---加载Nav-->
   {dede:include filename="head.htm"/}
 
 <!--页面内容-->
@@ -272,7 +272,7 @@
 
       <div class="fillwidth-1"></div>
 
-      <!-- 作者信息区域 -->
+      <!--- 作者信息区域 -->
       <div class="author-info">
         <div class="author-header">
           <span class="author-label">作者</span>
@@ -285,26 +285,26 @@
         </div>
         <div class="author-stats">
           <div class="stat-item" onclick="javascript:postDigg('good',{dede:field.id/})">
-            <span class="stat-value"><i class="iconfont">&#xe616;</i>{dede:field.goodper/}%</span>
+            <span class="stat-value"><i class="iconfont">&#xe616;</i>{dede:field.goodper function='floor(@me)'/}%</span>
             <span class="stat-label">Like ({dede:field.goodpost/})</span>
           </div>
           <div class="stat-item" onclick="javascript:postDigg('bad',{dede:field.id/})">
-            <span class="stat-value"><i class="iconfont">&#xe60f;</i>{dede:field.badper/}%</span>
+            <span class="stat-value"><i class="iconfont">&#xe60f;</i>{dede:field.badper function='floor(@me)'/}%</span>
             <span class="stat-label">Dislike ({dede:field.badpost/})</span>
           </div>
           <div class="stat-item" id="comment-trigger">
-            <span class="stat-value"><i class="iconfont">&#xe60e;</i>12+</span>
+            <span class="stat-value"><i class="iconfont">&#xe60e;</i>{dede:field.id runphp='yes'} global $dsql; $row = $dsql->GetOne("SELECT COUNT(*) AS num FROM dede_feedback WHERE aid=@me"); @me=$row['num']; {/dede:field.id}</span>
             <span class="stat-label" style="cursor: pointer;">Comment</span>
           </div>
         </div>
       </div>
 
       <div class="newdigg" id="newdigg" style="display:none;">
-        <!-- 这个div用于AJAX更新数据 -->
+        <!--- 这个div用于AJAX更新数据 -->
       </div>
 
       <script language="javascript" type="text/javascript">getDigg({ dede: field.id /});</script>
-      <!-- 对话开场白区域 -->
+      <!--- 对话开场白区域 -->
       <div class="conversation-starters">
         <h3>Reviews</h3>
         {dede:include file='ajaxfeedback.htm' /}
