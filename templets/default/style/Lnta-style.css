@@ -102,7 +102,6 @@ h6.active {
     width: 44.4444%;
     z-index: 4;
     box-sizing: border-box;
-    max-width: 44.4444% !important;
     opacity: 0;
     padding-bottom: 35px;
     animation: fadeInUp 0.3s ease 0.5s forwards;
@@ -120,7 +119,7 @@ h6.active {
 }
 
 .header-text {
-    color: rgba(33, 36, 44, 0.64);
+    color: rgb(131 142 172);
     font-size: 56px;
     line-height: 1.15;
     padding: 0 16px;
@@ -146,7 +145,7 @@ h6.active {
     width: 44.4444%;
     box-sizing: border-box;
     overflow: hidden;
-    z-index: 100;
+    z-index: 1;
 }
 /* 文本选中样式 */
 ::selection {
@@ -285,10 +284,6 @@ h6 strong {
 
 .col-3 {
     width: 384px;
-}
-
-.col-4 {
-    width: 512px;
 }
 
 .col-7 {

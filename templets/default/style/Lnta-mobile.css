@@ -13,8 +13,8 @@
         width: 100% !important;
         margin-left: 0 !important;
         margin-right: 0 !important;
-        padding-left: 15px !important;
-        padding-right: 15px !important;
+        padding-left: 10px !important;
+        padding-right: 10px !important;
         box-sizing: border-box !important;
     }
     
@@ -24,6 +24,14 @@
         box-sizing: border-box !important;
     }
     
+    .header-text {
+        width: 100% !important;
+    }
+
+    .header-image-wrapper {
+        width: 80% !important;
+    }
+
     .mobile-no-offset {
         margin-left: 0 !important;
     }
@@ -133,7 +141,7 @@
     }
 
     .header-image {
-        height: 240px !important;
+        height: 256px !important;
     }
 
     .mobile-nav.active {
