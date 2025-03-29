@@ -1,22 +1,16 @@
+# IDE 和编辑器文件
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
 # 系统文件
 .DS_Store
 Thumbs.db
 
-# 开发环境
-/phpstudy_pro/
-/vendor/
-.env
+# 日志和缓存文件
 *.log
-*.backup
 
-# 第三方应用
-/phpMyAdmin4.8.5/
-
-# 编辑器配置
-.idea/
-.vscode/
-
-# 缓存文件
 /data/*
 !/data/admin/
 !/data/backupdata/
