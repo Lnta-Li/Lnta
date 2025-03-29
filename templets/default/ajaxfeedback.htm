@@ -25,9 +25,7 @@
 			</div>
 			<div class="dcmp-post">
 				<div class="dcmp-userinfo" id="_ajax_feedback">
-					<input type="text" name="username" size="16" class="ipt-txt" placeholder="昵称" style="text-transform:uppercase;" />
-					<input type="text" name="validate" size="8" class="ipt-txt" placeholder="验证码" style="text-transform:uppercase;" />
-					<img src="{dede:global.cfg_cmspath/}/include/vdimgck.php" id="validateimg" style="cursor:pointer" onclick="this.src=this.src+\'?\'" title="点击我更换图片" alt="点击我更换图片" />
+					<input type="text" name="username" size="12" class="ipt-txt" placeholder="昵称" style="text-transform:uppercase;" />
 					<input type="checkbox" name="notuser" id="dcmp-submit-guest" />
 					<label for="dcmp-submit-guest" />匿名</label>
 					{dede:php}
@@ -36,7 +34,7 @@
 					<script language="javascript" type="text/javascript">CheckLogin();</script>';
 					}
 					{/dede:php}
-					<button type="button" onClick='PostComment()'>发表评论</button>
+					<button type="button" onClick='PostComment()'>评论</button>
 				</div>
 			</div>
 		</form>
@@ -97,15 +95,6 @@
 			alert("评论内容不能为空！");
 			return;
 		}
-		if (f.validate) {
-			if (f.validate.value == '') {
-				alert("请填写验证码！");
-				return;
-			}
-			else {
-				nvalidate = f.validate.value;
-			}
-		}
 		if (f.msg.value.length > 500) {
 			alert("你的评论是不是太长了？请填写500字以内的评论。");
 			return;
@@ -141,6 +130,24 @@
 			if ($DE('validateimg')) $DE('validateimg').src = "{dede:global.cfg_cmsurl/}/include/vdimgck.php?" + f.validate.value;
 			f.validate.value = '';
 		}
+
+		// 关闭评论框
+		var form = document.getElementById('comment-form');
+		var overlay = document.getElementById('comment-overlay');
+		if (form && overlay) {
+			form.classList.remove('show');
+			overlay.classList.remove('show');
+		}
+
+		// 更新评论计数
+		var commentCount = document.querySelector('#comment-trigger .stat-value');
+		if (commentCount) {
+			var text = commentCount.textContent.trim();
+			var currentCount = parseInt(text.replace(/[^0-9]/g, ''));
+			if (!isNaN(currentCount)) {
+				commentCount.innerHTML = '<i class="iconfont">&#xe60e;</i>' + (currentCount + 1) + '+';
+			}
+		}
 	}
 	function quoteCommet(fid) {
 		document.feedback.fid.value = fid;
@@ -152,9 +159,6 @@
 		const container = document.getElementById('commetcontent');
 		if (!container) return;
 
-		const slideBox = document.getElementById('slide-box');
-		if (!slideBox) return;
-
 		const comments = container.querySelectorAll('.decmt-box2');
 		if (!comments.length) return;
 
@@ -163,59 +167,12 @@
 			return; // 如果内容长度不足，直接返回，不执行后续操作
 		}
 
-		let scrollPosition = 0;
-		const scrollSpeed = 1; // 滚动速度，可以根据需要调整
-		const gap = 16; // 评论之间的间距
-		let isPaused = false; // 是否暂停滚动
-		let animationFrameId = null; // 存储requestAnimationFrame的ID
-
-		// 计算所有评论的总宽度（包括间距）
-		let totalWidth = 0;
-		comments.forEach((comment, index) => {
-			totalWidth += comment.offsetWidth;
-			if (index < comments.length - 1) {
-				totalWidth += gap;
-			}
-		});
-
-		function scroll() {
-			if (isPaused) return;
-			
-			scrollPosition -= scrollSpeed;
-			
-			// 计算最后一个评论的右边界位置
-			const lastComment = comments[comments.length - 1];
-			const lastCommentRight = scrollPosition + totalWidth;
-			
-			// 当最后一个评论完全移出可视区域时，重置位置
-			if (lastCommentRight <= 0) {
-				scrollPosition = 0;
-			}
-			
-			// 移动所有评论
-			comments.forEach(comment => {
-				comment.style.transform = `translateX(${scrollPosition}px)`;
-			});
-			
-			animationFrameId = requestAnimationFrame(scroll);
-		}
-
-		// 添加鼠标事件监听
-		container.addEventListener('mouseenter', () => {
-			isPaused = true;
-			if (animationFrameId) {
-				cancelAnimationFrame(animationFrameId);
-			}
-		});
-
-		container.addEventListener('mouseleave', () => {
-			isPaused = false;
-			scroll();
-		});
-
-		// 开始滚动
-		slideBox.classList.add('slide-mask-l');
-		scroll();
+		// 将评论包装在滚动容器中
+		container.classList.add('comment-scroll-container');
+		const wrapper = document.createElement('div');
+		wrapper.className = 'comment-scroll-wrapper';
+		comments.forEach(comment => wrapper.appendChild(comment));
+		container.appendChild(wrapper);
 	}
 
 	// 等待内容加载完成后初始化滚动

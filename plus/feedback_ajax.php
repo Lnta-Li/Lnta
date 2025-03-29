@@ -37,16 +37,7 @@ else if($dopost=='send')
 {
     require_once(DEDEINC.'/charset.func.php');
     
-    if($cfg_feedback_ck=='Y')
-    {
-        $svali = strtolower(trim(GetCkVdValue()));
-        if(strtolower($validate) != $svali || $svali=='')
-        {
-            ResetVdValue();
-            echo '<font color="red">验证码错误，请点击验证码图片更新验证码！</font>';
-            exit();
-        }
-    }
+    // 已移除验证码检查
     
     $arcRow = GetOneArchive($aid);
     if(empty($arcRow['aid']))
@@ -178,7 +169,7 @@ else if($dopost=='send')
 <img src='<?php echo $mface;?>' height='40' width='40'/>
 <div class="content">
 <span class="fl"><?php echo $username; ?> · <?php echo GetDateMk($dtime); ?></span>
-<div class="text"><?php echo ubb($msg); ?></div>
+<div class="text">刚刚：<?php echo ubb($msg); ?></div>
 </div>
 </div>
 
