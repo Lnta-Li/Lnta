@@ -103,6 +103,20 @@ h6.active {
     z-index: 4;
     box-sizing: border-box;
     max-width: 44.4444% !important;
+    opacity: 0;
+    padding-bottom: 35px;
+    animation: fadeInUp 0.3s ease 0.5s forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        padding-bottom: 35px;
+    }
+    to {
+        opacity: 1;
+        padding-bottom: 0;
+    }
 }
 
 .header-text {
@@ -132,9 +146,8 @@ h6.active {
     width: 44.4444%;
     box-sizing: border-box;
     overflow: hidden;
-    z-index: 2;
+    z-index: 100;
 }
-
 /* 文本选中样式 */
 ::selection {
     background: #54ff9670;
@@ -174,7 +187,7 @@ h6.active {
     right: 0;
     padding: 90px 0;
     margin-top: -115px;
-    z-index: 1;
+    z-index: -1;
 }
 
 .projects-container {
@@ -878,11 +891,11 @@ iframe {
     text-decoration: underline;
 }
 
-.content-width {
+.content-width, .header, .about-header, .about-content, .projects-container {
     opacity: 0;
     transition: opacity 0.3s ease;
 }
 
-.content-width.show {
+.content-width.show, .header.show, .about-header.show, .about-content.show, .projects-container.show {
     opacity: 1;
 }
