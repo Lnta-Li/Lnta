@@ -32,7 +32,7 @@
       </div>
     </div>
 
-    <div class="default-img" style="display:none;">
+    <div class="default-img">
       <img class="project-header" alt="{dede:field.title/}" src="{dede:field.litpic/}">
     </div>
     <script>
@@ -43,6 +43,8 @@
         var picbox = document.querySelector('.picbox');
         var defaultImg = document.querySelector('.default-img');
         var pagtype = document.querySelector('.pagtype');
+        var contentWidth = document.querySelector('.content-width');
+        
         if (picbox.querySelector('img')) {
           picbox.style.display = 'block';
           defaultImg.style.display = 'none';
@@ -54,6 +56,11 @@
           pagtype.classList.remove('pagtype-img');
           pagtype.classList.add('pagtype-arc');
         }
+        
+        // 添加show类来触发动画
+        setTimeout(() => {
+          contentWidth.classList.add('show');
+        }, 100);
       });
     </script>
 

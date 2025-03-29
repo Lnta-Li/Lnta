@@ -36,15 +36,15 @@ $z[10][4]=array();
 $z[10][4]['row']="35";
 $z[10][4]['getall']="1";
 $z[10][4]['sort']="month";
-$z[11]=Array("list","\r\n                <li class=\"project col-8 nested mobile-full mob-over\">\r\n                    <a class=\"project-link fixed mobile-flex-column\" href=\"[field:arcurl/]\">\r\n                        <div class=\"project-number col-1 mobile-full\">\r\n                            <h3>[field:global.autoindex runphp='yes'] if(@me < 10) { @me = \"0\".@me; } [/field:global.autoindex]</h3>\r\n                        </div>\r\n                        [field:array runphp='yes']@me = (empty(@me['litpic']) ? \"\" : \"\"); [/field:array]\r\n                        <div class=\"col-3 project-thumb-fixed mobile-full\">\r\n                            <img class=\"project-thumb\" alt=\"[field:title/]\" src=\"[field:litpic/]\"></div>\r\n                        <div class=\"col-4 project-title mobile-full\">\r\n                            <h6 class=\"active\">[field:pubdate function=\"MyDate('Y-m-d',@me)\"/]</h6>\r\n                            <h2>[field:title function=\"cutStr(@me,60)\"/]</h2>\r\n                            <p>[field:description function=\"cutStr(@me,120)\"/]</p>\r\n                        </div>\r\n                    </a></li>\r\n                ",1750,2915);
+$z[11]=Array("list","\r\n                <li class=\"project col-8 nested mobile-full mob-over\">\r\n                    <a class=\"project-link fixed mobile-flex-column\" href=\"[field:arcurl/]\">\r\n                        <div class=\"project-number col-1 mobile-full\">\r\n                            <h3>[field:global.autoindex runphp='yes'] if(@me < 10) { @me = \"0\".@me; } [/field:global.autoindex]</h3>\r\n                        </div>\r\n                        [field:array runphp='yes']@me = (empty(@me['litpic']) ? \"\" : \"\"); [/field:array]\r\n                        <div class=\"col-3 project-thumb-fixed mobile-full\">\r\n                            <img class=\"project-thumb\" alt=\"[field:title/]\" src=\"[field:litpic/]\"></div>\r\n                        <div class=\"col-4 project-title mobile-full\">\r\n                            <h6 class=\"active\">[field:pubdate function=\"MyDate('Y-m-d',@me)\"/]</h6>\r\n                            <h2>[field:title function=\"cutStr(@me,60)\"/]</h2>\r\n                            <p>[field:description function=\"cutStr(@me,120)\"/]</p>\r\n                        </div>\r\n                    </a></li>\r\n                ",1733,2898);
 $z[11][4]=array();
 $z[11][4]['orderby']="sortrank";
 $z[11][4]['pagesize']="10";
-$z[12]=Array("pagelist","",3125,3198);
+$z[12]=Array("pagelist","",3108,3181);
 $z[12][4]=array();
 $z[12][4]['listitem']="index,end,pre,next,pageno,option";
 $z[12][4]['listsize']="5";
-$z[13]=Array("global","",3306,3338);
+$z[13]=Array("global","",3289,3321);
 $z[13][4]=array();
 $z[13][4]['name']="cfg_templets_skin";
 
