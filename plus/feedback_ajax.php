@@ -25,37 +25,19 @@ $cfg_ml = new MemberLogin();
 
 if(empty($dopost)) $dopost = '';
 $page = empty($page) || $page<1 ? 1 : intval($page);
-$pagesize = 10;
+$pagesize = 20;
 
-/*----------------------
-获得指定页的评论内容
-function getlist(){ }
-----------------------*/
 if($dopost=='getlist')
 {
     $totalcount = GetList($page);
     GetPageList($pagesize, $totalcount);
     exit();
 }
-/*----------------------
-发送评论
-function send(){ }
-----------------------*/
 else if($dopost=='send')
 {
     require_once(DEDEINC.'/charset.func.php');
     
-    //检查验证码
-    if($cfg_feedback_ck=='Y')
-    {
-        $svali = strtolower(trim(GetCkVdValue()));
-        if(strtolower($validate) != $svali || $svali=='')
-        {
-            ResetVdValue();
-            echo '<font color="red">验证码错误，请点击验证码图片更新验证码！</font>';
-            exit();
-        }
-    }
+    // 已移除验证码检查
     
     $arcRow = GetOneArchive($aid);
     if(empty($arcRow['aid']))
@@ -69,13 +51,13 @@ else if($dopost=='send')
         exit();
     }
     
-    if( $cfg_soft_lang != 'utf8' )
+    if($cfg_soft_lang != 'utf8')
     {
         $msg = UnicodeUrl2Gbk($msg);
         if(!empty($username)) $username = UnicodeUrl2Gbk($username);
     }
-    //词汇过滤检查
-    if( $cfg_notallowstr != '' )
+
+    if($cfg_notallowstr != '')
     {
         if(preg_match("#".$cfg_notallowstr."#i", $msg))
         {
@@ -83,21 +65,21 @@ else if($dopost=='send')
             exit();
         }
     }
-    if( $cfg_replacestr != '' )
+    if($cfg_replacestr != '')
     {
         $msg = preg_replace("#".$cfg_replacestr."#i", '***', $msg);
     }
-    if( empty($msg) )
+    if(empty($msg))
     {
         echo "<font color='red'>评论内容可能不合法或为空！</font>";
         exit();
     }
-	if($cfg_feedback_guest == 'N' && $cfg_ml->M_ID < 1)
-	{
-		echo "<font color='red'>管理员禁用了游客评论！<a href='{$cfg_cmspath}/member/login.php'>点击登录</a></font>";
-		exit();
-	}
-    //检查用户
+    if($cfg_feedback_guest == 'N' && $cfg_ml->M_ID < 1)
+    {
+        echo "<font color='red'>管理员禁用了游客评论！<a href='{$cfg_cmspath}/member/login.php'>点击登录</a></font>";
+        exit();
+    }
+
     $username = empty($username) ? '游客' : $username;
     if(empty($notuser)) $notuser = 0;
     if($notuser==1)
@@ -118,12 +100,10 @@ else if($dopost=='send')
         $cfg_ml = new MemberLogin();
     }
     
-    //检查评论间隔时间
     $ip = GetIP();
     $dtime = time();
     if(!empty($cfg_feedback_time))
     {
-        //检查最后发表评论时间，如果未登录判断当前IP最后评论时间
         $where = ($cfg_ml->M_ID > 0 ? "WHERE `mid` = '$cfg_ml->M_ID' " : "WHERE `ip` = '$ip' ");
         $row = $dsql->GetOne("SELECT dtime FROM `#@__feedback` $where ORDER BY `id` DESC ");
         if(is_array($row) && $dtime - $row['dtime'] < $cfg_feedback_time)
@@ -133,73 +113,29 @@ else if($dopost=='send')
             exit();
         }
     }
-    $face = 1;
-    extract($arcRow, EXTR_SKIP);
+
     $msg = cn_substrR(TrimMsg($msg), 500);
     $username = cn_substrR(HtmlReplace($username,2), 20);
-    if(empty($feedbacktype) || ($feedbacktype!='good' && $feedbacktype!='bad'))
-    {
-        $feedbacktype = 'feedback';
-    }
-    //保存评论内容
-    if(!empty($fid))
-    {
-        $row = $dsql->GetOne("SELECT username,msg from `#@__feedback` WHERE id ='$fid' ");
-        $qmsg = '{quote}{content}'.$row['msg'].'{/content}{title}'.$row['username'].' 的原帖：{/title}{/quote}';
-        $msg = addslashes($qmsg).$msg;
-    }
     $ischeck = ($cfg_feedbackcheck=='Y' ? 0 : 1);
     $arctitle = addslashes(RemoveXSS($title));
     $typeid = intval($typeid);
-    $feedbacktype = preg_replace("#[^0-9a-z]#i", "", $feedbacktype);
-    $inquery = "INSERT INTO `#@__feedback`(`aid`,`typeid`,`username`,`arctitle`,`ip`,`ischeck`,`dtime`, `mid`,`bad`,`good`,`ftype`,`face`,`msg`)
-                   VALUES ('$aid','$typeid','$username','$arctitle','$ip','$ischeck','$dtime', '{$cfg_ml->M_ID}','0','0','$feedbacktype','$face','$msg'); ";
+
+    $inquery = "INSERT INTO `#@__feedback`(`aid`,`typeid`,`username`,`arctitle`,`ip`,`ischeck`,`dtime`,`mid`,`msg`) 
+               VALUES ('$aid','$typeid','$username','$arctitle','$ip','$ischeck','$dtime','{$cfg_ml->M_ID}','$msg');";
     $rs = $dsql->ExecuteNoneQuery($inquery);
-    if( !$rs )
+    if(!$rs)
     {
-            echo "<font color='red'>发表评论出错了！</font>";
-            //echo $dslq->GetError();
-            exit();
+        echo "<font color='red'>发表评论出错了！</font>";
+        exit();
     }
-    $newid = $dsql->GetLastID();
-  //给文章评分
-    if($feedbacktype=='bad')
-    {
-        $dsql->ExecuteNoneQuery("UPDATE `#@__archives` SET scores=scores-{cfg_feedback_sub},badpost=badpost+1,lastpost='$dtime' WHERE id='$aid' ");
-    }
-    else if($feedbacktype=='good')
-    {
-        $dsql->ExecuteNoneQuery("UPDATE `#@__archives` SET scores=scores+{$cfg_feedback_add},goodpost=goodpost+1,lastpost='$dtime' WHERE id='$aid' ");
-    }
-    else
-    {
-        $dsql->ExecuteNoneQuery("UPDATE `#@__archives` SET scores=scores+1,lastpost='$dtime' WHERE id='$aid' ");
-    }
-    //给用户增加积分
+
     if($cfg_ml->M_ID > 0)
     {
-        #api{{
-        if(defined('UC_API') && @include_once DEDEROOT.'/api/uc.func.php')
-        {
-            //同步积分
-            uc_credit_note($cfg_ml->M_LoginID, $cfg_sendfb_scores);
-            
-            //推送事件
-            $arcRow = GetOneArchive($aid);
-            $feed['icon'] = 'thread';
-            $feed['title_template'] = '<b>{username} 在网站发表了评论</b>';
-            $feed['title_data'] = array('username' => $cfg_ml->M_UserName);
-            $feed['body_template'] = '<b>{subject}</b><br>{message}';
-            $url = !strstr($arcRow['arcurl'],'http://') ? ($cfg_basehost.$arcRow['arcurl']) : $arcRow['arcurl'];        
-            $feed['body_data'] = array('subject' => "<a href=\"".$url."\">$arcRow[arctitle]</a>", 'message' => cn_substr(strip_tags(preg_replace("/\[.+?\]/is", '', $msg)), 150));
-            $feed['images'][] = array('url' => $cfg_basehost.'/images/scores.gif', 'link'=> $cfg_basehost);
-            uc_feed_note($cfg_ml->M_LoginID,$feed); unset($arcRow);
-        }
-        #/aip}}
         $dsql->ExecuteNoneQuery("UPDATE `#@__member` set scores=scores+{$cfg_sendfb_scores} WHERE mid='{$cfg_ml->M_ID}' ");
-        $row = $dsql->GetOne("SELECT COUNT(*) AS nums FROM `#@__feedback` WHERE `mid`='".$cfg_ml->M_ID."'");
-        $dsql->ExecuteNoneQuery("UPDATE `#@__member_tj` SET `feedback`='$row[nums]' WHERE `mid`='".$cfg_ml->M_ID."'");
+        $row = $dsql->GetOne("SELECT COUNT(*) AS nums FROM `#@__feedback` WHERE `mid`='{$cfg_ml->M_ID}'");
+        $dsql->ExecuteNoneQuery("UPDATE `#@__member_tj` SET `feedback`='$row[nums]' WHERE `mid`='{$cfg_ml->M_ID}'");
     }
+
     $_SESSION['sedtime'] = time();
     if($ischeck==0)
     {
@@ -208,59 +144,45 @@ else if($dopost=='send')
     }
     else
     {
+        $newid = $dsql->GetLastID();
         $spaceurl = '#';
         if($cfg_ml->M_ID > 0) $spaceurl = "{$cfg_memberurl}/index.php?uid=".urlencode($cfg_ml->M_LoginID);
-        $id = $newid;
+
         $msg = stripslashes($msg);
         $msg = str_replace('<', '&lt;', $msg);
         $msg = str_replace('>', '&gt;', $msg);
-		helper('smiley');
+        helper('smiley');
         $msg = RemoveXSS(Quote_replace(parseSmileys($msg, $cfg_cmspath.'/images/smiley')));
-        //$msg = RemoveXSS(Quote_replace($msg));
-        if($feedbacktype=='bad') $bgimg = 'cmt-bad.gif';
-        else if($feedbacktype=='good') $bgimg = 'cmt-good.gif';
-        else $bgimg = 'cmt-neu.gif';
-        global $dsql, $aid, $pagesize, $cfg_templeturl;
+
         if($cfg_ml->M_ID==""){
-             $mface=$cfg_cmspath."/member/templets/images/dfboy.png";
+            $mface=$cfg_cmspath."/member/templets/images/dfboy.png";
         } else {
-          $row = $dsql->GetOne("SELECT face,sex FROM `#@__member` WHERE mid={$cfg_ml->M_ID} ");
+            $row = $dsql->GetOne("SELECT face,sex FROM `#@__member` WHERE mid={$cfg_ml->M_ID} ");
             if(empty($row['face']))
             {
-              if($row['sex']=="女") $mface=$cfg_cmspath."/member/templets/images/dfgirl.png";
-              else $mface=$cfg_cmspath."/member/templets/images/dfboy.png";
+                if($row['sex']=="女") $mface=$cfg_cmspath."/member/templets/images/dfgirl.png";
+                else $mface=$cfg_cmspath."/member/templets/images/dfboy.png";
             }
         }
 ?>
-
-<div class='decmt-box2'>
-  <ul>
-    <li> <a href='<?php echo $spaceurl; ?>' class='plpic'><img src='<?php echo $mface;?>'  height='40' width='40'/></a> <span class="title"><a href="<?php echo $spaceurl; ?>"><?php echo $username; ?></a></span>
-    <div class="comment_act"><span class="fl"><?php echo GetDateMk($dtime); ?>发表</span></div>
-      <div style="clear:both"><?php echo ubb($msg); ?></div>
-      <div class="newcomment_act"><span class="fr"><span id='goodfb<?php echo $id; ?>'> <a href='#goodfb<?php echo $id; ?>' onclick="postBadGood('goodfb',<?php echo $id; ?>);">支持</a>[0] </span> <span id='badfb<?php echo $id; ?>'> <a href='#badfb<?php echo $id; ?>' onclick="postBadGood('badfb',<?php echo $id; ?>);">反对</a>[0] </span> <span class='quote'>
-        <!--<a href='/plus/feedback.php?aid=<?php echo $id; ?>&fid=<?php echo $id; ?>&action=quote'>[引用]</a>-->
-        <a href='javascript:ajaxFeedback(<?php echo $id; ?>,<?php echo $id; ?>,"quote");'>[引用]</a> </span></span></div>
-    </li>
-    <div id="ajaxfeedback_<?php echo $id; ?>"></div>
-  </ul>
+<div class="decmt-box2">
+<img src='<?php echo $mface;?>' height='40' width='40'/>
+<div class="content">
+<span class="fl"><?php echo $username; ?> · <?php echo GetDateMk($dtime); ?></span>
+<div class="text">刚刚：<?php echo ubb($msg); ?></div>
 </div>
-<br style='clear:both' />
+</div>
+
+
 <?php
     }
     exit();
 }
 
-/**
- *  读取列表内容
- *
- * @param     int  $page  页码
- * @return    string
- */
 function GetList($page=1)
 {
-    global $dsql, $aid, $pagesize, $cfg_templeturl,$cfg_cmspath;
-    $querystring = "SELECT fb.*,mb.userid,mb.face as mface,mb.spacesta,mb.scores,mb.sex FROM `#@__feedback` fb
+    global $dsql, $aid, $pagesize, $cfg_templeturl, $cfg_cmspath;
+    $querystring = "SELECT fb.*,mb.userid,mb.face as mface,mb.sex FROM `#@__feedback` fb
                  LEFT JOIN `#@__member` mb on mb.mid = fb.mid WHERE fb.aid='$aid' AND fb.ischeck='1' ORDER BY fb.id DESC";
     $row = $dsql->GetOne("SELECT COUNT(*) AS dd FROM `#@__feedback` WHERE aid='$aid' AND ischeck='1' ");
     $totalcount = (empty($row['dd']) ? 0 : $row['dd']);
@@ -276,54 +198,31 @@ function GetList($page=1)
         if($fields['userid']!='') $spaceurl = $GLOBALS['cfg_memberurl'].'/index.php?uid='.$fields['userid'];
         else $spaceurl = '#';
         if($fields['username']=='匿名') $spaceurl = '#';
-        $fields['bgimg'] = 'cmt-neu.gif';
-        $fields['ftypetitle'] = '该用户表示中立';
-        if($fields['ftype']=='bad')
-        {
-            $fields['bgimg'] = 'cmt-bad.gif';
-            $fields['ftypetitle'] = '该用户表示差评';
-        }
-        else if($fields['ftype']=='good')
-        {
-            $fields['bgimg'] = 'cmt-good.gif';
-            $fields['ftypetitle'] = '该用户表示好评';
-        }
+
         if(empty($fields['mface']))
         {
             if($fields['sex']=="女") $fields['mface']=$cfg_cmspath."/member/templets/images/dfgirl.png";
             else $fields['mface']=$cfg_cmspath."/member/templets/images/dfboy.png";
         }
-        $fields['face'] = empty($fields['face']) ? 6 : $fields['face'];
+
         $fields['msg'] = str_replace('<', '&lt;', $fields['msg']);
         $fields['msg'] = str_replace('>', '&gt;', $fields['msg']);
-		helper('smiley');
+        helper('smiley');
         $fields['msg'] = RemoveXSS(Quote_replace(parseSmileys($fields['msg'], $cfg_cmspath.'/images/smiley')));
         extract($fields, EXTR_OVERWRITE);
 ?>
 <div class="decmt-box2">
-  <ul>
-    <li> <a href='<?php echo $spaceurl; ?>' class='plpic'><img src='<?php echo $mface;?>'  height='40' width='40'/></a> <span class="title"><a href="<?php echo $spaceurl; ?>"><?php echo $username; ?></a></span>
-      <div class="comment_act"><span class="fl"><?php echo GetDateMk($dtime); ?>发表</span></div>
-      <div style="clear:both"><?php echo ubb($msg); ?></div>
-      <div class="newcomment_act"><span class="fr"><span id='goodfb<?php echo $id; ?>'> <a href='#goodfb<?php echo $id; ?>' onclick="postBadGood('goodfb',<?php echo $id; ?>);">支持</a>[<?php echo $good; ?>] </span> <span id='badfb<?php echo $id; ?>'> <a href='#badfb<?php echo $id; ?>' onclick="postBadGood('badfb',<?php echo $id; ?>);">反对</a>[<?php echo $bad; ?>] </span> <span class='quote'>
-        <!--<a href='/plus/feedback.php?aid=<?php echo $id; ?>&fid=<?php echo $id; ?>&action=quote'>[引用]</a>-->
-        <a href='javascript:ajaxFeedback(<?php echo $id; ?>,<?php echo $id; ?>,"quote");'>[引用]</a> </span></span></div>
-    </li>
-  </ul>
-  <div id="ajaxfeedback_<?php echo $id; ?>"></div>
+<img src='<?php echo $mface;?>' height='40' width='40'/>
+<div class="content">
+<span class="fl"><?php echo $username; ?> · <?php echo GetDateMk($dtime); ?></span>
+<div class="text"><?php echo ubb($msg); ?></div>
+</div>
 </div>
 <?php
     }
     return $totalcount;            
 }
 
-/**
- *  获取分页列表
- *
- * @param     int  $pagesize  显示条数
- * @param     int  $totalcount  总数
- * @return    string
- */
 function GetPageList($pagesize, $totalcount)
 {
     global $page;
@@ -332,41 +231,38 @@ function GetPageList($pagesize, $totalcount)
     if($allpage < 2) 
     {
         echo '';
-        return ;
+        return;
     }
-    echo "
-<div id='commetpages'>";
-  echo "<span>总: {$allpage} 页/{$totalcount} 条评论</span> ";
-  $listsize = 5;
-  $total_list = $listsize * 2 + 1;
-  $totalpage = $allpage;
-  $listdd = '';
-  if($curpage-1 > 0 )
-  {
-  echo "<a href='#commettop' onclick='LoadCommets(".($curpage-1).");'>上一页</a> ";
-  }
-  if($curpage >= $total_list)
-  {
-  $j = $curpage - $listsize;
-  $total_list = $curpage + $listsize;
-  if($total_list > $totalpage)
-  {
-  $total_list = $totalpage;
-  }
-  }
-  else
-  {
-  $j = 1;
-  if($total_list > $totalpage) $total_list = $totalpage;
-  }
-  for($j; $j <= $total_list; $j++)
-  {
-  echo ($j==$curpage ? "<strong>$j</strong> " : "<a href='#commettop' onclick='LoadCommets($j);'>{$j}</a> ");
-  }
-  if($curpage+1 <= $totalpage )
-  {
-  echo "<a href='#commettop' onclick='LoadCommets(".($curpage+1).");'>下一页</a> ";
-  }
-  echo "</div>
-";
+    echo "<div id='commetpages'>";
+    echo "<span>Total: {$allpage} Page/{$totalcount} Item</span> ";
+    $listsize = 5;
+    $total_list = $listsize * 2 + 1;
+    $totalpage = $allpage;
+    if($curpage-1 > 0)
+    {
+        echo "<a href='#commettop' onclick='LoadCommets(".($curpage-1).");'>Pre</a> ";
+    }
+    if($curpage >= $total_list)
+    {
+        $j = $curpage - $listsize;
+        $total_list = $curpage + $listsize;
+        if($total_list > $totalpage)
+        {
+            $total_list = $totalpage;
+        }
+    }
+    else
+    {
+        $j = 1;
+        if($total_list > $totalpage) $total_list = $totalpage;
+    }
+    for($j; $j <= $total_list; $j++)
+    {
+        echo ($j==$curpage ? "<strong>$j</strong> " : "<a href='#commettop' onclick='LoadCommets($j);'>{$j}</a> ");
+    }
+    if($curpage+1 <= $totalpage)
+    {
+        echo "<a href='#commettop' onclick='LoadCommets(".($curpage+1).");'>Next</a> ";
+    }
+    echo "</div>";
 }

@@ -1,1 +1,0 @@
-<img class="header-image main-image" alt="[field:title/]" src=" [field:litpic/]" />

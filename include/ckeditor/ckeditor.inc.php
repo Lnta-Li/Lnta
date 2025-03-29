@@ -57,14 +57,17 @@ $toolbar['MemberLit'] = array(
             array( 'TextColor', 'BGColor')
         );
 $toolbar['Diy'] = array(
-            array( 'Source','-'),
+            array( 'Source','-','Templates'),
             array( 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Print'),
             array( 'Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'),
+            array( 'ShowBlocks'),array('Image','Flash','Addon'),array('Maximize'),'/',
             array( 'Bold','Italic','Underline','Strike','-'),
-            array( 'Table','HorizontalRule'),
-            array( 'Link','Unlink','Image','Anchor'),
+            array( 'NumberedList','BulletedList','-','Outdent','Indent','Blockquote'),
+            array( 'JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'),
+            array( 'Table','HorizontalRule','Smiley','SpecialChar'),
+            array( 'Link','Unlink','Anchor'),'/',
             array( 'Styles','Format','Font','FontSize'),
-            array( 'TextColor', 'BGColor')
+            array( 'TextColor', 'BGColor', 'MyPage','MultiPic')
         );
 $toolbar['Feedback'] = array(
             array( 'Source','-','Bold','Italic','Underline','-'),

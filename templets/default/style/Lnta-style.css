@@ -29,9 +29,9 @@ body {
 @font-face {
     font-family: 'iconfont';  /* Project id 4858194 */
     src: 
-         url('//at.alicdn.com/t/c/font_4858194_p223v1afiso.woff2?t=1742899883582') format('woff2'),
-         url('//at.alicdn.com/t/c/font_4858194_p223v1afiso.woff?t=1742899883582') format('woff'),
-         url('//at.alicdn.com/t/c/font_4858194_p223v1afiso.ttf?t=1742899883582') format('truetype');
+         url('//at.alicdn.com/t/c/font_4858194_j7xo1pmkd4c.woff2?t=1743240224826') format('woff2'),
+         url('//at.alicdn.com/t/c/font_4858194_j7xo1pmkd4c.woff?t=1743240224826') format('woff'),
+         url('//at.alicdn.com/t/c/font_4858194_j7xo1pmkd4c.ttf?t=1743240224826') format('truetype');
   }
 
 .iconfont {
@@ -40,6 +40,10 @@ body {
     -webkit-font-smoothing: antialiased;
     -webkit-text-stroke-width: 0.2px;
     -moz-osx-font-smoothing: grayscale;
+}
+
+a:focus-visible {
+    outline: none; 
 }
 
 /* 页面包装器 */
@@ -98,11 +102,24 @@ h6.active {
     width: 44.4444%;
     z-index: 4;
     box-sizing: border-box;
-    max-width: 44.4444% !important;
+    opacity: 0;
+    padding-bottom: 35px;
+    animation: fadeInUp 0.3s ease 0.5s forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        padding-bottom: 35px;
+    }
+    to {
+        opacity: 1;
+        padding-bottom: 0;
+    }
 }
 
 .header-text {
-    color: rgba(33, 36, 44, 0.64);
+    color: rgb(131 142 172);
     font-size: 56px;
     line-height: 1.15;
     padding: 0 16px;
@@ -128,9 +145,8 @@ h6.active {
     width: 44.4444%;
     box-sizing: border-box;
     overflow: hidden;
-    z-index: 2;
+    z-index: 1;
 }
-
 /* 文本选中样式 */
 ::selection {
     background: #54ff9670;
@@ -170,7 +186,7 @@ h6.active {
     right: 0;
     padding: 90px 0;
     margin-top: -115px;
-    z-index: 1;
+    z-index: -1;
 }
 
 .projects-container {
@@ -229,7 +245,7 @@ ul {
 
 .project-header {
     max-width: 100%;
-    max-height: 500px;
+    max-height: 80vh;
 }
 
 .project-title {
@@ -268,10 +284,6 @@ h6 strong {
 
 .col-3 {
     width: 384px;
-}
-
-.col-4 {
-    width: 512px;
 }
 
 .col-7 {
@@ -321,15 +333,15 @@ h6 strong {
     width: 64vw;
 }
 
-.pagtype-img .fillheight-1 {
-    height: 100%;
+.fillheight-1 {
+    height: 100vh;
     max-width: 320px;
     min-width: 220px;
     width: 20vw;
 }
 
 .pagtype-arc .fillheight-1 {
-    height: 100%;
+    height: 100vh;
     max-width: 400px;
     min-width: 340px;
     width: 24vw;
@@ -628,7 +640,7 @@ h2 {
     font-size: 28px;
     font-weight: 700;
     line-height: 1.1;
-    margin-bottom: 8px;
+    margin: 8px 0;
 }
 
 .project .project-link:hover h2 {
@@ -872,4 +884,13 @@ iframe {
 
 .next-title:hover {
     text-decoration: underline;
+}
+
+.content-width, .header, .about-header, .about-content, .projects-container {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.content-width.show, .header.show, .about-header.show, .about-content.show, .projects-container.show {
+    opacity: 1;
 }
