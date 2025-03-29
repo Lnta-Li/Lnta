@@ -155,10 +155,10 @@
           
           if (goodItem && badItem) {
               // 更新Like数据
-              goodItem.querySelector('.stat-value i').nextSibling.textContent = Math.floor(data.goodper) + '%';
+              goodItem.querySelector('.stat-value i').nextSibling.textContent = parseFloat(data.goodper).toFixed(1) + '%';
               goodItem.querySelector('.stat-label').textContent = 'Like (' + data.goodpost + ')';
               // 更新Dislike数据
-              badItem.querySelector('.stat-value i').nextSibling.textContent = Math.floor(data.badper) + '%';
+              badItem.querySelector('.stat-value i').nextSibling.textContent = parseFloat(data.badper).toFixed(1) + '%';
               badItem.querySelector('.stat-label').textContent = 'Dislike (' + data.badpost + ')';
               
               // 更新按钮状态
@@ -285,15 +285,15 @@
         </div>
         <div class="author-stats">
           <div class="stat-item" onclick="javascript:postDigg('good',{dede:field.id/})">
-            <span class="stat-value"><i class="iconfont">&#xe616;</i>{dede:field.goodper function='floor(@me)'/}%</span>
+            <span class="stat-value"><i class="iconfont">&#xe616;</i>{dede:field.goodper function='number_format(@me,1)'/}%</span>
             <span class="stat-label">Like ({dede:field.goodpost/})</span>
           </div>
           <div class="stat-item" onclick="javascript:postDigg('bad',{dede:field.id/})">
-            <span class="stat-value"><i class="iconfont">&#xe60f;</i>{dede:field.badper function='floor(@me)'/}%</span>
+            <span class="stat-value"><i class="iconfont">&#xe60f;</i>{dede:field.badper function='number_format(@me,1)'/}%</span>
             <span class="stat-label">Dislike ({dede:field.badpost/})</span>
           </div>
           <div class="stat-item" id="comment-trigger">
-            <span class="stat-value"><i class="iconfont">&#xe60e;</i>{dede:field.id runphp='yes'} global $dsql; $row = $dsql->GetOne("SELECT COUNT(*) AS num FROM dede_feedback WHERE aid=@me"); @me=$row['num']; {/dede:field.id}</span>
+            <span class="stat-value"><i class="iconfont">&#xe60e;</i>{dede:field.id runphp='yes'} global $dsql; $row = $dsql->GetOne("SELECT COUNT(*) AS num FROM dede_feedback WHERE aid=@me"); @me=$row['num']; {/dede:field.id}+</span>
             <span class="stat-label" style="cursor: pointer;">Comment</span>
           </div>
         </div>
@@ -309,9 +309,6 @@
         <h3>Reviews</h3>
         {dede:include file='ajaxfeedback.htm' /}
       </div>
-
-
-      <div class="fillwidth-1"></div>
 
       <section class="next-shelf">
         <li class="project" style="max-width: 70%;">
