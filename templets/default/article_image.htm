@@ -270,9 +270,10 @@
         {dede:field.body/}
       </section>
 
-      <div class="fillwidth-1"></div>
-
       <!--- 作者信息区域 -->
+      <div class="conversation-starters">
+        <h3>Reviews</h3>
+      </div>
       <div class="author-info">
         <div class="author-header">
           <span class="author-label">作者</span>
@@ -280,7 +281,7 @@
         </div>
         <div class="author-description">
           {dede:arclist row='1' type='image.' titlelen='100' orderby=click}
-          Popular: <a href="[field:arcurl/]">[field:title/]</a>
+          <i class="iconfont" style="padding-right: 5px;font-size: 18px;">&#xe66e;</i>Popular: <a href="[field:arcurl/]">[field:title/]</a>
           {/dede:arclist}
         </div>
         <div class="author-stats">
@@ -306,7 +307,7 @@
       <script language="javascript" type="text/javascript">getDigg({ dede: field.id /});</script>
       <!--- 对话开场白区域 -->
       <div class="conversation-starters">
-        <h3>Reviews</h3>
+        <h3>Comment</h3>
         {dede:include file='ajaxfeedback.htm' /}
       </div>
 

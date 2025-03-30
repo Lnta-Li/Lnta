@@ -342,7 +342,7 @@ textarea:focus-visible, input:focus-visible {
 .starter-item:hover {
     background-color: rgb(125 125 125 / 6%);
 }
-
+/*
 .slide-mask-r, .slide-mask-l {
     position: relative;
 }
@@ -370,7 +370,7 @@ textarea:focus-visible, input:focus-visible {
     pointer-events: none;
     z-index: 1;
 }
-
+*/
 .comment-form-container {
     display: none;
     position: fixed;
@@ -452,5 +452,5 @@ textarea:focus-visible, input:focus-visible {
 }
 
 #commetcontentNew {
-    position:absolute;	
+    height: 30px;
 }
