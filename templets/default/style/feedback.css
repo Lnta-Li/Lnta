@@ -1,3 +1,19 @@
+@media screen and (max-width: 768px) {
+    .stat-value {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .author-description a, .author-description {
+        font-size: 14px;
+    }
+
+    .author-description a {
+        width: 75%;
+    }
+
+}
+
 .dcmp-userinfo button {
     width: 91px;
     height: 40px;
@@ -220,6 +236,10 @@ textarea:focus-visible, input:focus-visible {
 .author-description a {
     color: rgb(64, 65, 66);
     text-decoration: none;
+    font-size: 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .author-description a:hover {
@@ -231,8 +251,7 @@ textarea:focus-visible, input:focus-visible {
     display: flex;
     gap: 6%;
     justify-content: center;
-    position: relative;
-    height: 50px;
+    text-align: center;
 }
 
 .stat-item {
@@ -253,7 +272,7 @@ textarea:focus-visible, input:focus-visible {
     top: 50%;
     transform: translateY(-50%);
     width: 1px;
-    height: 100%;
+    height: 80%;
     background-color: rgb(115 115 115 / 20%);
 }
 
