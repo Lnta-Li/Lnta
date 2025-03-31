@@ -1,0 +1,536 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>测试上下一篇的图集文档案例_设计师Lntano的个人作品集</title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta http-equiv="mobile-agent" content="format=xhtml;url=/m/view.php?aid=36">
+<link href="/templets/default/style/Lnta-style.css" rel="stylesheet" media="screen" type="text/css" />
+<link href="/templets/default/style/Lnta-mobile.css" rel="stylesheet" media="screen" type="text/css" />
+<link href="/templets/default/style/image-carousel.css" rel="stylesheet" media="screen"
+  type="text/css" />
+<link href="/templets/default/style/feedback.css" rel="stylesheet" media="screen" type="text/css" />
+<script language="javascript" type="text/javascript" src="/include/dedeajax2.js"></script>
+<script language="javascript" type="text/javascript">
+  <!--
+  function CheckLogin(){
+    var taget_obj = document.getElementById('_ajax_feedback');
+    myajax = new DedeAjax(taget_obj,false,false,'','','');
+    myajax.SendGet2("/member/ajax_feedback.php");
+    DedeXHTTP = null;
+  }
+  function checkSubmit(){
+    if(document.feedback.msg.value!='') document.feedback.submit();
+    else alert("评论内容不能为空！");
+  }
+  function postBadGood(ftype,fid)
+  {
+    var taget_obj = document.getElementById(ftype+fid);
+    var saveid = GetCookie('badgoodid');
+    if(saveid != null)
+    {
+      var saveids = saveid.split(',');
+      var hasid = false;
+      saveid = '';
+      j = 1;
+      for(i=saveids.length-1;i>=0;i--)
+      {
+        if(saveids[i]==fid && hasid) continue;
+        else {
+          if(saveids[i]==fid && !hasid) hasid = true;
+          saveid += (saveid=='' ? saveids[i] : ','+saveids[i]);
+          j++;
+          if(j==10 && hasid) break;
+          if(j==9 && !hasid) break;
+        }
+      }
+      if(hasid) { alert('您刚才已表决过了喔！'); return false;}
+      else saveid += ','+fid;
+      SetCookie('badgoodid',saveid,1);
+    }
+    else
+    {
+      SetCookie('badgoodid',fid,1);
+    }
+    myajax = new DedeAjax(taget_obj,false,false,'','','');
+    myajax.SendGet2("/plus/feedback.php?aid="+fid+"&action="+ftype+"&fid="+fid);
+    DedeXHTTP = null;
+  }
+  function postDigg(ftype,aid) {
+      var taget_obj = document.getElementById('newdigg');
+      var saveid = GetCookie('diggid');
+      var currentState = 0;
+      
+      // 解析当前状态
+      if(saveid) {
+          var states = saveid.split('|');
+          for(var i = 0; i < states.length; i++) {
+              var parts = states[i].split(':');
+              if(parts[0] == aid) {
+                  currentState = parseInt(parts[1]);
+                  break;
+              }
+          }
+      }
+      
+      // 计算新状态
+      var newState = 0;
+      if(ftype == 'good') {
+          if(currentState == 1) newState = 0;  // 取消点赞
+          else if(currentState == -1) {  // 从踩改为点赞
+              newState = 1;
+              // 先发送取消踩的请求
+              var cancelUrl = "/plus/digg_ajax.php?action=bad&id="+aid+"&state=0";
+              var tempAjax = new DedeAjax(taget_obj,false,false,'','','');
+              tempAjax.SendGet2(cancelUrl);
+              DedeXHTTP = null;
+          } else newState = 1;  // 首次点赞
+      } else {
+          if(currentState == -1) newState = 0;  // 取消踩
+          else if(currentState == 1) {  // 从点赞改为踩
+              newState = -1;
+              // 先发送取消点赞的请求
+              var cancelUrl = "/plus/digg_ajax.php?action=good&id="+aid+"&state=0";
+              var tempAjax = new DedeAjax(taget_obj,false,false,'','','');
+              tempAjax.SendGet2(cancelUrl);
+              DedeXHTTP = null;
+          } else newState = -1;  // 首次踩
+      }
+      
+      // 更新Cookie
+      var newSaveid = '';
+      if(saveid) {
+          var states = saveid.split('|');
+          var found = false;
+          for(var i = 0; i < states.length; i++) {
+              var parts = states[i].split(':');
+              if(parts[0] == aid) {
+                  if(newState != 0) {
+                      newSaveid += (newSaveid ? '|' : '') + aid + ':' + newState;
+                  }
+                  found = true;
+              } else {
+                  newSaveid += (newSaveid ? '|' : '') + states[i];
+              }
+          }
+          if(!found && newState != 0) {
+              newSaveid += (newSaveid ? '|' : '') + aid + ':' + newState;
+          }
+      } else if(newState != 0) {
+          newSaveid = aid + ':' + newState;
+      }
+      
+      // 保存状态
+      SetCookie('diggid', newSaveid, 30);  // 30天有效期
+      
+      // 发送AJAX请求
+      myajax = new DedeAjax(taget_obj,false,false,'','','');
+      var url = "/plus/digg_ajax.php?action="+ftype+"&id="+aid+"&state="+newState;
+      myajax.SendGet2(url);
+      DedeXHTTP = null;
+      
+      // 更新显示
+      updateDiggDisplay();
+  }
+  function getDigg(aid) {
+      var taget_obj = document.getElementById('newdigg');
+      myajax = new DedeAjax(taget_obj,false,false,'','','');
+      myajax.SendGet2("/plus/digg_ajax.php?id="+aid);
+      DedeXHTTP = null;
+      
+      // 更新显示
+      updateDiggDisplay();
+  }
+  function updateDiggDisplay() {
+      var newdigg = document.getElementById('newdigg');
+      if (!newdigg || !newdigg.textContent) return;
+      
+      try {
+          var data = JSON.parse(newdigg.textContent);
+          // 使用更精确的选择器
+          var goodItem = document.querySelector('.stat-item[onclick*="postDigg(\'good\'"]');
+          var badItem = document.querySelector('.stat-item[onclick*="postDigg(\'bad\'"]');
+          
+          if (goodItem && badItem) {
+              // 更新Like数据
+              goodItem.querySelector('.stat-value i').nextSibling.textContent = parseFloat(data.goodper).toFixed(1) + '%';
+              goodItem.querySelector('.stat-label').textContent = 'Like (' + data.goodpost + ')';
+              // 更新Dislike数据
+              badItem.querySelector('.stat-value i').nextSibling.textContent = parseFloat(data.badper).toFixed(1) + '%';
+              badItem.querySelector('.stat-label').textContent = 'Dislike (' + data.badpost + ')';
+              
+              // 更新按钮状态
+              if(data.userState) {
+                  // 移除所有active类
+                  goodItem.classList.remove('active');
+                  badItem.classList.remove('active');
+                  // 根据状态添加active类
+                  if(data.userState == 1) {
+                      goodItem.classList.add('active');
+                  } else if(data.userState == -1) {
+                      badItem.classList.add('active');
+                  }
+              } else {
+                  // 如果状态为0，移除所有active类
+                  goodItem.classList.remove('active');
+                  badItem.classList.remove('active');
+              }
+          }
+      } catch (e) {
+          console.error('Error updating digg display:', e);
+      }
+  }
+  $(function() {
+    $("#navigation .sort").click(function(){
+      $(this).next(".menu").toggleClass("invisible");
+      $(this).toggleClass("hover");
+    })
+    $(".scroll").jCarouselLite({})
+  });
+  function ChangePic(picsrc, imgid)
+  {
+    $(imgid).get(0).src = picsrc;
+  }
+  document.addEventListener('DOMContentLoaded', function () {
+      // 获取文章ID
+      var aid = document.querySelector('.stat-item[onclick*="postDigg"]').getAttribute('onclick').match(/\d+/)[0];
+      
+      // 立即获取并更新状态
+      getDigg(aid);
+    
+  });
+  //-->
+</script>
+</head>
+
+<body class="articleview">
+
+  <!---加载Nav-->
+  <style>
+  .header-image:hover {
+    cursor: url(/uploads/250317/1-250323225050495.png), pointer;
+}
+</style>
+
+<div class="page-wrapper">
+  <div class="mobile-menu-toggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  <nav class="navigation navwidth mobile-nav">
+    <a class="home" href="/">Home</a>
+    
+    <a class="" href="/a/About/">About</a>
+    
+    <a class="" href="/a/Graphic/">Graphic</a>
+    <a class='active' href='/a/Activity/' ><span>Activity</span></a>
+    <a class="" href="/a/3d/">3D Design</a>
+    
+    <a class="" href="/a/Drawing/">Drawing</a>
+    
+    <a class="" href="/a/AIGC/">AIGC</a>
+    
+    <a class="" href="/a/Orther/">Other</a>
+    
+  </nav>
+</div>
+
+<!--页面内容-->
+<div class="page-wrapper pagtype" style="display: flex;">
+  <div class="fillheight-1"></div>
+  <div class="content-width">
+    <div class="fillwidth-1"></div>
+
+    <div class="image-carousel picbox" style="display:none;">
+      <div class="carousel-container">
+        
+      </div>
+    </div>
+
+    <div class="default-img">
+      <img class="project-header" alt="测试上下一篇的图集文档案例" src="/images/defaultpic.gif">
+    </div>
+    <script>
+        // 检查picbox元素中是否存在图片
+        // 如果存在图片，显示picbox并隐藏default-img，同时设置content-area-1
+        // 如果不存在图片，隐藏picbox并显示default-img，同时设置content-area-2
+        document.addEventListener('DOMContentLoaded', function () {
+          var picbox = document.querySelector('.picbox');
+          var defaultImg = document.querySelector('.default-img');
+          var pagtype = document.querySelector('.pagtype');
+          var contentWidth = document.querySelector('.content-width');
+
+          if (picbox.querySelector('img')) {
+            picbox.style.display = 'block';
+            defaultImg.style.display = 'none';
+            pagtype.classList.remove('pagtype-arc');
+            pagtype.classList.add('pagtype-img');
+          } else {
+            picbox.style.display = 'none';
+            defaultImg.style.display = 'block';
+            pagtype.classList.remove('pagtype-img');
+            pagtype.classList.add('pagtype-arc');
+          }
+
+          // 添加show类来触发动画
+          setTimeout(() => {
+            contentWidth.classList.add('show');
+          }, 100);
+        });
+    </script>
+
+    <div class="content-area">
+      <div class="fillwidth-3"></div>
+      <h1><strong>测试上下一篇的图集文档案例</strong></h1>
+      <h2 class="project-description"></h2>
+      <div class="tags">
+        <ul></ul>
+      </div>
+      <section class="Content-Type content-icon">
+        
+      </section>
+
+      <!--- 作者信息区域 -->
+      <div class="conversation-starters">
+        <h3>Reviews</h3>
+      </div>
+      <div class="author-info">
+        <div class="author-header">
+          <span class="author-label">作者</span>
+          <span class="author-name">Lnta</span>
+        </div>
+        <div class="author-description">
+          <i class="iconfont" style="padding-right: 5px;font-size: 18px;">&#xe66e;</i>Popular: <a href="/a/Activity/2025/0327/33.html">苏州网络安全宣传周活动视觉设计</a>
+
+        </div>
+        <div class="author-stats">
+          <div class="stat-item" onclick="javascript:postDigg('good',36)">
+            <span class="stat-value"><i class="iconfont">&#xe616;</i>0.0%</span>
+            <span class="stat-label">Like (0)</span>
+          </div>
+          <div class="stat-item" onclick="javascript:postDigg('bad',36)">
+            <span class="stat-value"><i class="iconfont">&#xe60f;</i>0.0%</span>
+            <span class="stat-label">Dislike (0)</span>
+          </div>
+          <div class="stat-item" id="comment-trigger">
+            <span class="stat-value"><i class="iconfont">&#xe60e;</i>0+</span>
+            <span class="stat-label" style="cursor: pointer;">Comment</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="newdigg" id="newdigg" style="display:none;">
+        <!--- 这个div用于AJAX更新数据 -->
+      </div>
+
+      <script language="javascript" type="text/javascript">getDigg({ dede: field.id /});</script>
+      <!--- 对话开场白区域 -->
+      <div class="conversation-starters">
+        <h3>Comment</h3>
+        <!-- //主模板必须要引入/include/dedeajax2.js -->
+<!-- //评论内容区 -->
+<a name='commettop'></a>
+<div class="mt1">
+	<dl class="tbox" id="slide-box">
+		<!-- //这两个ID的区块必须存在，否则JS会出错 -->
+		<dd id='commetcontentNew'></dd>
+		<dd id='commetcontent'></dd>
+	</dl>
+</div>
+
+<div class="fillwidth-3"></div>
+
+<!-- 评论表单弹出层 -->
+<div class="comment-form-overlay" id="comment-overlay"></div>
+<div class="comment-form-container" id="comment-form">
+	<div class="dede_comment_post">
+		<form action="#" method="post" name="feedback">
+			<input type="hidden" name="dopost" value="send" />
+			<input type="hidden" name="comtype" value="comments">
+			<input type="hidden" name="aid" value="36" />
+			<input type="hidden" name="fid" id='feedbackfid' value="0" />
+			<div class="dcmp-content">
+				<textarea cols="60" name="msg" rows="5" class="ipt-txt"></textarea>
+			</div>
+			<div class="dcmp-post">
+				<div class="dcmp-userinfo" id="_ajax_feedback">
+					<input type="text" name="username" size="12" class="ipt-txt" placeholder="昵称" style="text-transform:uppercase;" />
+					<input type="checkbox" name="notuser" id="dcmp-submit-guest" />
+					<label for="dcmp-submit-guest" />匿名</label>
+					
+					<button type="button" onClick='PostComment()'>评论</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script language='javascript'>
+	// 评论表单弹出控制
+	function initCommentForm() {
+		const trigger = document.getElementById('comment-trigger');
+		const form = document.getElementById('comment-form');
+		const overlay = document.getElementById('comment-overlay');
+		
+		if (!trigger || !form || !overlay) return;
+
+		// 点击评论按钮显示表单
+		trigger.addEventListener('click', () => {
+			form.classList.add('show');
+			overlay.classList.add('show');
+		});
+
+		// 点击遮罩层关闭表单
+		overlay.addEventListener('click', () => {
+			form.classList.remove('show');
+			overlay.classList.remove('show');
+		});
+
+		// 点击表单外部关闭表单
+		document.addEventListener('click', (e) => {
+			if (e.target === overlay) {
+				form.classList.remove('show');
+				overlay.classList.remove('show');
+			}
+		});
+	}
+
+	// 页面加载完成后初始化评论表单
+	window.addEventListener('load', initCommentForm);
+
+	function LoadCommets(page) {
+		var taget_obj = document.getElementById('commetcontent');
+		var waithtml = "<div style='line-height:50px'><img src='/images/loadinglit.gif' />评论加载中...</div>";
+		var myajax = new DedeAjax(taget_obj, true, true, '', 'x', waithtml);
+		myajax.SendGet2("/plus/feedback_ajax.php?dopost=getlist&aid=36&page=" + page);
+		DedeXHTTP = null;
+	}
+	function PostComment() {
+		var f = document.feedback;
+		var nface = '6';
+		var nfeedbacktype = 'feedback';
+		var nvalidate = '';
+		var nnotuser = '';
+		var nusername = '';
+		var npwd = '';
+		var taget_obj = $DE('commetcontentNew');
+		var waithtml = "<div style='line-height:30px'><img src='/images/loadinglit.gif' />正在发送中...</div>";
+		if (f.msg.value == '') {
+			alert("评论内容不能为空！");
+			return;
+		}
+		if (f.msg.value.length > 500) {
+			alert("你的评论是不是太长了？请填写500字以内的评论。");
+			return;
+		}
+		if (f.feedbacktype) {
+			for (var i = 0; i < f.feedbacktype.length; i++)
+				if (f.feedbacktype[i].checked) nfeedbacktype = f.feedbacktype[i].value;
+		}
+		if (f.face) {
+			for (var j = 0; j < f.face.length; j++)
+				if (f.face[j].checked) nface = f.face[j].value;
+		}
+		if (f.notuser.checked) nnotuser = '1';
+		if (f.username) nusername = f.username.value;
+		if (f.pwd) npwd = f.pwd.value;
+
+		var myajax = new DedeAjax(taget_obj, false, true, '', '', waithtml);
+		myajax.sendlang = 'utf-8';
+		myajax.AddKeyN('dopost', 'send');
+		myajax.AddKeyN('aid', '36');
+		myajax.AddKeyN('fid', f.fid.value);
+		myajax.AddKeyN('face', nface);
+		myajax.AddKeyN('feedbacktype', nfeedbacktype);
+		myajax.AddKeyN('validate', nvalidate);
+		myajax.AddKeyN('notuser', nnotuser);
+		myajax.AddKeyN('username', nusername);
+		myajax.AddKeyN('pwd', npwd);
+		myajax.AddKeyN('msg', f.msg.value);
+		myajax.SendPost2('/plus/feedback_ajax.php');
+		f.msg.value = '';
+		f.fid.value = 0;
+		if (f.validate) {
+			if ($DE('validateimg')) $DE('validateimg').src = "/include/vdimgck.php?" + f.validate.value;
+			f.validate.value = '';
+		}
+
+		// 关闭评论框
+		var form = document.getElementById('comment-form');
+		var overlay = document.getElementById('comment-overlay');
+		if (form && overlay) {
+			form.classList.remove('show');
+			overlay.classList.remove('show');
+		}
+
+		// 更新评论计数
+		var commentCount = document.querySelector('#comment-trigger .stat-value');
+		if (commentCount) {
+			var text = commentCount.textContent.trim();
+			var currentCount = parseInt(text.replace(/[^0-9]/g, ''));
+			if (!isNaN(currentCount)) {
+				commentCount.innerHTML = '<i class="iconfont">&#xe60e;</i>' + (currentCount + 1) + '+';
+			}
+		}
+	}
+	function quoteCommet(fid) {
+		document.feedback.fid.value = fid;
+	}
+	LoadCommets(1);
+
+	// 添加滚动效果
+	function initScroll() {
+		const container = document.getElementById('commetcontent');
+		if (!container) return;
+
+		const comments = container.querySelectorAll('.decmt-box2');
+		if (!comments.length) return;
+
+		// 检查内容是否超出容器宽度
+		if (container.scrollWidth <= container.clientWidth) {
+			return; // 如果内容长度不足，直接返回，不执行后续操作
+		}
+
+		// 将评论包装在滚动容器中
+		container.classList.add('comment-scroll-container');
+		const wrapper = document.createElement('div');
+		wrapper.className = 'comment-scroll-wrapper';
+		comments.forEach(comment => wrapper.appendChild(comment));
+		container.appendChild(wrapper);
+	}
+
+	// 等待内容加载完成后初始化滚动
+	window.addEventListener('load', initScroll);
+</script><!-- //评论内容区结束 -->
+      </div>
+
+      <section class="next-shelf">
+        <li class="project" style="max-width: 70%;">
+          <a class="shelf-project-link" href="/a/Activity/2025/0327/33.html">
+            <h6 class="active" style="margin-bottom: 0;">Previous</h6>
+            <div class="next-title">苏州网络安全宣传周活动视觉设计</div>
+          </a>
+        </li>
+        <li class="project" style="text-align: right;max-width: 70%;">
+          <a class="shelf-project-link" href="">
+            <div class="next-title">None</div>
+            <h6 class="active" style="margin-bottom: 0;">Next</h6>
+          </a>
+        </li>
+      </section>
+      <div class="fillwidth-1"></div>
+
+    </div>
+  </div>
+</div>
+<link href="/templets/default/style/image-preview.css" rel="stylesheet" media="screen" type="text/css" />
+<script src="/templets/default/js/image-preview.js"></script>
+<script src="/templets/default/js/image-caption.js"></script>
+<script src="/templets/default/js/mobile-menu.js"></script>
+<script src="/templets/default/js/image-carousel.js"></script>
+</body>
+
+</html>

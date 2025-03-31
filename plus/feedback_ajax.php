@@ -186,6 +186,17 @@ function GetList($page=1)
                  LEFT JOIN `#@__member` mb on mb.mid = fb.mid WHERE fb.aid='$aid' AND fb.ischeck='1' ORDER BY fb.id DESC";
     $row = $dsql->GetOne("SELECT COUNT(*) AS dd FROM `#@__feedback` WHERE aid='$aid' AND ischeck='1' ");
     $totalcount = (empty($row['dd']) ? 0 : $row['dd']);
+    
+    // 添加无评论时的提示信息
+    if($totalcount == 0) {
+        echo '<div class="decmt-box2 no-comments">
+            <div class="content">
+                <div class="text">期待与您交流  Anticipating discourse with you</div>
+            </div>
+        </div>';
+        return 0;
+    }
+    
     $startNum = $pagesize * ($page-1);
     if($startNum > $totalcount)
     {

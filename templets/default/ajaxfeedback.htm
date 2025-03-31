@@ -9,6 +9,24 @@
 	</dl>
 </div>
 
+<!--- 随机推荐 -->
+<div class="conversation-starters">
+	<h3>ReadMore</h3>
+	<dd id='ReadMore'>
+		{dede:arclist typeid='top' limit='1,10' titlelen='80' orderby=rand}
+		<div class="decmt-box2">
+			<a href="[field:arcurl/]">
+				<img src='[field:litpic/]' height='40' width='40' />
+				<div class="content">
+					<span class="fl">[field:typename/] · [field:pubdate function="MyDate('Y-m-d',@me)"/]</span>
+					<div class="text">[field:title/]</div>
+				</div>
+			</a>
+		</div>
+		{/dede:arclist}
+	</dd>
+</div>
+
 <div class="fillwidth-3"></div>
 
 <!-- 评论表单弹出层 -->
@@ -156,23 +174,35 @@
 
 	// 添加滚动效果
 	function initScroll() {
-		const container = document.getElementById('commetcontent');
-		if (!container) return;
-
-		const comments = container.querySelectorAll('.decmt-box2');
-		if (!comments.length) return;
-
-		// 检查内容是否超出容器宽度
-		if (container.scrollWidth <= container.clientWidth) {
-			return; // 如果内容长度不足，直接返回，不执行后续操作
+		// 处理评论区域
+		const commentContainer = document.getElementById('commetcontent');
+		if (commentContainer) {
+			const comments = commentContainer.querySelectorAll('.decmt-box2');
+			if (comments.length && commentContainer.scrollWidth > commentContainer.clientWidth) {
+				commentContainer.classList.add('comment-scroll-container', 'slide-mask-l', 'slide-mask-r');
+				const commentWrapper = document.createElement('div');
+				commentWrapper.className = 'comment-scroll-wrapper';
+				comments.forEach(comment => commentWrapper.appendChild(comment));
+				commentContainer.appendChild(commentWrapper);
+				// 设置评论区域的滚动速度
+				commentWrapper.style.animationDuration = '{dede:global.cfg_comment_speed/}s';
+			}
 		}
 
-		// 将评论包装在滚动容器中
-		container.classList.add('comment-scroll-container');
-		const wrapper = document.createElement('div');
-		wrapper.className = 'comment-scroll-wrapper';
-		comments.forEach(comment => wrapper.appendChild(comment));
-		container.appendChild(wrapper);
+		// 处理ReadMore区域
+		const readMoreContainer = document.getElementById('ReadMore');
+		if (readMoreContainer) {
+			const readMoreItems = readMoreContainer.querySelectorAll('.decmt-box2');
+			if (readMoreItems.length && readMoreContainer.scrollWidth > readMoreContainer.clientWidth) {
+				readMoreContainer.classList.add('comment-scroll-container', 'slide-mask-l', 'slide-mask-r');
+				const readMoreWrapper = document.createElement('div');
+				readMoreWrapper.className = 'comment-scroll-wrapper';
+				readMoreItems.forEach(item => readMoreWrapper.appendChild(item));
+				readMoreContainer.appendChild(readMoreWrapper);
+				// 设置ReadMore区域的滚动速度
+				readMoreWrapper.style.animationDuration = '{dede:global.cfg_readmore_speed/}s';
+			}
+		}
 	}
 
 	// 等待内容加载完成后初始化滚动

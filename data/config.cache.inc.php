@@ -163,4 +163,6 @@ $cfg_auto_translate = 'Y';
 $translate_api_id = '20250322002311983';
 $translate_api_key = '_TD5i_jJ6xpuW17iNbZO';
 $cfg_cursor = '/uploads/250317/1-250323225050495.png';
+$cfg_comment_speed = 10;
+$cfg_readmore_speed = 20;
 ?>

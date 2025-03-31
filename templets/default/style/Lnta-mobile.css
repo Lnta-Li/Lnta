@@ -274,4 +274,9 @@
         border-radius: 0 !important;
         min-height: 25vh;
         object-fit: cover;
+    }
+
+    .next-title {
+        padding: 0;       
+    }
 }
