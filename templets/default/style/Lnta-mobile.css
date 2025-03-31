@@ -279,4 +279,8 @@
     .next-title {
         padding: 0;       
     }
+
+    .carousel-item {
+        min-height: 20vh!important; 
+    }
 }
