@@ -40,6 +40,6 @@ class __TwigTemplate_2b2c2cedbb6c279c5fea82eafec6dcdb6326a5d7303ea1d91987ef469d0
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "config/form_display/tabs_bottom.twig", "C:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\config\\form_display\\tabs_bottom.twig");
+        return new Twig_Source("", "config/form_display/tabs_bottom.twig", "D:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\config\\form_display\\tabs_bottom.twig");
     }
 }

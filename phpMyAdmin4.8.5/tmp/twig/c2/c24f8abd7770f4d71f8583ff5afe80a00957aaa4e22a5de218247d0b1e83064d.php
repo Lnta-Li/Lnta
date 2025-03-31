@@ -52,6 +52,6 @@ class __TwigTemplate_b25ff3a952b6da1bdc85dae035aae1bc684a2d2ba28778663a3d401e339
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "database/structure/search_table.twig", "C:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\database\\structure\\search_table.twig");
+        return new Twig_Source("", "database/structure/search_table.twig", "D:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\database\\structure\\search_table.twig");
     }
 }

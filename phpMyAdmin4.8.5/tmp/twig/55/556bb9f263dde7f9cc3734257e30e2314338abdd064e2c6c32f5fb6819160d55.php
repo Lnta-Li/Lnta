@@ -102,6 +102,6 @@ class __TwigTemplate_b6211a6fa76c94ae2d353430e4abc767e0c7adb04a7108639d441ac622b
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "table/structure/action_row_in_structure_table.twig", "C:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\table\\structure\\action_row_in_structure_table.twig");
+        return new Twig_Source("", "table/structure/action_row_in_structure_table.twig", "D:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\table\\structure\\action_row_in_structure_table.twig");
     }
 }

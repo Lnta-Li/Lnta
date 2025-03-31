@@ -68,6 +68,6 @@ class __TwigTemplate_a1509369f7fc6b439b6a5db46b6e326b23dbe8afea6eb5043db184861db
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "display/results/multi_row_operations_form.twig", "C:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\display\\results\\multi_row_operations_form.twig");
+        return new Twig_Source("", "display/results/multi_row_operations_form.twig", "D:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\display\\results\\multi_row_operations_form.twig");
     }
 }

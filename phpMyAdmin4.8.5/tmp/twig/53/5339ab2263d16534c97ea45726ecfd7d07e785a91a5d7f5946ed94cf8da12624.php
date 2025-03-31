@@ -116,6 +116,6 @@ class __TwigTemplate_381098703395e10dd60ff4bcd7e17e350374d1172602a69a399bdc1c854
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "table/structure/optional_action_links.twig", "C:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\table\\structure\\optional_action_links.twig");
+        return new Twig_Source("", "table/structure/optional_action_links.twig", "D:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\table\\structure\\optional_action_links.twig");
     }
 }

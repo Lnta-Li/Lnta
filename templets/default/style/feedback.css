@@ -385,6 +385,16 @@ textarea:focus-visible, input:focus-visible {
     z-index: 1;
 }
 
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInScale  {
+    from { scale: 0.5; }
+    to { scale: 1; }
+}
+
 .comment-form-container {
     display: none;
     position: fixed;
@@ -398,7 +408,21 @@ textarea:focus-visible, input:focus-visible {
     z-index: 1000;
     max-width: 80vw;
     width: 500px;
+    animation: fadeIn, fadeInScale 0.3s cubic-bezier(0.23, 0.64, 0.6, 1.35) forwards;
 }
+
+.comment-form-container::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    right: 30px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #fff;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
+  }
 
 .comment-form-overlay {
     display: none;
@@ -409,6 +433,7 @@ textarea:focus-visible, input:focus-visible {
     bottom: 0;
     background: rgba(0, 0, 0, 0.5);
     z-index: 999;
+    animation: fadeIn 0.3s ease-out forwards;
 }
 
 .comment-form-container.show {

@@ -82,6 +82,6 @@ class __TwigTemplate_8a567b289eae623f09e20a67dd90f7debebfdd40ca2254cdec8363219ea
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "display/results/show_all_checkbox.twig", "C:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\display\\results\\show_all_checkbox.twig");
+        return new Twig_Source("", "display/results/show_all_checkbox.twig", "D:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\display\\results\\show_all_checkbox.twig");
     }
 }

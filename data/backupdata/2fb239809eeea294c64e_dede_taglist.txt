@@ -21,7 +21,7 @@ INSERT INTO `dede_taglist` VALUES('24','30','0','4','游戏开发');
 INSERT INTO `dede_taglist` VALUES('18','29','0','6','AIGC');
 INSERT INTO `dede_taglist` VALUES('17','28','0','7','社交');
 INSERT INTO `dede_taglist` VALUES('16','28','0','7','周年');
-INSERT INTO `dede_taglist` VALUES('10','28','0','7','活动');
+INSERT INTO `dede_taglist` VALUES('10','28','0','3','活动');
 INSERT INTO `dede_taglist` VALUES('15','28','0','7','王森');
 INSERT INTO `dede_taglist` VALUES('9','27','0','7','设计');
 INSERT INTO `dede_taglist` VALUES('8','27','0','7','ai');

@@ -70,6 +70,6 @@ class __TwigTemplate_7bb82617343ad6ac2fb8532a15a2a8d9b278a400c35adf6bfc2a4078fde
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "display/results/additional_fields.twig", "C:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\display\\results\\additional_fields.twig");
+        return new Twig_Source("", "display/results/additional_fields.twig", "D:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\display\\results\\additional_fields.twig");
     }
 }

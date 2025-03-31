@@ -121,6 +121,6 @@ class __TwigTemplate_1c51641d9ca55d24690fe99fb44dcd99ba60e455870b686e7a456e69599
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "list/item.twig", "C:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\list\\item.twig");
+        return new Twig_Source("", "list/item.twig", "D:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\list\\item.twig");
     }
 }

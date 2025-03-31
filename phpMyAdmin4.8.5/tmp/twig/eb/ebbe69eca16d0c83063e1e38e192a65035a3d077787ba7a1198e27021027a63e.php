@@ -211,6 +211,6 @@ class __TwigTemplate_188c6bd4fbec8d6c4fb904a57a306b8326bcc3833a6986f9dd0293fde8c
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "database/structure/table_header.twig", "C:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\database\\structure\\table_header.twig");
+        return new Twig_Source("", "database/structure/table_header.twig", "D:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\database\\structure\\table_header.twig");
     }
 }

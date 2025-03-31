@@ -72,6 +72,6 @@ class __TwigTemplate_d8360d29f657d2fd506e35a97a9b63ae002efecbe5a26ef730be9b29a3d
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "login/header.twig", "C:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\login\\header.twig");
+        return new Twig_Source("", "login/header.twig", "D:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\login\\header.twig");
     }
 }

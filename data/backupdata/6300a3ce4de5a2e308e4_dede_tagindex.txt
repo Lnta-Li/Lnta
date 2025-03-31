@@ -1,4 +1,4 @@
-INSERT INTO `dede_tagindex` VALUES('1','Logo','Logo','2','9','3','9','10','1742630831','1741830188','1743062448');
+INSERT INTO `dede_tagindex` VALUES('1','Logo','Logo','2','11','1','11','12','1742630831','1741830188','1743062448');
 INSERT INTO `dede_tagindex` VALUES('2','design','Design','2','66','2','66','67','1742637114','1741830188','1743062448');
 INSERT INTO `dede_tagindex` VALUES('3','ps','ps','7','3','3','3','3','1742630478','1742630478','1743061735');
 INSERT INTO `dede_tagindex` VALUES('4','分辨率','分辨率','7','22','3','22','22','1742630478','1742630478','1743061735');

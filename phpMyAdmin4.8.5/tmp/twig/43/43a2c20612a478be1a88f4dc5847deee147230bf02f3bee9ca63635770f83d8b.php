@@ -125,6 +125,6 @@ class __TwigTemplate_f22cdcb9e5fa060cb6716f74a0ace72bd545c1daf554e82f97d0fc7d0fd
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "table/structure/add_column.twig", "C:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\table\\structure\\add_column.twig");
+        return new Twig_Source("", "table/structure/add_column.twig", "D:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\table\\structure\\add_column.twig");
     }
 }

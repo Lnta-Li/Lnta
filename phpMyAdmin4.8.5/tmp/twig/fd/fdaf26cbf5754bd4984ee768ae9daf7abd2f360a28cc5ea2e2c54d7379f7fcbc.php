@@ -79,6 +79,6 @@ class __TwigTemplate_be9ffaeb282d96590e3b9b34673139e2a0ae2f239128f281dfcee079520
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "div_for_slider_effect.twig", "C:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\div_for_slider_effect.twig");
+        return new Twig_Source("", "div_for_slider_effect.twig", "D:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\div_for_slider_effect.twig");
     }
 }

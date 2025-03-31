@@ -6,7 +6,7 @@ $cfg_dbname = 'dedecmsv57utf8_117';
 $cfg_dbuser = 'root';
 $cfg_dbpwd = 'root54';
 $cfg_dbprefix = 'dede_';
-$cfg_db_language = 'utf8';
+$cfg_db_language = 'utf8mb4';
 
 
 ?>

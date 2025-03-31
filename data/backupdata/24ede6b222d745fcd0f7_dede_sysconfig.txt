@@ -162,3 +162,5 @@ INSERT INTO `dede_sysconfig` VALUES('20243','cfg_auto_translate','是否使用�
 INSERT INTO `dede_sysconfig` VALUES('20244','translate_api_id','百度翻译api_id','8','string','20250322002311983');
 INSERT INTO `dede_sysconfig` VALUES('20245','translate_api_key','百度翻译api_key','8','string','_TD5i_jJ6xpuW17iNbZO');
 INSERT INTO `dede_sysconfig` VALUES('20246','cfg_cursor','特殊光标样式','1','pic','/uploads/250317/1-250323225050495.png');
+INSERT INTO `dede_sysconfig` VALUES('20247','cfg_comment_speed','评论滚动速度（s）','5','number','10');
+INSERT INTO `dede_sysconfig` VALUES('20248','cfg_readmore_speed','推荐阅读滚动速度（s）','5','number','20');

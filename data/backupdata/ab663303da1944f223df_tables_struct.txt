@@ -24,7 +24,7 @@ CREATE TABLE `dede_addonimages` (
   `templet` varchar(30) NOT NULL DEFAULT '',
   `userip` char(15) NOT NULL DEFAULT '',
   `redirecturl` varchar(255) NOT NULL DEFAULT '',
-  `body` mediumtext,
+  `body` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`aid`),
   KEY `imagesMain` (`typeid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -168,7 +168,7 @@ CREATE TABLE `dede_archives` (
   `arcrank` smallint(6) NOT NULL DEFAULT '0',
   `click` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `money` smallint(6) NOT NULL DEFAULT '0',
-  `title` char(60) NOT NULL DEFAULT '',
+  `title` char(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `shorttitle` char(36) NOT NULL DEFAULT '',
   `color` char(7) NOT NULL DEFAULT '',
   `writer` char(20) NOT NULL DEFAULT '',
@@ -184,7 +184,7 @@ CREATE TABLE `dede_archives` (
   `badpost` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `voteid` mediumint(8) NOT NULL,
   `notpost` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `description` varchar(255) NOT NULL DEFAULT '',
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `filename` varchar(40) NOT NULL DEFAULT '',
   `dutyadmin` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `tackid` int(10) NOT NULL DEFAULT '0',
@@ -449,7 +449,7 @@ CREATE TABLE `dede_feedback` (
   `good` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `ftype` set('feedback','good','bad') NOT NULL DEFAULT 'feedback',
   `face` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `msg` text,
+  `msg` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
   KEY `aid` (`aid`,`ischeck`,`mid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

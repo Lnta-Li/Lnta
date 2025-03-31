@@ -49,6 +49,6 @@ class __TwigTemplate_8193feca24e4006e55dd9dd3da8d757bafd5e29e337f545534264954de9
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "display/results/empty_display.twig", "C:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\display\\results\\empty_display.twig");
+        return new Twig_Source("", "display/results/empty_display.twig", "D:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\display\\results\\empty_display.twig");
     }
 }

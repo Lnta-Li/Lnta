@@ -282,6 +282,6 @@ class __TwigTemplate_12f396a387a6fd820ae200b7d9d190bedb99d630d98995a466d9448edc0
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "table/structure/row_stats_table.twig", "C:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\table\\structure\\row_stats_table.twig");
+        return new Twig_Source("", "table/structure/row_stats_table.twig", "D:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\table\\structure\\row_stats_table.twig");
     }
 }

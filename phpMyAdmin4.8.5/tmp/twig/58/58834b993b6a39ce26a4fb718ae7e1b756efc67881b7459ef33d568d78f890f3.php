@@ -57,6 +57,6 @@ class __TwigTemplate_2d75be22f0844779558d1795872b7bb1208c1674fe6b733e9791f99344e
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "database/structure/empty_table.twig", "C:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\database\\structure\\empty_table.twig");
+        return new Twig_Source("", "database/structure/empty_table.twig", "D:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\database\\structure\\empty_table.twig");
     }
 }

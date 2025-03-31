@@ -220,6 +220,6 @@ class __TwigTemplate_21381fa8b01b6f9b27417feae977d7662aca9e922cc2d1da7ef9cc45b00
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "table/structure/display_table_stats.twig", "C:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\table\\structure\\display_table_stats.twig");
+        return new Twig_Source("", "table/structure/display_table_stats.twig", "D:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\table\\structure\\display_table_stats.twig");
     }
 }
