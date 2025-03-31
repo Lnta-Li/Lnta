@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS `dede_addonarticle`;
 CREATE TABLE `dede_addonarticle` (
   `aid` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `typeid` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `body` mediumtext,
+  `body` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `redirecturl` varchar(255) NOT NULL DEFAULT '',
   `templet` varchar(30) NOT NULL DEFAULT '',
   `userip` char(15) NOT NULL DEFAULT '',

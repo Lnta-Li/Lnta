@@ -135,6 +135,6 @@ $context["stat_name"], "sort_order" => ((((                // line 18
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "server/databases/table_header.twig", "C:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\server\\databases\\table_header.twig");
+        return new Twig_Source("", "server/databases/table_header.twig", "D:\\phpstudy_pro\\WWW\\Lnta\\phpMyAdmin4.8.5\\templates\\server\\databases\\table_header.twig");
     }
 }
