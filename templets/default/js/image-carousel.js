@@ -14,17 +14,23 @@ class ImageCarousel {
         this.currentIndex = 0;
         this.totalItems = this.items.length;
         
-        // 创建导航按钮
-        this.createNavigationButtons();
-        
-        // 创建指示器圆点
-        this.createDots();
-        
-        // 初始化轮播
-        this.updateCarousel();
-        
-        // 添加事件监听
-        this.addEventListeners();
+        // 等待所有图片加载完成后初始化
+        this.waitForImages().then(() => {
+            // 计算图片比例并添加标签
+            this.calculateAspectRatios();
+            
+            // 创建导航按钮
+            this.createNavigationButtons();
+            
+            // 创建指示器圆点
+            this.createDots();
+            
+            // 初始化轮播
+            this.updateCarousel();
+            
+            // 添加事件监听
+            this.addEventListeners();
+        });
     }
     
     createNavigationButtons() {
@@ -175,7 +181,38 @@ class ImageCarousel {
         this.updateCarousel();
     }
     
-
+    // 等待所有图片加载完成
+    async waitForImages() {
+        const images = Array.from(this.items).map(item => item.querySelector('img'));
+        const promises = images.map(img => {
+            if (img.complete) return Promise.resolve();
+            return new Promise(resolve => {
+                img.onload = resolve;
+                img.onerror = resolve;
+            });
+        });
+        await Promise.all(promises);
+    }
+    
+    // 计算所有图片的长宽比例并添加标签
+    calculateAspectRatios() {
+        const images = Array.from(this.items).map(item => item.querySelector('img'));
+        const ratios = images.map(img => img.naturalWidth / img.naturalHeight);
+        
+        // 找出最大和最小比例
+        const maxRatio = Math.max(...ratios);
+        const minRatio = Math.min(...ratios);
+        
+        // 检查是否存在竖版图片（高度大于宽度）
+        const hasPortraitImage = images.some(img => img.naturalHeight > img.naturalWidth);
+        
+        // 计算最大差异百分比
+        const difference = Math.abs(maxRatio - minRatio) / minRatio * 100;
+        
+        // 根据差异和竖版图片判断添加标签
+        const className = (difference > 30 || hasPortraitImage) ? 'no-fill' : 'fill';
+        this.items.forEach(item => item.classList.add(className));
+    }
 }
 
 // DOM加载完成后初始化轮播
