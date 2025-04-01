@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         const x = e.clientX;
         const walk = x - startThumbX;
-        if (Math.abs(walk) > 5) { // 添加一个小的阈值，只有移动超过5像素才认为是拖动
+        if (Math.abs(walk) > 5) { // 添加一个小的阈值，只有移动超过5像素才被认为是拖动
             hasDragged = true;
         }
         thumbnailsContainer.scrollLeft = scrollLeft - walk;
@@ -133,6 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
             translateY = 0;
             updateImageTransform();
             modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // 禁用背景页面滚动
             
             // 更新缩略图状态
             const thumbnails = thumbnailsWrapper.querySelectorAll('.img-preview-thumbnail');
@@ -206,6 +207,63 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // 触摸缩放变量
+    let initialDistance = 0;
+    let initialScale = 1;
+    
+    // 计算两个触摸点之间的距离
+    function getDistance(touch1, touch2) {
+        return Math.hypot(
+            touch2.clientX - touch1.clientX,
+            touch2.clientY - touch1.clientY
+        );
+    }
+    
+    // 触摸事件处理
+    previewImg.addEventListener('touchstart', function(e) {
+        if (!modal.classList.contains('active')) return;
+        e.preventDefault();
+        
+        if (e.touches.length === 2) {
+            // 双指缩放
+            initialDistance = getDistance(e.touches[0], e.touches[1]);
+            initialScale = scale;
+        } else if (e.touches.length === 1) {
+            // 单指拖动
+            isDragging = true;
+            startX = e.touches[0].clientX - translateX;
+            startY = e.touches[0].clientY - translateY;
+        }
+    }, { passive: false });
+    
+    previewImg.addEventListener('touchmove', function(e) {
+        if (!modal.classList.contains('active')) return;
+        e.preventDefault();
+        
+        if (e.touches.length === 2) {
+            // 双指缩放
+            const currentDistance = getDistance(e.touches[0], e.touches[1]);
+            const scaleDiff = (currentDistance / initialDistance) - 1;
+            const newScale = Math.max(0.1, Math.min(5, initialScale + scaleDiff));
+            
+            if (newScale !== scale) {
+                scale = newScale;
+                updateImageTransform();
+            }
+        } else if (e.touches.length === 1 && isDragging) {
+            // 单指拖动
+            translateX = e.touches[0].clientX - startX;
+            translateY = e.touches[0].clientY - startY;
+            updateImageTransform();
+        }
+    }, { passive: false });
+    
+    previewImg.addEventListener('touchend', function(e) {
+        isDragging = false;
+        initialDistance = 0;
+        initialScale = scale;
+    });
+    
     // 拖拽功能
     previewImg.addEventListener('mousedown', function(e) {
         if (!modal.classList.contains('active')) return;
@@ -239,6 +297,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function closeModal() {
         modal.classList.remove('active');
+        document.body.style.overflow = ''; // 恢复背景页面滚动
         setTimeout(() => {
             previewImg.src = '';
         }, 300);
