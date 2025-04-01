@@ -164,3 +164,4 @@ INSERT INTO `dede_sysconfig` VALUES('20245','translate_api_key','百度翻译api
 INSERT INTO `dede_sysconfig` VALUES('20246','cfg_cursor','特殊光标样式','1','pic','/uploads/250317/1-250323225050495.png');
 INSERT INTO `dede_sysconfig` VALUES('20247','cfg_comment_speed','评论滚动速度（s）','5','number','10');
 INSERT INTO `dede_sysconfig` VALUES('20248','cfg_readmore_speed','推荐阅读滚动速度（s）','5','number','20');
+INSERT INTO `dede_sysconfig` VALUES('20249','cfg_head_image','首页图片','1','pic','/uploads/allimg/250315/1-2503151600300-L.jpg');

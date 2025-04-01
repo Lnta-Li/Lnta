@@ -165,4 +165,5 @@ $translate_api_key = '_TD5i_jJ6xpuW17iNbZO';
 $cfg_cursor = '/uploads/250317/1-250323225050495.png';
 $cfg_comment_speed = 10;
 $cfg_readmore_speed = 20;
+$cfg_head_image = '/uploads/allimg/250315/1-2503151600300-L.jpg';
 ?>

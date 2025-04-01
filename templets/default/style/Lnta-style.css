@@ -636,7 +636,7 @@ h6.active {
 
 h2 {
     color: #21242c;
-    font-family: PT Sans, Helvetica, Arial, sans-serif;
+    font-family: PT Mono, 'HarmonySans SC';
     font-size: 28px;
     font-weight: 700;
     line-height: 1.1;
@@ -777,14 +777,23 @@ h3 strong {
 
 .project-area a {
     color: #ae812b;
-    font-size: 22px;
-    display: contents;
+    font-size: 18px;
+    display: inline;
+    font-family: 'AlimamaFangYuanTiVF';
+    font-variation-settings: 'wght' 450, 'ROND' 0;
+    transition: all 0.3s ease;
+    text-decoration: underline;
+    text-underline-offset: 5px;
+    padding: 4px;
 }
 
 .project-area a:hover {
     cursor: pointer;
     text-decoration: underline;
-    text-decoration-color: #ae812b;
+    text-decoration-color: #626aff;
+    color: #fff;
+    font-size: 19px;
+    background-color: #8da5ff;
 }
 
 /* 标签列表样式 */
