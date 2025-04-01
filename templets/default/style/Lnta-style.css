@@ -184,7 +184,8 @@ h6.active {
     position: absolute;
     left: 0;
     right: 0;
-    padding: 90px 0;
+    padding-top: 90px;
+    padding-bottom: 90px;
     margin-top: -115px;
     z-index: -1;
 }
@@ -390,6 +391,10 @@ h3 {
     color: rgba(33, 36, 44, .84);
     line-height: 1.5em;
     margin: 20px 0;
+}
+
+.Content-Type li {
+    list-style-type: square;
 }
 
 .image-caption {
@@ -789,11 +794,11 @@ h3 strong {
 
 .project-area a:hover {
     cursor: pointer;
-    text-decoration: underline;
-    text-decoration-color: #626aff;
+    text-decoration: none;
     color: #fff;
     font-size: 19px;
     background-color: #8da5ff;
+    border-radius: 5px;
 }
 
 /* 标签列表样式 */

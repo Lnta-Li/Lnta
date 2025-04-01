@@ -288,7 +288,7 @@ CREATE TABLE `dede_arctype` (
   `ishidden` smallint(6) NOT NULL DEFAULT '0',
   `cross` tinyint(1) NOT NULL DEFAULT '0',
   `crossid` text,
-  `content` longtext,
+  `content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `smalltypes` text,
   PRIMARY KEY (`id`),
   KEY `reid` (`reid`,`isdefault`,`channeltype`,`ispart`,`corank`,`topid`,`ishidden`),
