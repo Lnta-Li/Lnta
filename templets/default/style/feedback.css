@@ -511,3 +511,17 @@ textarea:focus-visible, input:focus-visible {
     color: rgb(115, 115, 115);
     font-size: 16px;
 }
+
+.mysvg {
+    fill: rgb(64, 65, 66);
+    stroke-width: 80px;
+    width: 22px;
+}
+
+.active .mysvg {
+    fill: #ff234c; 
+}
+
+.active .down {
+    fill: #b6792e!important;	
+}
