@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.addEventListener('click', function(event) {
             if (!mobileNav.contains(event.target) && !menuToggle.contains(event.target) && mobileNav.classList.contains('active')) {
                 mobileNav.classList.remove('active');
+                document.getElementById('indexbody').classList.remove('navmenuopen');
                 
                 // 恢复菜单按钮样式
                 var spans = menuToggle.querySelectorAll('span');
