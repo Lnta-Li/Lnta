@@ -104,13 +104,14 @@
         position: fixed;
         top: 0;
         left: -100%;
-        width: 66vw !important;
+        width: 60vw !important;
         height: 100vh;
-        background-color: #34535196;
+        background-color: #3c4c4b96;
         z-index: 999;
         padding: 0 20px !important;
         transition: left 0.3s;
-        backdrop-filter: blur(30px);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
     }
     
     .navwidth {
@@ -282,5 +283,14 @@
 
     .carousel-item {
         min-height: 20vh!important; 
+    }
+
+    .navmenuopen {
+        filter: blur(8px);
+        -webkit-filter: blur(8px);
+    }
+
+    #indexbody {
+        transition: all 0.3s ease-out; 
     }
 }
