@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // 点击菜单按钮时切换导航菜单的显示状态
         menuToggle.addEventListener('click', function() {
             mobileNav.classList.toggle('active');
+            document.getElementById('indexbody').classList.toggle('navmenuopen');
             
             // 切换菜单按钮的样式
             var spans = menuToggle.querySelectorAll('span');
@@ -26,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.addEventListener('click', function(event) {
             if (!mobileNav.contains(event.target) && !menuToggle.contains(event.target) && mobileNav.classList.contains('active')) {
                 mobileNav.classList.remove('active');
+                document.getElementById('indexbody').classList.remove('navmenuopen');
                 
                 // 恢复菜单按钮样式
                 var spans = menuToggle.querySelectorAll('span');
