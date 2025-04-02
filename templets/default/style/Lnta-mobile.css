@@ -106,11 +106,11 @@
         left: -100%;
         width: 66vw !important;
         height: 100vh;
-        background-color: #46635fdb;
+        background-color: #34535196;
         z-index: 999;
         padding: 0 20px !important;
         transition: left 0.3s;
-        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        backdrop-filter: blur(30px);
     }
     
     .navwidth {
