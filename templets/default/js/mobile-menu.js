@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // 点击菜单按钮时切换导航菜单的显示状态
         menuToggle.addEventListener('click', function() {
             mobileNav.classList.toggle('active');
+            var pageBody = document.getElementById('pagebody');
             
             // 切换菜单按钮的样式
             var spans = menuToggle.querySelectorAll('span');
@@ -15,10 +16,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
                 spans[1].style.opacity = '0';
                 spans[2].style.transform = 'rotate(-45deg) translate(7px, -7px)';
+                pageBody.classList.add('navopen');
             } else {
                 spans[0].style.transform = 'none';
                 spans[1].style.opacity = '1';
                 spans[2].style.transform = 'none';
+                pageBody.classList.remove('navopen');
             }
         });
         
@@ -32,6 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 spans[0].style.transform = 'none';
                 spans[1].style.opacity = '1';
                 spans[2].style.transform = 'none';
+                document.getElementById('pagebody').classList.remove('navopen');
             }
         });
     }
