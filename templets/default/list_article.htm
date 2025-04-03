@@ -8,10 +8,9 @@
     <title>{dede:field.title/}_{dede:global.cfg_webname/}</title>
     <meta name="keywords" content="{dede:field name='keywords'/}" />
     <meta name="description" content="{dede:field name='description' function='html2text(@me)'/}" />
-    <link href="{dede:global.cfg_templets_skin/}/style/Lnta-style.css" rel="stylesheet" media="screen"
-        type="text/css" />
-    <link href="{dede:global.cfg_templets_skin/}/style/Lnta-mobile.css" rel="stylesheet" media="screen"
-        type="text/css" />
+    <link href="{dede:global.cfg_templets_skin/}/style/Lnta-style.css" rel="stylesheet" media="screen" type="text/css" />
+    <link href="{dede:global.cfg_templets_skin/}/style/Lnta-mobile.css" rel="stylesheet" media="screen" type="text/css" />
+    <script src="{dede:global.cfg_templets_skin/}/js/page-loader.js"></script>
 </head>
 
 <body huaban_pin_injected="true">
@@ -54,13 +53,6 @@
         </section>
     </div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            document.querySelector('.header').classList.add('show');
-            document.querySelector('.projects-container').classList.add('show');
-        });
-    </script>
 
     <script src="{dede:global.cfg_templets_skin/}/js/mobile-menu.js"></script>
 </body>

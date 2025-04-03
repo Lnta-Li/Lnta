@@ -102,20 +102,7 @@ h6.active {
     width: 44.4444%;
     z-index: 4;
     box-sizing: border-box;
-    opacity: 0;
     padding-bottom: 35px;
-    animation: fadeInUp 0.3s ease 0.5s forwards;
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        padding-bottom: 35px;
-    }
-    to {
-        opacity: 1;
-        padding-bottom: 0;
-    }
 }
 
 .header-text {
@@ -901,11 +888,13 @@ iframe {
     text-decoration: underline;
 }
 
-.content-width, .header, .about-header, .about-content, .projects-container {
-    opacity: 0;
-    transition: opacity 0.3s ease;
+#pagebody.show {
+    opacity: 1;
+    filter: blur(0px);
 }
 
-.content-width.show, .header.show, .about-header.show, .about-content.show, .projects-container.show {
-    opacity: 1;
+#pagebody {
+    opacity: 0;
+    filter: blur(10px);
+    transition: all 0.5s ease;
 }
