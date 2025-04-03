@@ -247,7 +247,7 @@
           var picbox = document.querySelector('.picbox');
           var defaultImg = document.querySelector('.default-img');
           var pagtype = document.querySelector('.pagtype');
-          var contentWidth = document.querySelector('.content-width');
+          var pagebody = document.getElementById('pagebody');
 
           if (picbox.querySelector('img')) {
             picbox.style.display = 'block';
@@ -263,7 +263,7 @@
 
           // 添加show类来触发动画
           setTimeout(() => {
-            contentWidth.classList.add('show');
+            pagebody.classList.add('show');
           }, 0);
         });
       </script>
@@ -351,7 +351,7 @@
 
       </div>
     </div>
-  </div>
+    </div>
   </div>
   <link href="{dede:global.cfg_templets_skin/}/style/image-preview.css" rel="stylesheet" media="screen"
     type="text/css" />
