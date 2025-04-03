@@ -20,7 +20,7 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    max-height: 85vh;
+    max-height: 65vh;
     max-width: 100%;
     min-height: 500px;
 }
@@ -146,8 +146,11 @@
        display: none; 
     }
     
+    .carousel-item {
+        min-height: 85vh!important; 
+    }
+
     .carousel-item img {
         min-height: 200px; 
-        max-height: 65vh;
     }
 }
