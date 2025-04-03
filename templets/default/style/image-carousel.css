@@ -147,7 +147,7 @@
     }
     
     .carousel-item {
-        min-height: 85vh!important; 
+        max-height: 85vh!important; 
     }
 
     .carousel-item img {
