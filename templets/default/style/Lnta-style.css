@@ -175,6 +175,8 @@ h6.active {
     padding-bottom: 90px;
     margin-top: -115px;
     z-index: -1;
+    transition: all .3s linear;
+    -webkit-transition: all 0.3s linear;
 }
 
 .projects-container {
@@ -427,6 +429,7 @@ h4 {
     width: 100%;
     cursor: pointer; /* 添加指针样式提示可点击 */
     transition: transform 0.3s ease; /* 添加过渡效果 */
+    -webkit-transition: all 0.3s ease;
 }
 
 .col-4 {
@@ -701,7 +704,6 @@ p {
 
 .about-header {
     padding: 2vw 0px;
-    margin-bottom: 48px;
 }
 
 .pagelist .thisclass a {
@@ -775,6 +777,7 @@ h3 strong {
     font-family: 'AlimamaFangYuanTiVF';
     font-variation-settings: 'wght' 450, 'ROND' 0;
     transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
     text-decoration: underline;
     text-underline-offset: 5px;
     padding: 4px;
@@ -813,6 +816,7 @@ h3 strong {
     font-size: 14px;
     text-decoration: none;
     transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
     margin-bottom: 0!important;
 }
 
@@ -891,10 +895,25 @@ iframe {
 #pagebody.show {
     opacity: 1;
     filter: blur(0px);
+    -webkit-filter: blur(0px);
 }
 
 #pagebody {
     opacity: 0;
     filter: blur(10px);
-    transition: all 0.5s ease;
+    -webkit-filter: blur(10px);
+    transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
+    scale: 1;
+}
+
+#pagebody.nav {
+    scale: 0.9;
+    filter: blur(1px);
+    -webkit-filter: blur(1px);
+}
+
+.nav .projects-wrapper {
+    margin: -115px -10vw 0;
+    padding: 90px 10vw;
 }
