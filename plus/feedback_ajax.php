@@ -165,7 +165,7 @@ else if($dopost=='send')
             }
         }
 ?>
-<div class="decmt-box2">
+<div class="decmt-box2" style="margin-right: 16px;">
 <img src='<?php echo $mface;?>' height='40' width='40'/>
 <div class="content">
 <span class="fl"><?php echo $username; ?> · <?php echo GetDateMk($dtime); ?></span>
