@@ -252,6 +252,10 @@
        height: 0px; 
     }
     
+    .fillwidth-archeader {
+        height: 0;
+    }
+
     .content-area {
        padding: 0 6vw!important;
     }
