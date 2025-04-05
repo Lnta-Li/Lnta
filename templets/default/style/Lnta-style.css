@@ -300,6 +300,10 @@ h6 strong {
     padding: 0;
 }
 
+.fillwidth-archeader {
+    height: 25px;
+}
+
 .fillwidth-1 {
     height: 70px;
 }
