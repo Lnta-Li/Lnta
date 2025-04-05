@@ -40,12 +40,14 @@
 		trigger.addEventListener('click', () => {
 			form.classList.add('show');
 			overlay.classList.add('show');
+			document.getElementById('pagebody').classList.add('nav');
 		});
 
 		// 点击遮罩层关闭表单
 		overlay.addEventListener('click', () => {
 			form.classList.remove('show');
 			overlay.classList.remove('show');
+			document.getElementById('pagebody').classList.remove('nav');
 		});
 
 		// 点击表单外部关闭表单
@@ -53,6 +55,7 @@
 			if (e.target === overlay) {
 				form.classList.remove('show');
 				overlay.classList.remove('show');
+				document.getElementById('pagebody').classList.remove('nav');
 			}
 		});
 	}
