@@ -18,6 +18,34 @@
         box-sizing: border-box !important;
     }
     
+    .tagheader {
+        padding-top: 55px;
+    }
+
+    /* 瀑布流移动端样式 */
+    .waterfall-container {
+        column-count: 2 !important;
+        column-gap: 10px !important;
+    }
+    
+    .waterfall-item {
+        margin-bottom: 10px !important;
+    }
+    
+    .waterfall-content {
+        padding: 8px 10px !important;
+    }
+    
+    .waterfall-title {
+        font-size: 14px !important;
+        -webkit-line-clamp: 2 !important;
+        margin-bottom: 5px !important;
+    }
+    
+    .waterfall-date {
+        font-size: 11px !important;
+    }
+    
     .mobile-half {
         width: 50% !important;
         float: left !important;
