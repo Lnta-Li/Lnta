@@ -39,7 +39,13 @@ else
 
 $tag = FilterSearch(urldecode($tag));
 if($tag != addslashes($tag)) $tag = '';
-if($tag == '') $dlist = new TagList($tag, 'tag.htm');
-else $dlist = new TagList($tag, 'taglist.htm');
+if($tag == '') {
+    $dlist = new TagList($tag, 'tag.htm');
+} else {
+    global $dsql;
+    $count = $dsql->GetOne("SELECT COUNT(*) as num FROM `#@__taglist` WHERE tag = '{$tag}'");
+    $template = ($count['num'] > 8) ? 'taglist-瀑布流.htm' : 'taglist-列表页.htm';
+    $dlist = new TagList($tag, $template);
+}
 $dlist->Display();
 exit();

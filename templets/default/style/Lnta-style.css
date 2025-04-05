@@ -321,6 +321,12 @@ h6 strong {
     width: 70vw; 
 }
 
+.pagtag .content-width {
+    max-width: 1024px;
+    width: 70vw; 
+    padding: 0 20px;
+}
+
 .pagtype-arc .content-width {
     max-width: 880px;
     min-width: 640px;
@@ -649,6 +655,66 @@ h2 {
     text-decoration-color: #ae812b;
 }
 
+/* 瀑布流布局样式 */
+.waterfall-container {
+    column-count: 4;
+    width: 100%;
+}
+
+.waterfall-item a {
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #fff;
+    transition: all 0.2s ease;
+    -webkit-transition: all 0.2s ease;
+}
+
+.waterfall-item a:hover {
+    scale: 1.02;
+}
+
+@media (max-width: 1200px) {
+    .waterfall-container {
+        column-count: 3;
+    }
+}
+
+.waterfall-content {
+    padding: 0 10px;
+}
+
+.waterfall-item {
+    break-inside: avoid;
+    margin-bottom: 20px;
+    page-break-inside: avoid;
+}
+
+.waterfall-img {
+    width: 100%;
+}
+
+.waterfall-img img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.waterfall-title {
+    font-size: 16px;
+    font-weight: normal;
+    color: #282525;
+    line-height: 1.3;
+    margin-bottom: 2px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.waterfall-date {
+    font-size: 14px;
+    color: #ae812b;
+}
 /* 段落样式 */
 p {
     font-size: 18px;
@@ -774,6 +840,10 @@ h3 strong {
     margin-left: -80px;
 }
 
+.tags h6 {
+    font-size: 50px;
+}
+
 .project-area a {
     color: #ae812b;
     font-size: 18px;
@@ -798,7 +868,7 @@ h3 strong {
 
 /* 标签列表样式 */
 .tags {
-    margin-bottom: 50px;
+    margin-bottom: 24px;
     padding-top: 8px;
 }
 
@@ -836,7 +906,7 @@ h3 strong {
     margin-bottom: 0px !important;
 }
 
-.tagtheader h3 {
+.tagtheader h3, .tags h3  {
     padding: 10px 0;
 }
 
@@ -906,8 +976,8 @@ iframe {
     opacity: 0;
     filter: blur(10px);
     -webkit-filter: blur(10px);
-    transition: all 0.3s ease;
-    -webkit-transition: all 0.3s ease;
+    transition: all .3s ease;
+    -webkit-transition: all .3s ease;
     scale: 1;
 }
 
