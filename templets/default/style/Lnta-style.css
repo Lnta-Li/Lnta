@@ -844,7 +844,7 @@ h3 strong {
     font-size: 50px;
 }
 
-.project-area a {
+.project-area a, .Content-Type a {
     color: #ae812b;
     font-size: 18px;
     display: inline;
@@ -857,7 +857,7 @@ h3 strong {
     padding: 4px;
 }
 
-.project-area a:hover {
+.project-area a:hover, .Content-Type a:hover {
     cursor: pointer;
     text-decoration: none;
     color: #fff;
