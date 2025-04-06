@@ -13,7 +13,7 @@
 <div class="conversation-starters">
 	<h3>ReadMore</h3>
 	<dd id='ReadMore'>
-		{dede:arclist typeid='top' row='10' titlelen='80' orderby=rand}
+		{dede:arclist typeid='top' row='20' titlelen='80' orderby=rand}
 		<div class="decmt-box2">
 			<a href="[field:arcurl/]">
 				<img src='[field:litpic/]' height='40' width='40' />
@@ -126,6 +126,7 @@
 		if (form && overlay) {
 			form.classList.remove('show');
 			overlay.classList.remove('show');
+			document.getElementById('pagebody').classList.remove('nav');
 		}
 
 		// 更新评论计数
@@ -145,6 +146,10 @@
 
 	// 添加滚动效果
 	function initScroll() {
+		// 创建动画样式
+		const styleSheet = document.createElement('style');
+		document.head.appendChild(styleSheet);
+
 		// 处理评论区域
 		const commentContainer = document.getElementById('commetcontent');
 		if (commentContainer) {
@@ -155,8 +160,22 @@
 				commentWrapper.className = 'comment-scroll-wrapper';
 				comments.forEach(comment => commentWrapper.appendChild(comment));
 				commentContainer.appendChild(commentWrapper);
+
+				// 计算起始位置（容器宽度加上一定的偏移量）
+				const startPosition = commentContainer.offsetWidth + 50;
+				// 计算内容总宽度（包括起始位置）
+				const totalWidth = commentWrapper.scrollWidth + startPosition;
+				// 根据设定的速度（像素/秒）计算动画时长
+				const duration = totalWidth / parseFloat('{dede:global.cfg_comment_speed/}');
+				// 动态添加滚动动画
+				styleSheet.sheet.insertRule(`
+					@keyframes scroll {
+						from { transform: translateX(${startPosition}px); }
+						to { transform: translateX(-100%); }
+					}
+				`, styleSheet.sheet.cssRules.length);
 				// 设置评论区域的滚动速度
-				commentWrapper.style.animationDuration = '{dede:global.cfg_comment_speed/}s';
+				commentWrapper.style.animationDuration = duration + 's';
 			}
 		}
 
@@ -170,8 +189,22 @@
 				readMoreWrapper.className = 'comment-scroll-wrapper';
 				readMoreItems.forEach(item => readMoreWrapper.appendChild(item));
 				readMoreContainer.appendChild(readMoreWrapper);
+
+				// 计算起始位置（容器宽度加上一定的偏移量）
+				const startPosition = readMoreContainer.offsetWidth + 50;
+				// 计算内容总宽度（包括起始位置）
+				const totalWidth = readMoreWrapper.scrollWidth + startPosition;
+				// 根据设定的速度（像素/秒）计算动画时长
+				const duration = totalWidth / parseFloat('{dede:global.cfg_readmore_speed/}');
+				// 动态添加滚动动画
+				styleSheet.sheet.insertRule(`
+					@keyframes scroll {
+						from { transform: translateX(${startPosition}px); }
+						to { transform: translateX(-100%); }
+					}
+				`, styleSheet.sheet.cssRules.length);
 				// 设置ReadMore区域的滚动速度
-				readMoreWrapper.style.animationDuration = '{dede:global.cfg_readmore_speed/}s';
+				readMoreWrapper.style.animationDuration = duration + 's';
 			}
 		}
 	}
