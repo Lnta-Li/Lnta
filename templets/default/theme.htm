@@ -1,0 +1,62 @@
+<script>
+(function() {
+    // 获取当前主题设置
+    function getCurrentTheme() {
+        const themeCookie = document.cookie.split('; ').find(row => row.startsWith('theme='));
+        if (themeCookie) {
+            return themeCookie.split('=')[1];
+        }
+        return '{dede:global.cfg_Default_theme/}';
+    }
+
+    // 设置主题
+    function setTheme(themeValue) {
+        const themeFile = themeValue === '0' ? 'theme-light.css' : 'theme-dark.css';
+        document.write(`<link rel="stylesheet" href="{dede:global.cfg_templets_skin/}/style/${themeFile}" id="theme-style">`);
+        
+        // 设置radio按钮状态
+        document.write(`
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const themeInputs = document.querySelectorAll('.switch-wrapper input[name="theme"]');
+                    themeInputs.forEach(input => {
+                        input.checked = input.value === '${themeValue}';
+                    });
+                });
+            <\/script>
+        `);
+    }
+
+    // 立即执行主题设置
+    const currentTheme = getCurrentTheme();
+    setTheme(currentTheme);
+})();
+</script>
+
+<script defer>
+document.addEventListener('DOMContentLoaded', function() {
+    const themeInputs = document.querySelectorAll('.switch-wrapper input[name="theme"]');
+    
+    // 监听主题切换
+    themeInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            if (this.checked) {
+                const themeValue = this.value;
+                const themeFile = themeValue === '0' ? 'theme-light.css' : 'theme-dark.css';
+                const themeLink = document.getElementById('theme-style');
+                themeLink.href = '{dede:global.cfg_templets_skin/}/style/' + themeFile;
+                
+                // 保存到cookies，设置30天过期
+                const date = new Date();
+                date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000));
+                document.cookie = `theme=${themeValue}; expires=${date.toUTCString()}; path=/`;
+                
+                // 更新radio按钮状态
+                themeInputs.forEach(input => {
+                    input.checked = input.value === themeValue;
+                });
+            }
+        });
+    });
+});
+</script>

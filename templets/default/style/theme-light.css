@@ -1,0 +1,30 @@
+:root {
+    --Key-color: #ae812b; /* 主题色 */
+    --background-color: #c4d1c4; /* 背景色 */
+    --background-body: #f7f8fa; /* 正文背景色 */
+    --background-carousel: #e1e6e3; /* 轮播图背景色 */
+    --background-selection: #54ff9670; /* 选中背景色 */
+    --background-text: rgb(230 255 102 / 45%); /* 文本背景 */
+    --background-blockquote: rgba(174, 129, 43, 0.1); /* 引用背景色 */
+    --blockquote-color: rgba(174, 129, 43, 0.3); /* 引用符号颜色 */
+    --Aux-colors-1: #8b807e; /* Tag翻译字体色 */
+    --Aux-colors-2: rgb(102 128 128 / 50%); /* 浏览点赞评论数量颜色 */
+    --Aux-colors-3: rgb(51 102 51 / 30%); /* 互动区标题颜色 */
+    --solid-color: #21242c; /* 纯色 */
+    --solid-color-2: #fff; /* 纯色2 */
+    --faint-color-0: rgb(128 128 128 / 3%); /* 浅浅浅色1-互动区背景 */
+    --faint-color-1: rgb(0 0 0 / 5%); /* 浅浅色1 */
+    --faint-color-2: rgb(0 0 0 / 10%); /* 浅浅色2 */
+    --faint-color-3: rgb(0 0 0 / 50%); /* 半透色 */
+    --faint-color-4: rgba(33, 36, 44, 0.64); /* 首页描述、文章页描述 */
+    --color-border: rgba(0,0,0,0.08); /* 边框颜色 */
+    --comment-color: rgb(64, 65, 66); /* 评论区颜色 */
+    --comment-bg-color: #e3ede4; /* 评论区背景色 */
+    --comment-bg-color-2: #f2f4f7; /* 评论区背景色2 */
+    --menu-toggle-color: #333; /* 菜单按钮颜色 */
+    --menu-bg-color: rgb(60 76 75 / 59%); /* 菜单背景色 */
+    --header-text-color: rgb(131 142 172); /* 头部文本颜色 */
+    --header-text-color-strong: rgb(33, 36, 44); /* 头部文本颜色2 */
+    --img-brightness: brightness(1); /*默认图片亮度*/
+    --img-brightness-hover: brightness(0.9); /*鼠标悬停图片亮度*/
+}

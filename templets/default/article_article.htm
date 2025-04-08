@@ -7,6 +7,7 @@
 <meta name="keywords" content="{dede:field.keywords/}" />
 <meta name="description" content="{dede:field.description function='html2text(@me)'/}" />
 <meta http-equiv="mobile-agent" content="format=xhtml;url={dede:global.cfg_mobileurl/}/view.php?aid={dede:field.id/}">
+{dede:include filename="theme.htm"/}
 <link href="{dede:global.cfg_templets_skin/}/style/Lnta-style.css" rel="stylesheet" media="screen" type="text/css" />
 <link href="{dede:global.cfg_templets_skin/}/style/Lnta-mobile.css" rel="stylesheet" media="screen" type="text/css" />
 <link href="{dede:global.cfg_templets_skin/}/style/image-carousel.css" rel="stylesheet" media="screen" type="text/css" />
@@ -221,7 +222,7 @@
   <div class="page-wrapper pagtype" style="display: flex;">
     <div class="fillheight-1"></div>
     <div class="content-width">
-      <div class="fillwidth-1"></div>
+      <div class="fillwidth-archeader"></div>
 
       <div class="image-carousel picbox" style="display:none;">
         <div class="carousel-container">
@@ -234,7 +235,7 @@
         </div>
       </div>
 
-      <div class="default-img">
+      <div class="default-img"  style="display:none;">
         <img class="project-header" alt="{dede:field.title/}" src="{dede:field.litpic/}">
       </div>
       <script>

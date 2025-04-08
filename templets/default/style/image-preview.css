@@ -82,7 +82,7 @@
 }
 
 .img-preview-close:hover {
-    color: #ae812b;
+    color: var(--Key-color);
 }
 
 .img-preview-nav {

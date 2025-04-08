@@ -1,5 +1,5 @@
 <style>
-  .header-image:hover {
+.header-image:hover {
     cursor: url({dede:global.cfg_cursor/}), pointer;
 }
 </style>
@@ -16,5 +16,14 @@
       ~rel~><span>~typename~</span></a>"}
     <a class="" href="[field:typeurl/]">[field:typename/]</a>
     {/dede:channel}
+
+    <div class="switch-wrapper">
+      <input type="radio" name="theme" id="light" value="0">
+      <input type="radio" name="theme" id="dark" value="1">
+      <label for="light" class="light"><i class="iconfontb">&#xe95f;</i></label>
+      <label for="dark" class="dark"><i class="iconfontb">&#xe635;</i></label>
+      <span class="slider"></span>
+    </div>
+
   </nav>
 </div>
