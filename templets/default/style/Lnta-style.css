@@ -1,9 +1,11 @@
 /* 全局样式 */
 body {
-    background: #f7f8fa;
+    background: var(--background-body);
     margin: 0;
     padding: 0;
     font-family: "PT Sans", Helvetica, Arial, sans-serif;
+    transition: all .3s ease;
+    -webkit-transition: all .3s ease;
 }
 
 @font-face {
@@ -29,9 +31,9 @@ body {
 @font-face {
     font-family: 'iconfont';  /* Project id 4858194 */
     src: 
-         url('//at.alicdn.com/t/c/font_4858194_d911mdxcer.woff2?t=1743386028566') format('woff2'),
-         url('//at.alicdn.com/t/c/font_4858194_d911mdxcer.woff?t=1743386028566') format('woff'),
-         url('//at.alicdn.com/t/c/font_4858194_d911mdxcer.ttf?t=1743386028566') format('truetype');
+         url('//at.alicdn.com/t/c/font_4858194_hlglylgk9au.woff2?t=1743996269621') format('woff2'),
+         url('//at.alicdn.com/t/c/font_4858194_hlglylgk9au.woff?t=1743996269621') format('woff'),
+         url('//at.alicdn.com/t/c/font_4858194_hlglylgk9au.ttf?t=1743996269621') format('truetype');
   }
 
 .iconfont {
@@ -42,8 +44,66 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+/* 在线链接服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
+@font-face {
+    font-family: 'iconfontb';  /* Project id 4883100 */
+    src: url('//at.alicdn.com/t/c/font_4883100_z97dru1b51.woff2?t=1744023181166') format('woff2'),
+         url('//at.alicdn.com/t/c/font_4883100_z97dru1b51.woff?t=1744023181166') format('woff'),
+         url('//at.alicdn.com/t/c/font_4883100_z97dru1b51.ttf?t=1744023181166') format('truetype'),
+         url('//at.alicdn.com/t/c/font_4883100_z97dru1b51.svg?t=1744023181166#iconfontb') format('svg');
+  }
+
+.iconfontb {
+    font-family:"iconfontb" !important;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+}
+
 a:focus-visible {
     outline: none; 
+}
+
+a, abbr, acronym, address, applet, article, aside, audio, b, big, blockquote, body, canvas, caption, center, cite, code, dd, del, details, dfn, div, dl, dt, em, embed, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, html, i, iframe, img, ins, kbd, label, legend, li, mark, menu, nav, object, ol, output, p, pre, q, ruby, s, samp, section, small, span, strike, strong, sub, summary, sup, table, tbody, td, tfoot, th, thead, time, tr, tt, u, ul, var, video {
+    margin: 0;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-weight: normal;
+}
+
+h1 a strong,h1 strong {
+    color: var(--solid-color);
+}
+
+h1,h1 a {
+    color: var(--solid-color);
+    font-family: PT Sans, Helvetica, Arial, sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.15;
+}
+
+a,h6 {
+    display: block;
+    font-family: PT Mono, HarmonySans SC;
+    font-size: 17px;
+    margin-bottom: 8px;
+    text-decoration: none;
+}
+
+a,h6,li,p {
+    color: var(--solid-color);
+}
+
+a.active,h6.active {
+    color: var(--Key-color);
+}
+
+img {
+    filter: var(--img-brightness);
+    transition: all 0.3s ease;
 }
 
 /* 页面包装器 */
@@ -64,6 +124,7 @@ a:focus-visible {
     position: fixed;
     text-align: right;
     z-index: 3;
+    align-items: flex-end;
 }
 
 .navwidth {
@@ -73,12 +134,12 @@ a:focus-visible {
 }
 
 .home-active .home {
-    color: #ae812b;
+    color: var(--Key-color);
 }
 
 a.active,
 h6.active {
-    color: #ae812b;
+    color: var(--Key-color);
 }
 
 .navigation a {
@@ -106,7 +167,7 @@ h6.active {
 }
 
 .header-text {
-    color: rgb(131 142 172);
+    color: var(--header-text-color);
     font-size: 56px;
     line-height: 1.15;
     padding: 0 16px;
@@ -119,7 +180,7 @@ h6.active {
 }
 
 .highlighter strong {
-    color: rgb(33, 36, 44);
+    color: var(--header-text-color-strong);
 }
 
 .navigation a:hover {
@@ -136,12 +197,11 @@ h6.active {
 }
 /* 文本选中样式 */
 ::selection {
-    background: #54ff9670;
-    /* 使用主题色 #ae812b 的半透明版本 */
+    background: var(--background-selection);
 }
 
 ::-moz-selection {
-    background: #54ff9670;
+    background: var(--background-selection);
     /* Firefox 浏览器兼容 */
 }
 
@@ -167,7 +227,7 @@ h6.active {
 
 /* 项目区域 */
 .projects-wrapper {
-    background: #c4d1c4;
+    background: var(--background-color);
     position: absolute;
     left: 0;
     right: 0;
@@ -241,6 +301,14 @@ ul {
 .project-title {
     margin-top: 30px;
     margin-bottom: 8px;
+}
+
+.project-title p {
+    margin: 8px 0;
+}
+
+.listicon {
+    font-size: 14px;
 }
 
 .project .project-link.fixed {
@@ -370,11 +438,11 @@ h6 strong {
 .next-shelf .shelf-project-link:hover h2 {
     cursor: pointer;
     text-decoration: underline;
-    text-decoration-color: #ae812b;
+    text-decoration-color: var(--Key-color);
 }
 
 h3 {
-    color: #ae812b;
+    color: var(--Key-color);
     font-family: PT Mono, sans-serif, monospace;
     font-size: 26px;
 }
@@ -387,7 +455,7 @@ h3 {
 .Content-Type p {
     font-family: 'AlimamaFangYuanTiVF';
     font-variation-settings: 'wght' 380, 'ROND' 0;
-    color: rgba(33, 36, 44, .84);
+    color: var(--faint-color-4);
     line-height: 1.5em;
     margin: 20px 0;
 }
@@ -399,7 +467,7 @@ h3 {
 .image-caption {
     text-align: center;
     font-style: italic;
-    color: #00000078;
+    color: var(--faint-color-3);
     font-size: 17px;
     margin-top: 5px;
     margin-bottom: 15px;
@@ -412,7 +480,7 @@ h4 {
     margin-top: -10px !important;
     font-size: 17px;
     font-family: HarmonySans SC;
-    color: #00000085;
+    color: var(--faint-color-3);
     font-weight: initial !important;
     font-style: italic;
 }
@@ -525,7 +593,7 @@ h4 {
     position: relative;
 }
 
-/* 项目缩略图 */
+/* 首页缩略图卡片尺寸限制 */
 #project-1 .project-thumb {
     max-height: 300px;
     min-height: 200px;
@@ -565,12 +633,13 @@ h4 {
 }
 
 .project .project-thumb {
-    background: #fff;
     border-radius: 8px;
     margin-bottom: 16px;
     width: 100%;
     object-fit: cover;
     object-position: center;
+    transition: all .3s ease;
+    -webkit-transition: all 0.3s ease;
 }
 
 .project-thumb-fixed .project-thumb {
@@ -578,56 +647,8 @@ h4 {
     object-fit: cover;
 }
 
-a, abbr, acronym, address, applet, article, aside, audio, b, big, blockquote, body, canvas, caption, center, cite, code, dd, del, details, dfn, div, dl, dt, em, embed, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, html, i, iframe, img, ins, kbd, label, legend, li, mark, menu, nav, object, ol, output, p, pre, q, ruby, s, samp, section, small, span, strike, strong, sub, summary, sup, table, tbody, td, tfoot, th, thead, time, tr, tt, u, ul, var, video {
-    margin: 0;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-weight: normal;
-}
-
-h1 a strong,
-h1 strong {
-    color: #21242c;
-}
-
-h1,
-h1 a {
-    color: #21242c;
-    font-family: PT Sans, Helvetica, Arial, sans-serif;
-    font-size: 48px;
-    font-weight: 700;
-    line-height: 1.15;
-}
-
-a,
-h6 {
-    display: block;
-    font-family: PT Mono, HarmonySans SC;
-    font-size: 17px;
-    margin-bottom: 8px;
-    text-decoration: none;
-}
-
-a,
-h6,
-li,
-p {
-    color: #21242c;
-}
-
-a.active,
-h6.active {
-    color: #ae812b;
-}
-
 .project-description {
-    color: rgba(33, 36, 44, .64);
+    color: var(--faint-color-4);
     font-weight: 300;
     font-family: 'HarmonySans SC';
 }
@@ -641,7 +662,7 @@ h6.active {
 }
 
 h2 {
-    color: #21242c;
+    color: var(--solid-color);
     font-family: PT Mono, 'HarmonySans SC';
     font-size: 28px;
     font-weight: 700;
@@ -651,31 +672,17 @@ h2 {
 
 .project .project-link:hover h2 {
     cursor: pointer;
-    text-decoration: underline;
-    text-decoration-color: #ae812b;
 }
 
 /* 瀑布流布局样式 */
 .waterfall-container {
-    column-count: 4;
+    column-count: 3;
     width: 100%;
 }
 
-.waterfall-item a {
-    border-radius: 8px;
-    overflow: hidden;
-    background-color: #fff;
-    transition: all 0.2s ease;
-    -webkit-transition: all 0.2s ease;
-}
-
-.waterfall-item a:hover {
-    scale: 1.02;
-}
-
-@media (max-width: 1200px) {
+@media (max-width: 1080px) {
     .waterfall-container {
-        column-count: 3;
+        column-count:2;
     }
 }
 
@@ -689,37 +696,65 @@ h2 {
     page-break-inside: avoid;
 }
 
+.waterfall-link img {
+    transform: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
+}
+
+.waterfall-link:hover img, .project-link:hover img {
+    filter: var(--img-brightness-hover);
+    scale: 1.01;
+}
+
 .waterfall-img {
     width: 100%;
+    border-radius: 12px;
+    outline: 1px solid var(--color-border);
+    outline-offset: -1px;
+    overflow: hidden;
 }
 
 .waterfall-img img {
     width: 100%;
     height: auto;
     display: block;
+    min-height: 14vh;
+    max-height: 60vh; 
+    object-fit: cover;
 }
 
 .waterfall-title {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: normal;
-    color: #282525;
-    line-height: 1.3;
-    margin-bottom: 2px;
+    color: var(--solid-color);
+    line-height: 1.5;
+    margin-bottom: 5px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    font-family: HarmonySans SC;
 }
 
 .waterfall-date {
     font-size: 14px;
-    color: #ae812b;
+    color: var(--Key-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
+
+.clickico {
+    color: var(--Aux-colors-2);
+    display: flex;
+    align-items: center;
+}
+
 /* 段落样式 */
 p {
     font-size: 18px;
     line-height: 1.5em;
-    color: rgba(33, 36, 44, 0.64);
+    color: var(--faint-color-4);
     font-family: "PT Sans", Helvetica, Arial, sans-serif;
 }
 
@@ -736,11 +771,6 @@ p {
     padding: 0px 16px;
     width: 256px;
     box-sizing: border-box;
-}
-
-/* 背景图片样式 */
-.bg-image {
-    background-image: url('../images/home-head.jpg');
 }
 
 .project {
@@ -761,10 +791,10 @@ p {
 .pageinfo {
     display: block;
     font-family: PT Mono, HarmonySans SC;
-    font-size: 17px;
+    font-size: 14px;
     margin-bottom: 8px;
     text-decoration: none;
-    color: #21242c5c;
+    color: var(--faint-color-3);
 }
 
 .artheader  {
@@ -777,11 +807,11 @@ p {
 }
 
 .pagelist .thisclass a {
-    color: #ae812b;
+    color: var(--Key-color);
 }
 
 .pagelist a:hover {
-    color: #fff;
+    color: var(--solid-color-2);
 }
 
 .project-area img {
@@ -798,14 +828,14 @@ p {
 }
 
 .project-area h1 {
-    color: #21242c;
+    color: var(--solid-color);
     padding-bottom: 20px;
     font-weight: 700;
 }
 
 .project-area h2 {
     padding-bottom: 20px;
-    color: #21242cb0;
+    color: var(--solid-color);
 }
 
 .project-area h3 {
@@ -820,14 +850,14 @@ p {
 }
 
 p strong {
-    color: #ae812b;
+    color: var(--Key-color);
     padding: 2px 2px;
     margin: 0 2px;
     font-weight: normal;
 }
 
 h3 strong {
-    background-color: #f7ff6373;
+    background-color: var(--background-text);
 }
 
 .Content-Type h3 strong {
@@ -845,7 +875,7 @@ h3 strong {
 }
 
 .project-area a, .Content-Type a {
-    color: #ae812b;
+    color: var(--Key-color);
     font-size: 18px;
     display: inline;
     font-family: 'AlimamaFangYuanTiVF';
@@ -883,9 +913,9 @@ h3 strong {
 
 .tags li a {
     padding: 6px 12px;
-    background: #0000000d;
+    background: var(--faint-color-1);
     border-radius: 4px;
-    color: #666;
+    color: var(--faint-color-3);
     font-family: 'PT Mono', sans-serif;
     font-size: 14px;
     text-decoration: none;
@@ -895,8 +925,8 @@ h3 strong {
 }
 
 .tags li a:hover {
-    background: #e0e0e0;
-    color: #ae812b;
+    background: var(--faint-color-2);
+    color: var(--Key-color);
 }
 
 .tagtheader {
@@ -915,7 +945,7 @@ h3 strong {
 }
 
 .translation {
-    color: #8b807e;
+    color: var(--Aux-colors-1);
     font-size: 0.9em;
     font-weight: revert;
     font-family: 'PT Mono', sans-serif;
@@ -941,19 +971,18 @@ iframe {
     font-family: 'AlimamaFangYuanTiVF';
     font-size: 1.2em;
     line-height: 2.6;
-    color: rgba(33, 36, 44, 0.84);
-    background: rgba(174, 129, 43, 0.1);
-    border-left: 4px solid #ae812b;
+    background: var(--background-blockquote);
+    border-left: 4px solid var(--Key-color);
 }
 
 .Content-Type blockquote::before {
     content: "“";
     position: absolute;
-    left: 20px;
-    top: -10px;
+    left: 12px;
+    top: 0;
     font-family: Arial;
     font-size: 120px;
-    color: rgba(174, 129, 43, 0.3);
+    color: var(--blockquote-color);
     line-height: 1;
     z-index: 1;
 }
@@ -990,4 +1019,54 @@ iframe {
 .nav .projects-wrapper {
     margin: -115px -10vw 0;
     padding: 90px 10vw;
+}
+
+/* 主题切换按钮样式 */
+.switch-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 65px;
+    height: 35px;
+    background-color: var(--faint-color-1);
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.switch-wrapper input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch-wrapper label {
+    position: absolute;
+    width: 29px;
+    height: 29px;
+    margin: 3px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 16px;
+    z-index: 2;
+    cursor: pointer;
+    color: var(--faint-color-4);
+}
+
+.light { left: 0; }
+.dark { right: 0; }
+
+.slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 29px;
+    height: 29px;
+    margin: 3px;
+    background-color: var(--background-body);
+    border-radius: 50%;
+    transition: 0.3s;
+    z-index: 1;
+}
+
+input[value="1"]:checked ~ .slider {
+    transform: translateX(30px);
 }

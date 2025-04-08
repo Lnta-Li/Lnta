@@ -167,4 +167,5 @@ $cfg_comment_speed = 150;
 $cfg_readmore_speed = 180;
 $cfg_head_image = '/uploads/allimg/250315/1-2503151600300-L.jpg';
 $cfg_readmore_quantit = 15;
+$cfg_Default_theme = 0;
 ?>

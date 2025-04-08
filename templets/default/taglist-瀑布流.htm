@@ -7,6 +7,7 @@
 <meta name="keywords" content="{dede:field.keywords/}" />
 <meta name="description" content="{dede:field.description function='html2text(@me)'/}" />
 <meta http-equiv="mobile-agent" content="format=xhtml;url={dede:global.cfg_mobileurl/}/view.php?aid={dede:field.id/}">
+{dede:include filename="theme.htm"/}
 <link href="{dede:global.cfg_templets_skin/}/style/Lnta-style.css" rel="stylesheet" media="screen" type="text/css" />
 <link href="{dede:global.cfg_templets_skin/}/style/Lnta-mobile.css" rel="stylesheet" media="screen" type="text/css" />
 <script src="{dede:global.cfg_templets_skin/}/js/page-loader.js"></script>
@@ -39,11 +40,16 @@
             <li class="waterfall-item">
                 <a class="waterfall-link" href="[field:arcurl/]">
                     <div class="waterfall-img">
-                        <img class="project-thumb" alt="[field:title/]" src="[field:litpic/]">
+                        <img alt="[field:title/]" src="[field:litpic/]">
                     </div>
                     <div class="waterfall-content">
                         <h2 class="waterfall-title">[field:title function="cutStr(@me,60)"/]</h2>
-                        <h6 class="waterfall-date">[field:pubdate function="MyDate('Y-m-d',@me)"/]</h6>
+                        <h6 class="waterfall-date">
+                            <span>[field:pubdate function="MyDate('Y-m-d',@me)"/]</span>
+                            <span class="clickico">
+                                <i class="iconfontb">&#xe8d4;</i>&ensp;[field:click/]
+                            </span>
+                        </h6>
                     </div>
                 </a>
             </li>

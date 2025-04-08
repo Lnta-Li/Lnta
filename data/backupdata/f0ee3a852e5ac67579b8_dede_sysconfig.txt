@@ -166,3 +166,4 @@ INSERT INTO `dede_sysconfig` VALUES('20247','cfg_comment_speed','评论滚动速
 INSERT INTO `dede_sysconfig` VALUES('20248','cfg_readmore_speed','推荐阅读滚动速度（s）','5','number','180');
 INSERT INTO `dede_sysconfig` VALUES('20249','cfg_head_image','首页图片','1','pic','/uploads/allimg/250315/1-2503151600300-L.jpg');
 INSERT INTO `dede_sysconfig` VALUES('20250','cfg_readmore_quantit','推荐阅读数量','5','number','15');
+INSERT INTO `dede_sysconfig` VALUES('20251','cfg_Default_theme','默认主题 [0]浅色 [1]深色','1','number','0');
