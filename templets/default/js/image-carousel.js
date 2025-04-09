@@ -57,6 +57,11 @@ class ImageCarousel {
             const dot = document.createElement('div');
             dot.className = 'carousel-dot';
             dot.dataset.index = i;
+            // 从img标签的alt属性获取描述文本
+            const img = this.items[i].querySelector('img');
+            if (img && img.alt) {
+                dot.textContent = img.alt;
+            }
             dotsContainer.appendChild(dot);
         }
         
@@ -72,6 +77,19 @@ class ImageCarousel {
         // 更新指示器圆点
         this.dots.forEach((dot, index) => {
             dot.classList.toggle('active', index === this.currentIndex);
+            // 根据alt文本长度设置宽度和样式
+            if (index === this.currentIndex) {
+                const img = this.items[index].querySelector('img');
+                const altLength = img && img.alt ? img.alt.length : 0;
+                if (altLength === 0) {
+                    dot.style.cssText = 'padding: 0;background: #fff; border: none;';
+                } else {
+                    const width = Math.min(altLength * 14, 200);
+                    dot.style.width = `${width}px`;
+                }
+            } else {
+                dot.style.cssText = '';
+            }
         });
     }
     
