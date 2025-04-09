@@ -201,7 +201,7 @@ textarea:focus-visible, input:focus-visible {
     outline: none;
     border: 2px solid var(--background-color);
     transition: 0.3s;
-    background-color: var(--solid-color-2);
+    /*background-color: var(--solid-color-2);*/
 }
 
 /* 作者信息区域样式 */

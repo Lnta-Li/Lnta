@@ -30,21 +30,32 @@
     
     .waterfall-item {
         margin-bottom: 10px !important;
+        overflow: hidden;
+        border-radius: 8px;
+    }
+    
+    .waterfall-img {
+        border-radius: 0; 
     }
     
     .waterfall-content {
-        padding: 8px 10px !important;
+        padding: 8px !important;
+    }
+
+    .waterfall-link {
+        margin-bottom: 0px!important; 
+        background: var(--solid-color-3)
     }
     
     .waterfall-title {
-        font-size: 13px !important;
+        font-size: 14px !important;
         -webkit-line-clamp: 2 !important;
         margin-bottom: 5px !important;
         margin: 0!important;
     }
     
     .waterfall-date {
-        font-size: 11px !important;
+        font-size: 12px !important;
     }
     
     .mobile-half {
