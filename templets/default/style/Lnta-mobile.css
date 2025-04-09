@@ -145,7 +145,6 @@
         top: 0;
         left: -100%;
         width: 60vw !important;
-        width: 60vw !important;
         height: 100vh;
         background-color: var(--menu-bg-color);
         z-index: 999;
@@ -192,7 +191,7 @@
     
     .mobile-nav a {
         display: block;
-        margin: 15px 0;
+        margin-bottom: 30px;
         font-size: 22px;
         color: var(--solid-color-2);
     }
