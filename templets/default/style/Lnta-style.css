@@ -6,6 +6,7 @@ body {
     font-family: "PT Sans", Helvetica, Arial, sans-serif;
     transition: all .3s ease;
     -webkit-transition: all .3s ease;
+    -webkit-font-smoothing: antialiased;
 }
 
 @font-face {
@@ -733,7 +734,7 @@ h2 {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    font-family: HarmonySans SC;
+    font-family: system-ui;
 }
 
 .waterfall-date {
