@@ -1,0 +1,45 @@
+<script text="javascript">
+document.addEventListener('DOMContentLoaded', function() {
+    // 获取所有代码块
+    const codeBlocks = document.querySelectorAll('code');
+    
+    codeBlocks.forEach(code => {
+        // 检测代码类型
+        const content = code.textContent.trim();
+        let codeType = 'plain';
+        
+        // 检测CSS代码
+        if (content.includes('@font-face') || content.includes('{') || content.includes('}')) {
+            codeType = 'css';
+            code.classList.add('css');
+        }
+        
+        // 根据代码类型进行高亮处理
+        if (codeType === 'css') {
+            highlightCSS(code);
+        }
+    });
+});
+
+function highlightCSS(code) {
+    const content = code.textContent;
+    
+    // 替换选择器
+    let highlighted = content.replace(/([^{}]+)(?={)/g, '<span class="selector">$1</span>');
+    
+    // 替换属性
+    highlighted = highlighted.replace(/([a-zA-Z-]+)(?=:)/g, '<span class="property">$1</span>');
+    
+    // 替换值
+    highlighted = highlighted.replace(/(?<=:)([^;]+)(?=;)/g, '<span class="value">$1</span>');
+    
+    // 替换字符串
+    highlighted = highlighted.replace(/(['"])(.*?)\1/g, '<span class="string">$1$2$1</span>');
+    
+    // 替换注释
+    highlighted = highlighted.replace(/\/\*[\s\S]*?\*\//g, '<span class="comment">$&</span>');
+    
+    code.innerHTML = highlighted;
+} 
+</script>
+<link href="{dede:global.cfg_templets_skin/}/style/code-highlight.css" rel="stylesheet" media="screen" type="text/css" />
