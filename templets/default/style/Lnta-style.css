@@ -412,7 +412,7 @@ h3 {
 }
 
 .image-caption {
-    text-align: center;
+    text-align: left;
     font-style: italic;
     color: var(--faint-color-3);
     font-size: 17px;
