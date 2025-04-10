@@ -1,0 +1,977 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>让字体和图标库 “活” 起来：一次后台自由度的升级_设计师Lntano的个人作品集</title>
+<meta name="keywords" content="网站,开发,dede,织梦,cms,建站,iconfont," />
+<meta name="description" content="Bring the font and icon library to life: An upgrade of back - end freedom." />
+<meta http-equiv="mobile-agent" content="format=xhtml;url=/m/view.php?aid=48">
+<script>
+(function() {
+    // 获取当前主题设置
+    function getCurrentTheme() {
+        const themeCookie = document.cookie.split('; ').find(row => row.startsWith('theme='));
+        if (themeCookie) {
+            return themeCookie.split('=')[1];
+        }
+        return '0';
+    }
+
+    // 设置主题
+    function setTheme(themeValue) {
+        const themeFile = themeValue === '0' ? 'theme-light.css' : 'theme-dark.css';
+        document.write(`<link rel="stylesheet" href="/templets/default/style/${themeFile}" id="theme-style">`);
+        
+        // 设置radio按钮状态
+        document.write(`
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const themeInputs = document.querySelectorAll('.switch-wrapper input[name="theme"]');
+                    themeInputs.forEach(input => {
+                        input.checked = input.value === '${themeValue}';
+                    });
+                });
+            <\/script>
+        `);
+    }
+
+    // 立即执行主题设置
+    const currentTheme = getCurrentTheme();
+    setTheme(currentTheme);
+})();
+</script>
+
+<script defer>
+document.addEventListener('DOMContentLoaded', function() {
+    const themeInputs = document.querySelectorAll('.switch-wrapper input[name="theme"]');
+    
+    // 监听主题切换
+    themeInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            if (this.checked) {
+                const themeValue = this.value;
+                const themeFile = themeValue === '0' ? 'theme-light.css' : 'theme-dark.css';
+                const themeLink = document.getElementById('theme-style');
+                themeLink.href = '/templets/default/style/' + themeFile;
+                
+                // 保存到cookies，设置30天过期
+                const date = new Date();
+                date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000));
+                document.cookie = `theme=${themeValue}; expires=${date.toUTCString()}; path=/`;
+                
+                // 更新radio按钮状态
+                themeInputs.forEach(input => {
+                    input.checked = input.value === themeValue;
+                });
+            }
+        });
+    });
+});
+</script>
+<link href="/templets/default/style/Lnta-style.css" rel="stylesheet" media="screen" type="text/css" />
+<link href="/templets/default/style/Lnta-mobile.css" rel="stylesheet" media="screen" type="text/css" />
+<link href="/templets/default/style/image-carousel.css" rel="stylesheet" media="screen" type="text/css" />
+<link href="/templets/default/style/feedback.css" rel="stylesheet" media="screen" type="text/css" />
+<script language="javascript" type="text/javascript" src="/include/dedeajax2.js"></script>
+<script language="javascript" type="text/javascript">
+  /**
+   * 检查用户登录状态
+   * 通过AJAX请求获取用户登录信息，并更新反馈区域
+   */
+  function CheckLogin() {
+    var taget_obj = document.getElementById('_ajax_feedback');
+    myajax = new DedeAjax(taget_obj, false, false, '', '', '');
+    myajax.SendGet2("/member/ajax_feedback.php");
+    DedeXHTTP = null;
+  }
+
+  /**
+   * 检查评论提交
+   * 验证评论内容是否为空，如果不为空则提交表单
+   */
+  function checkSubmit() {
+    if (document.feedback.msg.value != '') document.feedback.submit();
+    else alert("评论内容不能为空！");
+  }
+
+  /**
+   * 处理文章的点赞/踩功能（新版）
+   * @param {string} ftype - 操作类型，'good'表示点赞，'bad'表示踩
+   * @param {string} aid - 文章ID
+   * 使用Cookie记录用户的操作状态，支持取消和切换操作
+   * Cookie格式：文章ID:状态|文章ID:状态 (状态：1=赞，-1=踩，0=取消)
+   */
+  function postDigg(ftype, aid) {
+    var taget_obj = document.getElementById('newdigg');
+    var saveid = GetCookie('diggid');
+    var currentState = 0;
+
+    // 从Cookie中解析当前状态
+    if (saveid) {
+      var states = saveid.split('|');
+      for (var i = 0; i < states.length; i++) {
+        var parts = states[i].split(':');
+        if (parts[0] == aid) {
+          currentState = parseInt(parts[1]);
+          break;
+        }
+      }
+    }
+
+    // 根据当前状态和操作类型计算新状态
+    var newState = 0;
+    if (ftype == 'good') {
+      if (currentState == 1) newState = 0;  // 取消点赞
+      else if (currentState == -1) {  // 从踩改为点赞
+        newState = 1;
+        // 先发送取消踩的请求
+        var cancelUrl = "/plus/digg_ajax.php?action=bad&id=" + aid + "&state=0";
+        var tempAjax = new DedeAjax(taget_obj, false, false, '', '', '');
+        tempAjax.SendGet2(cancelUrl);
+        DedeXHTTP = null;
+      } else newState = 1;  // 首次点赞
+    } else {
+      if (currentState == -1) newState = 0;  // 取消踩
+      else if (currentState == 1) {  // 从点赞改为踩
+        newState = -1;
+        // 先发送取消点赞的请求
+        var cancelUrl = "/plus/digg_ajax.php?action=good&id=" + aid + "&state=0";
+        var tempAjax = new DedeAjax(taget_obj, false, false, '', '', '');
+        tempAjax.SendGet2(cancelUrl);
+        DedeXHTTP = null;
+      } else newState = -1;  // 首次踩
+    }
+
+    // 更新Cookie中的状态记录
+    var newSaveid = '';
+    if (saveid) {
+      var states = saveid.split('|');
+      var found = false;
+      for (var i = 0; i < states.length; i++) {
+        var parts = states[i].split(':');
+        if (parts[0] == aid) {
+          if (newState != 0) {
+            newSaveid += (newSaveid ? '|' : '') + aid + ':' + newState;
+          }
+          found = true;
+        } else {
+          newSaveid += (newSaveid ? '|' : '') + states[i];
+        }
+      }
+      if (!found && newState != 0) {
+        newSaveid += (newSaveid ? '|' : '') + aid + ':' + newState;
+      }
+    } else if (newState != 0) {
+      newSaveid = aid + ':' + newState;
+    }
+
+    // 将新状态保存到Cookie
+    SetCookie('diggid', newSaveid, 30);  // 30天有效期
+
+    // 发送状态更新请求到服务器
+    myajax = new DedeAjax(taget_obj, false, false, '', '', '');
+    var url = "/plus/digg_ajax.php?action=" + ftype + "&id=" + aid + "&state=" + newState;
+    myajax.SendGet2(url);
+    DedeXHTTP = null;
+
+    // 更新页面显示
+    updateDiggDisplay();
+  }
+
+  /**
+   * 获取文章的点赞/踩统计数据
+   * @param {string} aid - 文章ID
+   */
+  function getDigg(aid) {
+    var taget_obj = document.getElementById('newdigg');
+    myajax = new DedeAjax(taget_obj, false, false, '', '', '');
+    myajax.SendGet2("/plus/digg_ajax.php?id=" + aid);
+    DedeXHTTP = null;
+
+    // 更新显示
+    updateDiggDisplay();
+  }
+
+  /**
+   * 更新点赞/踩的显示状态
+   * 解析服务器返回的JSON数据，更新页面上的数据显示和按钮状态
+   * 数据格式：{goodper: 百分比, goodpost: 点赞数, badper: 百分比, badpost: 踩数, userState: 用户状态}
+   */
+  function updateDiggDisplay() {
+    var newdigg = document.getElementById('newdigg');
+    if (!newdigg || !newdigg.textContent) return;
+
+    try {
+      var data = JSON.parse(newdigg.textContent);
+      // 获取点赞和踩按钮元素
+      var goodItem = document.querySelector('.stat-item[onclick*="postDigg(\'good\'"]');
+      var badItem = document.querySelector('.stat-item[onclick*="postDigg(\'bad\'"]');
+
+      if (goodItem && badItem) {
+        // 更新点赞数据显示
+        goodItem.querySelector('.stat-value i').nextSibling.textContent = parseFloat(data.goodper).toFixed(1) + '%';
+        goodItem.querySelector('.stat-label').textContent = data.goodpost + ' Like';
+        // 更新踩数据显示
+        badItem.querySelector('.stat-value i').nextSibling.textContent = parseFloat(data.badper).toFixed(1) + '%';
+        badItem.querySelector('.stat-label').textContent = data.badpost + ' Dislike';
+
+        // 根据用户状态更新按钮样式
+        if (data.userState) {
+          // 先移除所有active状态
+          goodItem.classList.remove('active');
+          badItem.classList.remove('active');
+          // 根据用户状态添加active类
+          if (data.userState == 1) {
+            goodItem.classList.add('active');
+          } else if (data.userState == -1) {
+            badItem.classList.add('active');
+          }
+        } else {
+          // 用户未操作，移除所有active状态
+          goodItem.classList.remove('active');
+          badItem.classList.remove('active');
+        }
+      }
+    } catch (e) {
+      console.error('Error updating digg display:', e);
+    }
+  }
+
+  //页面加载完成后从cookie中获取点赞状态并更新按钮状态
+  document.addEventListener('DOMContentLoaded', function () {
+  // 获取当前文章ID和点赞状态
+  var aid = 48;
+  var saveid = GetCookie('diggid');
+  var currentState = 0;
+  
+  // 从Cookie中解析当前状态
+  if (saveid) {
+    var states = saveid.split('|');
+    for (var i = 0; i < states.length; i++) {
+      var parts = states[i].split(':');
+      if (parts[0] == aid) {
+        currentState = parseInt(parts[1]);
+        break;
+      }
+    }
+  }
+  // 获取点赞和踩按钮元素
+  var goodItem = document.querySelector('.stat-item[onclick*="postDigg(\'good\'"]');
+  var badItem = document.querySelector('.stat-item[onclick*="postDigg(\'bad\'"]');
+
+  // 根据状态添加active类
+  if (goodItem && badItem) {
+    goodItem.classList.remove('active');
+    badItem.classList.remove('active');
+    if (currentState == 1) {
+      goodItem.classList.add('active');
+    } else if (currentState == -1) {
+      badItem.classList.add('active');
+    }
+  }
+});
+</script>
+</head>
+
+<body class="articleview">
+
+  <!---加载Nav-->
+  <style>
+/* 为了方便更新鼠标悬浮特殊样式，将cursor图片作为后台自定义变量进行调用 */
+.header-image:hover {
+    cursor: url(/uploads/250317/1-250323225050495.png), pointer;
+}
+/* 为了方便更新，将本站字体及iconfont在线链接作为后台自定义变量进行调用 */
+@font-face {
+    font-family: 'PT Mono';
+    src: url('/templets/default/fonts/PTMono-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'AlimamaFangYuanTiVF';
+    src: url('/templets/default/fonts/AlimamaFangYuanTiVF-Thin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'HarmonySans SC';
+    src: url('/templets/default/fonts/HarmonyOS_Sans_SC_Regular.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+}
+/* 在线链接服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
+@font-face {
+  font-family: 'iconfontb';  /* Project id 4883100 */
+  src: url('//at.alicdn.com/t/c/font_4883100_v2ooqn1685h.woff2?t=1744262451597') format('woff2'),
+       url('//at.alicdn.com/t/c/font_4883100_v2ooqn1685h.woff?t=1744262451597') format('woff'),
+       url('//at.alicdn.com/t/c/font_4883100_v2ooqn1685h.ttf?t=1744262451597') format('truetype'),
+       url('//at.alicdn.com/t/c/font_4883100_v2ooqn1685h.svg?t=1744262451597#iconfontb') format('svg');
+}
+/* 在线链接服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
+@font-face {
+  font-family: 'iconfont';  /* Project id 4858194 */
+  src: 
+       url('//at.alicdn.com/t/c/font_4858194_hlglylgk9au.woff2?t=1743996269621') format('woff2'),
+       url('//at.alicdn.com/t/c/font_4858194_hlglylgk9au.woff?t=1743996269621') format('woff'),
+       url('//at.alicdn.com/t/c/font_4858194_hlglylgk9au.ttf?t=1743996269621') format('truetype');
+}
+.iconfont {
+    font-family:'iconfont' !important;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+}
+.iconfontb {
+    font-family:'iconfontb' !important;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+}
+</style>
+
+<div class="page-wrapper">
+  <div class="mobile-menu-toggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  <nav class="navigation navwidth mobile-nav">
+    <a class="home" href="/">Home</a>
+    
+    <a class="" href="/a/About/">About</a>
+    
+    <a class="" href="/a/Graphic/">Graphic</a>
+    
+    <a class="" href="/a/Activity/">Activity</a>
+    
+    <a class="" href="/a/3d/">3D Design</a>
+    
+    <a class="" href="/a/Drawing/">Drawing</a>
+    
+    <a class="" href="/a/AIGC/">AIGC</a>
+    <a class='active' href='/a/Orther/' ><span>Other</span></a>
+
+    <div class="switch-wrapper">
+      <input type="radio" name="theme" id="light" value="0">
+      <input type="radio" name="theme" id="dark" value="1">
+      <label for="light" class="light"><i class="iconfontb">&#xe95f;</i></label>
+      <label for="dark" class="dark"><i class="iconfontb">&#xe635;</i></label>
+      <span class="slider"></span>
+    </div>
+
+  </nav>
+</div>
+  <div id="pagebody">
+  <!--页面内容-->
+  <div class="page-wrapper pagtype" style="display: flex;">
+    <div class="fillheight-1"></div>
+    <div class="content-width">
+      <div class="fillwidth-archeader"></div>
+
+      <div class="image-carousel picbox" style="display:none;">
+        <div class="carousel-container">
+          
+        </div>
+      </div>
+
+      <div class="default-img"  style="display:none;">
+        <img class="project-header" alt="让字体和图标库 “活” 起来：一次后台自由度的升级" src="/uploads/allimg/250410/1-2504101F5110-L.png">
+      </div>
+      <script>
+        //自动切换图集/文章页面显示效果
+        // 检查picbox元素中是否存在图片
+        // 如果存在图片，显示picbox并隐藏default-img，同时设置content-area-1
+        // 如果不存在图片，隐藏picbox并显示default-img，同时设置content-area-2
+        document.addEventListener('DOMContentLoaded', function () {
+          var picbox = document.querySelector('.picbox');
+          var defaultImg = document.querySelector('.default-img');
+          var pagtype = document.querySelector('.pagtype');
+          var pagebody = document.getElementById('pagebody');
+
+          if (picbox.querySelector('img')) {
+            picbox.style.display = 'block';
+            defaultImg.style.display = 'none';
+            pagtype.classList.remove('pagtype-arc');
+            pagtype.classList.add('pagtype-img');
+          } else {
+            picbox.style.display = 'none';
+            defaultImg.style.display = 'block';
+            pagtype.classList.remove('pagtype-img');
+            pagtype.classList.add('pagtype-arc');
+          }
+
+          // 添加show类来触发动画
+          setTimeout(() => {
+            pagebody.classList.add('show');
+          }, 0);
+        });
+      </script>
+
+      <div class="content-area">
+        <div class="fillwidth-3"></div>
+        <h1><strong>让字体和图标库 “活” 起来：一次后台自由度的升级</strong></h1>
+        <h2 class="project-description">Bring the font and icon library to life: An upgrade of back - end freedom.</h2>
+        <div class="tags">
+          <ul><li><a href='/tags/%E7%BD%91%E7%AB%99.html'>网站</a></li><li><a href='/tags/%E5%BC%80%E5%8F%91.html'>开发</a></li><li><a href='/tags/dede.html'>dede</a></li><li><a href='/tags/%E7%BB%87%E6%A2%A6.html'>织梦</a></li><li><a href='/tags/cms.html'>cms</a></li><li><a href='/tags/%E5%BB%BA%E7%AB%99.html'>建站</a></li><li><a href='/tags/iconfont.html'>iconfont</a></li><li><a href='/tags/%E5%AD%97%E4%BD%93.html'>字体</a></li><li><a href='/tags/CSS.html'>CSS</a></li><li><a href='/tags/%E5%90%8E%E5%8F%B0.html'>后台</a></li><li><a href='/tags/php.html'>php</a></li></ul>
+        </div>
+        <section class="Content-Type content-icon">
+          <p>
+	某个深夜，我对着屏幕上的代码叹气&mdash;&mdash;第7次修改网站字体链接后，突然意识到：每次加个图标或调整字体，都要重新修改和打包前端、后端的相关代码，覆盖服务器文件，甚至可能因为手滑少打一个字符导致全站样式崩坏。这种重复劳动像在给创造力上锁，尤其当合作的设计师同事想尝试网站开发这一新领域时，&ldquo;改代码&rdquo;成了与网站沟通的高墙。于是，一个念头冒出来：为什么不让这些全站配置和发文章一样，随时在后台自由替换？</p>
+<h3>
+	从&ldquo;硬编码&rdquo;到&ldquo;动态变量&rdquo;</h3>
+<p>
+	原来的代码中，字体和图标库的CSS链接是直接写死的：&nbsp;&nbsp;</p>
+<p>
+	<code>@font-face { font-family: &#39;iconfontb&#39;; /* Project id 4883100 */ src: url(&#39;//at.alicdn.com/t/c/font_4883100_v2ooqn1685h.woff2?t=1744262451597&#39;) format(&#39;woff2&#39;), url(&#39;//at.alicdn.com/t/c/font_4883100_v2ooqn1685h.woff?t=1744262451597&#39;) format(&#39;woff&#39;), url(&#39;//at.alicdn.com/t/c/font_4883100_v2ooqn1685h.ttf?t=1744262451597&#39;) format(&#39;truetype&#39;), url(&#39;//at.alicdn.com/t/c/font_4883100_v2ooqn1685h.svg?t=1744262451597#iconfontb&#39;) format(&#39;svg&#39;); }</code></p>
+<p>
+	每次更新都需要找到前台页面以及后台编辑器样式中的这段代码，手动替换链接，再部署上线。而织梦CMS的自定义变量功能，恰好能解决这个问题&mdash;&mdash;将链接存入数据库，让前端动态读取。&nbsp;&nbsp;</p>
+<p>
+	&nbsp;</p>
+<h3>
+	三步实现&ldquo;动态化&rdquo;</h3>
+<p>
+	1. 后台变量配置</p>
+<p>
+	在织梦后台新增一个自定义参数：`cfg_font_icon`（字体/图标CSS链接）。这一步相当于在后台开了个&ldquo;插槽&rdquo;，未来只需填链接即可。&nbsp;&nbsp;</p>
+<p>
+	2. 模板改造</p>
+<p>
+	将原模板中硬编码的CSS引用替换为动态变量，这里的问题在于，原来的样式是写在CSS文件中的，而CSS文兵并不能直接读取织梦的自定义变量，所以需要吧原来的css中相关部分代码删除，然后在前端、后端网页的htm模板页面中通过&lt;style&gt;标签来引用：</p>
+<p>
+	<code>&lt;style&gt;<br />
+	/* 为了方便更新，将本站字体及iconfont在线链接作为后台自定义变量进行调用 */<br />
+	@font-face {<br />
+	&nbsp;&nbsp;&nbsp; font-family: &#39;HarmonySans SC&#39;;<br />
+	&nbsp;&nbsp;&nbsp; src: url(&#39;/templets/default/fonts/HarmonyOS_Sans_SC_Regular.ttf&#39;) format(&#39;truetype&#39;);<br />
+	&nbsp;&nbsp;&nbsp; font-weight: 100;<br />
+	&nbsp;&nbsp;&nbsp; font-style: normal;<br />
+	}<br />
+	/* 在线链接服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */<br />
+	@font-face {<br />
+	&nbsp; font-family: &#39;iconfont&#39;;&nbsp; /* Project id 4858194 */<br />
+	&nbsp; src:<br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; url(&#39;//at.alicdn.com/t/c/font_4858194_hlglylgk9au.woff2?t=1743996269621&#39;) format(&#39;woff2&#39;),<br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; url(&#39;//at.alicdn.com/t/c/font_4858194_hlglylgk9au.woff?t=1743996269621&#39;) format(&#39;woff&#39;),<br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; url(&#39;//at.alicdn.com/t/c/font_4858194_hlglylgk9au.ttf?t=1743996269621&#39;) format(&#39;truetype&#39;);<br />
+	}<br />
+	.iconfont {<br />
+	&nbsp;&nbsp;&nbsp; font-family:&#39;iconfont&#39; !important;<br />
+	&nbsp;&nbsp;&nbsp; font-style:normal;<br />
+	&nbsp;&nbsp;&nbsp; -webkit-font-smoothing: antialiased;<br />
+	&nbsp;&nbsp;&nbsp; -webkit-text-stroke-width: 0.2px;<br />
+	&nbsp;&nbsp;&nbsp; -moz-osx-font-smoothing: grayscale;<br />
+	}<br />
+	&lt;/style&gt;</code></p>
+<p>
+	这样，页面渲染时会自动读取数据库中的最新值。&nbsp;&nbsp;</p>
+<p>
+	&nbsp;</p>
+<h3>
+	一个意想不到的收获</h3>
+<p>
+	某天设计师临时提议：&ldquo;试试把我们的适量字体设计插入到页面文本里？&rdquo;过去这需要把复杂的svg代码通过源代码的形式插入到文档里，或者在服务器上上传一个自定义的字体包再重新同步前后台的前端样式链接，而现在，我只用了1分钟：把svg上传到iconfont项目，更新链接，复制新链接粘贴到后台，刷新页面，效果立现。</p>
+<p>
+	&nbsp;</p>
+<h3>
+	写在最后</h3>
+<p>
+	技术存在的意义，是让人更专注于创造，而非被流程绑架。这次改动看似只是&ldquo;把链接存进数据库&rdquo;，实则是将控制权交还给使用者&mdash;&mdash;无论是设计师的突发灵感，还是未来可能的内容迭代，都不必再为&ldquo;改一行代码&rdquo;而妥协。</p>
+<p>
+	&nbsp;</p>
+<p>
+	注：若需补充技术细节（如织梦CMS具体操作步骤、代码示例），可留言告知，我会在文中更新～</p>
+
+        </section>
+
+        <!--- 作者信息区域 -->
+        <div class="conversation-starters">
+          <h3>Reviews</h3>
+        </div>
+        <div class="author-info">
+          <div class="author-header">
+            <span class="author-label">作者</span>
+            <span class="author-name">✨Lntano.Li</span>
+          </div>
+          <div class="author-stats">
+            <div class="stat-item" onclick="javascript:postDigg('good',48)">
+              <span class="stat-value"><i><svg t="1743482834616" class="mysvg" viewBox="0 0 1024 1024" version="1.1"
+                    xmlns="http://www.w3.org/2000/svg" p-id="983" width="22" height="22">
+                    <path
+                      d="M512 961.28c-15.36 0-30.72-4.48-43.52-12.8l-24.96-16s-101.12-64.64-202.24-158.08c-60.8-56.32-110.08-112-145.92-165.76a510.72 510.72 0 0 1-55.04-103.68C24.32 462.72 16 421.12 16 380.8a314.496 314.496 0 0 1 95.36-225.92c29.44-28.8 64-51.84 102.4-67.84 94.08-39.04 206.08-30.72 293.76 23.04 1.28 0.64 3.2 1.92 4.48 2.56 1.28-1.28 3.2-1.92 4.48-2.56 87.68-53.12 199.68-61.44 293.76-23.04 38.4 16 72.96 39.04 102.4 67.84 30.08 29.44 53.12 63.36 69.12 101.12 17.28 39.68 25.6 81.92 25.6 124.8 0 40.32-8.32 81.92-24.32 124.16-12.8 33.92-31.36 68.48-55.04 103.68-36.48 53.76-85.12 109.44-146.56 165.76a1610.048 1610.048 0 0 1-201.6 157.44l-25.6 16c-13.44 8.32-28.8 12.8-43.52 12.8z"
+                      p-id="984"></path>
+                  </svg></i>0.0%</span>
+              <span class="stat-label">0 Like</span>
+            </div>
+            <div class="stat-item" onclick="javascript:postDigg('bad',48)">
+              <span class="stat-value"><i><svg t="1743484092045" class="mysvg down" viewBox="0 0 1024 1024"
+                    version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1130" width="22" height="22">
+                    <path
+                      d="M512 16C238.72 16 16 238.72 16 512S238.72 1008 512 1008s496-222.72 496-496S785.28 16 512 16zM288 416c0-16.64 7.04-33.28 18.56-45.44 14.72-14.72 37.12-21.12 58.24-17.28 3.84 0 7.68 1.92 11.52 3.84 3.84 1.28 7.68 3.2 11.52 5.76 3.2 1.92 6.4 5.12 9.6 7.68 11.52 12.16 18.56 28.8 18.56 45.44 0 8.32-1.92 16.64-5.12 24.32-3.2 8.32-7.68 14.72-13.44 21.12l-9.6 7.68c-3.84 2.56-7.68 4.48-11.52 5.76-3.84 1.92-7.68 3.2-11.52 3.84-4.48 0-8.32 1.28-12.8 1.28-16.64 0-33.28-7.04-45.44-18.56-5.76-6.4-10.24-12.8-13.44-21.12a63.68 63.68 0 0 1-5.12-24.32z m407.04 311.04a48.64 48.64 0 0 1-65.28-19.2c-26.88-48-65.28-71.04-118.4-71.04s-91.52 22.4-117.76 69.76c-12.8 23.04-42.24 31.36-65.28 18.56a48.192 48.192 0 0 1-18.56-65.28c42.88-78.08 112.64-119.68 201.6-119.68s158.72 41.6 202.24 120.96c12.8 23.04 4.48 52.48-18.56 65.28z m35.84-286.72c-3.2 7.68-7.68 14.72-13.44 21.12-12.16 11.52-28.8 18.56-45.44 18.56-8.32 0-16.64-1.92-24.32-5.12-8.32-3.2-14.72-7.68-21.12-13.44-5.76-6.4-10.24-13.44-13.44-21.12s-5.12-16-5.12-24.32c0-4.48 0-8.32 1.28-12.8 0.64-3.84 1.92-7.68 3.84-11.52 1.28-3.84 3.2-7.68 5.76-11.52 1.92-3.2 5.12-6.4 7.68-9.6a66.048 66.048 0 0 1 90.88 0l7.68 9.6c2.56 3.84 4.48 7.68 5.76 11.52 1.92 3.84 3.2 7.68 3.84 11.52 0.64 4.48 1.28 8.32 1.28 12.8 0 8.32-1.92 16.64-5.12 24.32z"
+                      p-id="1131"></path>
+                  </svg></i>0.0%</span>
+              <span class="stat-label">0 Dislike</span>
+            </div>
+            <div class="stat-item" id="comment-trigger">
+              <span class="stat-value"><i><svg t="1743484133724" class="mysvg" viewBox="0 0 1024 1024" version="1.1"
+                    xmlns="http://www.w3.org/2000/svg" p-id="1424" width="22" height="22">
+                    <path
+                      d="M514.56 16C242.56 16 21.12 224 21.12 480c0 110.08 41.6 215.04 116.48 298.88l-53.76 165.12c-4.48 14.72-2.56 30.72 6.4 42.88 8.96 12.16 23.04 19.84 38.4 19.84 7.04 0 44.16-1.28 154.24-23.04 71.04-14.08 120.32-35.84 144-48 28.8 5.12 57.6 7.68 87.04 7.68 272 0 493.44-208 493.44-464S786.56 16 514.56 16zM333.44 525.44c-6.4 5.76-13.44 10.24-21.12 13.44a63.68 63.68 0 0 1-69.76-13.44c-5.76-6.4-10.24-13.44-14.08-21.12-3.2-7.68-4.48-16-4.48-24.32s1.28-16.64 5.12-24.32c3.2-7.68 7.68-14.72 13.44-21.12 5.76-5.76 12.8-10.24 21.12-13.44 23.68-10.24 51.84-4.48 69.76 13.44 5.76 6.4 10.24 12.8 13.44 21.12a63.68 63.68 0 0 1-13.44 69.76z m224 0c-6.4 5.76-13.44 10.24-21.12 13.44a63.68 63.68 0 0 1-69.76-13.44A63.36 63.36 0 0 1 448 480c0-8.32 1.28-16.64 5.12-24.32 3.2-7.68 7.68-14.72 13.44-21.12 23.68-23.68 67.2-23.68 90.88 0 5.76 6.4 10.24 13.44 13.44 21.12a63.68 63.68 0 0 1-13.44 69.76z m224 0c-12.16 12.16-28.16 18.56-45.44 18.56a63.36 63.36 0 0 1-58.88-88.32c3.2-8.32 7.68-14.72 13.44-21.12 23.68-23.68 66.56-23.68 90.88 0 5.76 6.4 10.24 13.44 13.44 21.12a63.68 63.68 0 0 1-13.44 69.76z"
+                      p-id="1425"></path>
+                  </svg></i>0+</span>
+              <span class="stat-label" style="cursor: pointer;">Comment</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="newdigg" id="newdigg" style="display:none;">
+          <!--- 这个div用于AJAX更新数据 -->
+        </div>
+        <!--- 评论区和推荐阅读 -->
+        <div class="conversation-starters">
+          <h3>Comment</h3>
+          <!-- //主模板必须要引入/include/dedeajax2.js -->
+<!-- //评论内容区 -->
+<a name='commettop'></a>
+<div class="mt1">
+	<dl class="tbox" id="slide-box">
+		<!-- //这两个ID的区块必须存在，否则JS会出错 -->
+		<dd id='commetcontentNew'></dd>
+		<dd id='commetcontent'></dd>
+	</dl>
+</div>
+
+<!--- 随机推荐 -->
+<div class="conversation-starters">
+	<h3>ReadMore</h3>
+	<dd id='ReadMore'>
+		<div class="decmt-box2">
+			<a href="/a/Orther/2025/0327/27.html">
+				<img src='/uploads/allimg/250319/1-25031ZU60J94.jpg' height='40' width='40' />
+				<div class="content">
+					<span class="fl">Other · 2025-04-06</span>
+					<div class="text">连72分辨率都搞不懂，还做什么设计</div>
+				</div>
+			</a>
+		</div>
+<div class="decmt-box2">
+			<a href="/a/Drawing/2025/0403/44.html">
+				<img src='/uploads/allimg/250403/3.jpg' height='40' width='40' />
+				<div class="content">
+					<span class="fl">Drawing · 2025-04-06</span>
+					<div class="text">🌈手绘地图🌈姑苏区微旅行线路-姑苏商贾</div>
+				</div>
+			</a>
+		</div>
+<div class="decmt-box2">
+			<a href="/a/3d/2025/0406/47.html">
+				<img src='/uploads/allimg/250406/1-250406120410K3.jpg' height='40' width='40' />
+				<div class="content">
+					<span class="fl">3D Design · 2025-04-07</span>
+					<div class="text">企业文化展厅空间文化墙设计</div>
+				</div>
+			</a>
+		</div>
+<div class="decmt-box2">
+			<a href="/a/Graphic/2025/0327/35.html">
+				<img src='/uploads/allimg/250313/1-250320145Pb50.jpg' height='40' width='40' />
+				<div class="content">
+					<span class="fl">Graphic · 2025-04-06</span>
+					<div class="text">苏州资产管理集团标志系统升级设计</div>
+				</div>
+			</a>
+		</div>
+<div class="decmt-box2">
+			<a href="/a/Drawing/2025/0403/43.html">
+				<img src='/uploads/allimg/250403/6.jpg' height='40' width='40' />
+				<div class="content">
+					<span class="fl">Drawing · 2025-04-06</span>
+					<div class="text">🌈手绘地图🌈姑苏区微旅行线路-民国风情</div>
+				</div>
+			</a>
+		</div>
+<div class="decmt-box2">
+			<a href="/a/AIGC/2025/0403/38.html">
+				<img src='/uploads/allimg/250403/1-2504031243244E.jpg' height='40' width='40' />
+				<div class="content">
+					<span class="fl">AIGC · 2025-04-06</span>
+					<div class="text">ChatGPT-4o漫画创作能力史诗级加强</div>
+				</div>
+			</a>
+		</div>
+<div class="decmt-box2">
+			<a href="/a/AIGC/2025/0327/29.html">
+				<img src='/uploads/allimg/250320/1-250320143230C4.gif' height='40' width='40' />
+				<div class="content">
+					<span class="fl">AIGC · 2025-04-06</span>
+					<div class="text">百变苏城-盘门百变换装秀</div>
+				</div>
+			</a>
+		</div>
+<div class="decmt-box2">
+			<a href="/a/Drawing/2025/0403/46.html">
+				<img src='/uploads/allimg/250403/1.jpg' height='40' width='40' />
+				<div class="content">
+					<span class="fl">Drawing · 2025-04-06</span>
+					<div class="text">🌈手绘地图🌈姑苏区微旅行线路-古城寻根</div>
+				</div>
+			</a>
+		</div>
+<div class="decmt-box2">
+			<a href="/a/Orther/2025/0331/37.html">
+				<img src='/uploads/allimg/250401/1-250401122614M9.png' height='40' width='40' />
+				<div class="content">
+					<span class="fl">Other · 2025-04-10</span>
+					<div class="text"><font color='#de6161'>🚀开发日志2025.04</font></div>
+				</div>
+			</a>
+		</div>
+<div class="decmt-box2">
+			<a href="/a/3d/2025/0327/30.html">
+				<img src='/uploads/allimg/250320/1-250320143620507.jpg' height='40' width='40' />
+				<div class="content">
+					<span class="fl">3D Design · 2025-04-06</span>
+					<div class="text">虚幻引擎5.3让室内高质量实时渲染交互成为可能</div>
+				</div>
+			</a>
+		</div>
+<div class="decmt-box2">
+			<a href="/a/Orther/2025/0410/48.html">
+				<img src='/uploads/allimg/250410/1-2504101F5110-L.png' height='40' width='40' />
+				<div class="content">
+					<span class="fl">Other · 2025-04-10</span>
+					<div class="text">让字体和图标库 “活” 起来：一次后台自由度的升级</div>
+				</div>
+			</a>
+		</div>
+<div class="decmt-box2">
+			<a href="/a/Drawing/2025/0403/39.html">
+				<img src='/uploads/allimg/250403/1-1S3393Y7.jpg' height='40' width='40' />
+				<div class="content">
+					<span class="fl">Drawing · 2025-04-09</span>
+					<div class="text">✏️彩铅风格的手绘小男孩</div>
+				</div>
+			</a>
+		</div>
+<div class="decmt-box2">
+			<a href="/a/Drawing/2025/0403/41.html">
+				<img src='/uploads/allimg/250403/4.jpg' height='40' width='40' />
+				<div class="content">
+					<span class="fl">Drawing · 2025-04-06</span>
+					<div class="text">🌈手绘地图🌈姑苏区微旅行线路-平江寻踪</div>
+				</div>
+			</a>
+		</div>
+<div class="decmt-box2">
+			<a href="/a/Activity/2025/0327/31.html">
+				<img src='/uploads/allimg/250318/1-25031P91Q60-L.jpg' height='40' width='40' />
+				<div class="content">
+					<span class="fl">Activity · 2025-04-06</span>
+					<div class="text">2024搜狐城市万有影力活动设计理念</div>
+				</div>
+			</a>
+		</div>
+<div class="decmt-box2">
+			<a href="/a/Activity/2025/0327/33.html">
+				<img src='/uploads/allimg/250317/1-25031H2554K58.jpg' height='40' width='40' />
+				<div class="content">
+					<span class="fl">Activity · 2025-04-06</span>
+					<div class="text">🌈苏州网络安全宣传周活动视觉设计</div>
+				</div>
+			</a>
+		</div>
+<div class="decmt-box2">
+			<a href="/a/Drawing/2025/0327/32.html">
+				<img src='/uploads/allimg/250314/1-250314233IYM.jpg' height='40' width='40' />
+				<div class="content">
+					<span class="fl">Drawing · 2025-04-06</span>
+					<div class="text">使用Affinity Designer绘制的港风女孩</div>
+				</div>
+			</a>
+		</div>
+<div class="decmt-box2">
+			<a href="/a/Drawing/2025/0403/45.html">
+				<img src='/uploads/allimg/250403/2.jpg' height='40' width='40' />
+				<div class="content">
+					<span class="fl">Drawing · 2025-04-06</span>
+					<div class="text">🌈手绘地图🌈姑苏区微旅行线路-高义风流</div>
+				</div>
+			</a>
+		</div>
+<div class="decmt-box2">
+			<a href="/a/Drawing/2025/0403/40.html">
+				<img src='/uploads/allimg/250403/1-1T205F00.webp' height='40' width='40' />
+				<div class="content">
+					<span class="fl">Drawing · 2025-04-06</span>
+					<div class="text">传统中式国潮风格的人物手绘</div>
+				</div>
+			</a>
+		</div>
+<div class="decmt-box2">
+			<a href="/a/Drawing/2025/0403/42.html">
+				<img src='/uploads/allimg/250403/5.jpg' height='40' width='40' />
+				<div class="content">
+					<span class="fl">Drawing · 2025-04-06</span>
+					<div class="text">🌈手绘地图🌈姑苏区微旅行线路-小巷幽幽</div>
+				</div>
+			</a>
+		</div>
+<div class="decmt-box2">
+			<a href="/a/Orther/2025/0327/28.html">
+				<img src='/uploads/allimg/250319/1-2503191925400-L.jpg' height='40' width='40' />
+				<div class="content">
+					<span class="fl">Other · 2025-04-06</span>
+					<div class="text">作为媒体受邀参加的各类活动</div>
+				</div>
+			</a>
+		</div>
+
+	</dd>
+</div>
+
+<script language='javascript'>
+	// 评论表单弹出控制
+	function initCommentForm() {
+		const trigger = document.getElementById('comment-trigger');
+		const form = document.getElementById('comment-form');
+		const overlay = document.getElementById('comment-overlay');
+		
+		if (!trigger || !form || !overlay) return;
+
+		// 点击评论按钮显示表单
+		trigger.addEventListener('click', () => {
+			form.classList.add('show');
+			overlay.classList.add('show');
+			document.getElementById('pagebody').classList.add('nav');
+		});
+
+		// 点击遮罩层关闭表单
+		overlay.addEventListener('click', () => {
+			form.classList.remove('show');
+			overlay.classList.remove('show');
+			document.getElementById('pagebody').classList.remove('nav');
+		});
+
+		// 点击表单外部关闭表单
+		document.addEventListener('click', (e) => {
+			if (e.target === overlay) {
+				form.classList.remove('show');
+				overlay.classList.remove('show');
+				document.getElementById('pagebody').classList.remove('nav');
+			}
+		});
+	}
+
+	// 页面加载完成后初始化评论表单
+	window.addEventListener('load', initCommentForm);
+
+	function LoadCommets(page) {
+		var taget_obj = document.getElementById('commetcontent');
+		var waithtml = "<div style='line-height:50px'><img src='/images/loadinglit.gif' />评论加载中...</div>";
+		var myajax = new DedeAjax(taget_obj, true, true, '', 'x', waithtml);
+		myajax.SendGet2("/plus/feedback_ajax.php?dopost=getlist&aid=48&page=" + page);
+		DedeXHTTP = null;
+	}
+	function PostComment() {
+		var f = document.feedback;
+		var nface = '6';
+		var nfeedbacktype = 'feedback';
+		var nvalidate = '';
+		var nnotuser = '';
+		var nusername = '';
+		var npwd = '';
+		var taget_obj = $DE('commetcontentNew');
+		var waithtml = "<div style='line-height:30px'><img src='/images/loadinglit.gif' />正在发送中...</div>";
+		if (f.msg.value == '') {
+			alert("评论内容不能为空！");
+			return;
+		}
+		if (f.msg.value.length > 500) {
+			alert("你的评论是不是太长了？请填写500字以内的评论。");
+			return;
+		}
+		if (f.feedbacktype) {
+			for (var i = 0; i < f.feedbacktype.length; i++)
+				if (f.feedbacktype[i].checked) nfeedbacktype = f.feedbacktype[i].value;
+		}
+		if (f.face) {
+			for (var j = 0; j < f.face.length; j++)
+				if (f.face[j].checked) nface = f.face[j].value;
+		}
+		if (f.notuser.checked) nnotuser = '1';
+		if (f.username) nusername = f.username.value;
+		if (f.pwd) npwd = f.pwd.value;
+
+		var myajax = new DedeAjax(taget_obj, false, true, '', '', waithtml);
+		myajax.sendlang = 'utf-8';
+		myajax.AddKeyN('dopost', 'send');
+		myajax.AddKeyN('aid', '48');
+		myajax.AddKeyN('fid', f.fid.value);
+		myajax.AddKeyN('face', nface);
+		myajax.AddKeyN('feedbacktype', nfeedbacktype);
+		myajax.AddKeyN('validate', nvalidate);
+		myajax.AddKeyN('notuser', nnotuser);
+		myajax.AddKeyN('username', nusername);
+		myajax.AddKeyN('pwd', npwd);
+		myajax.AddKeyN('msg', f.msg.value);
+		myajax.SendPost2('/plus/feedback_ajax.php');
+		f.msg.value = '';
+		f.fid.value = 0;
+		if (f.validate) {
+			if ($DE('validateimg')) $DE('validateimg').src = "/include/vdimgck.php?" + f.validate.value;
+			f.validate.value = '';
+		}
+
+		// 关闭评论框
+		var form = document.getElementById('comment-form');
+		var overlay = document.getElementById('comment-overlay');
+		if (form && overlay) {
+			form.classList.remove('show');
+			overlay.classList.remove('show');
+			document.getElementById('pagebody').classList.remove('nav');
+		}
+
+		// 更新评论计数
+		var commentCount = document.querySelector('#comment-trigger .stat-value');
+		if (commentCount) {
+			var text = commentCount.textContent.trim();
+			var currentCount = parseInt(text.replace(/[^0-9]/g, ''));
+			if (!isNaN(currentCount)) {
+				commentCount.innerHTML = '<i class="iconfont">&#xe60e;</i>' + (currentCount + 1) + '+';
+			}
+		}
+	}
+	function quoteCommet(fid) {
+		document.feedback.fid.value = fid;
+	}
+	LoadCommets(1);
+
+	// 添加滚动效果
+	function initScroll() {
+		// 创建动画样式
+		const styleSheet = document.createElement('style');
+		document.head.appendChild(styleSheet);
+
+		// 处理评论区域
+		const commentContainer = document.getElementById('commetcontent');
+		if (commentContainer) {
+			const comments = commentContainer.querySelectorAll('.decmt-box2');
+			if (comments.length && commentContainer.scrollWidth > commentContainer.clientWidth) {
+				commentContainer.classList.add('comment-scroll-container', 'slide-mask-l', 'slide-mask-r');
+				const commentWrapper = document.createElement('div');
+				commentWrapper.className = 'comment-scroll-wrapper';
+				comments.forEach(comment => commentWrapper.appendChild(comment));
+				commentContainer.appendChild(commentWrapper);
+
+				// 计算起始位置（容器宽度加上一定的偏移量）
+				const startPosition = commentContainer.offsetWidth + 50;
+				// 计算内容总宽度（包括起始位置）
+				const totalWidth = commentWrapper.scrollWidth + startPosition;
+				// 根据设定的速度（像素/秒）计算动画时长
+				const duration = totalWidth / parseFloat('150');
+				// 动态添加滚动动画
+				styleSheet.sheet.insertRule(`
+					@keyframes scroll {
+						from { transform: translateX(${startPosition}px); }
+						to { transform: translateX(-100%); }
+					}
+				`, styleSheet.sheet.cssRules.length);
+				// 设置评论区域的滚动速度
+				commentWrapper.style.animationDuration = duration + 's';
+			}
+		}
+
+		// 处理ReadMore区域
+		const readMoreContainer = document.getElementById('ReadMore');
+		if (readMoreContainer) {
+			const readMoreItems = readMoreContainer.querySelectorAll('.decmt-box2');
+			if (readMoreItems.length && readMoreContainer.scrollWidth > readMoreContainer.clientWidth) {
+				readMoreContainer.classList.add('comment-scroll-container', 'slide-mask-l', 'slide-mask-r');
+				const readMoreWrapper = document.createElement('div');
+				readMoreWrapper.className = 'comment-scroll-wrapper';
+				readMoreItems.forEach(item => readMoreWrapper.appendChild(item));
+				readMoreContainer.appendChild(readMoreWrapper);
+
+				// 计算起始位置（容器宽度加上一定的偏移量）
+				const startPosition = readMoreContainer.offsetWidth + 50;
+				// 计算内容总宽度（包括起始位置）
+				const totalWidth = readMoreWrapper.scrollWidth + startPosition;
+				// 根据设定的速度（像素/秒）计算动画时长
+				const duration = totalWidth / parseFloat('180');
+				// 动态添加滚动动画
+				styleSheet.sheet.insertRule(`
+					@keyframes scroll {
+						from { transform: translateX(${startPosition}px); }
+						to { transform: translateX(-100%); }
+					}
+				`, styleSheet.sheet.cssRules.length);
+				// 设置ReadMore区域的滚动速度
+				readMoreWrapper.style.animationDuration = duration + 's';
+			}
+		}
+	}
+
+	// 等待内容加载完成后初始化滚动
+	window.addEventListener('load', initScroll);
+</script><!-- //评论内容区结束 -->
+        </div>
+
+        <section class="next-shelf">
+          <li class="project" style="max-width: 70%;">
+            <a class="shelf-project-link" href="/a/Orther/2025/0331/37.html">
+              <h6 class="active" style="margin-bottom: 0;">Previous</h6>
+              <div class="next-title">🚀开发日志2025.04</div>
+            </a>
+          </li>
+          <li class="project" style="text-align: right;max-width: 70%;">
+            <a class="shelf-project-link" href="">
+              <div class="next-title">None</div>
+              <h6 class="active" style="margin-bottom: 0;">Next</h6>
+            </a>
+          </li>
+        </section>
+        <div class="fillwidth-2"></div>
+
+      </div>
+    </div>
+    </div>
+  </div>
+
+<!-- 评论表单弹出层 -->
+<div class="comment-form-overlay" id="comment-overlay"></div>
+<div class="comment-form-container" id="comment-form">
+	<div class="dede_comment_post">
+		<form action="#" method="post" name="feedback">
+			<input type="hidden" name="dopost" value="send" />
+			<input type="hidden" name="comtype" value="comments">
+			<input type="hidden" name="aid" value="48" />
+			<input type="hidden" name="fid" id='feedbackfid' value="0" />
+			<div class="dcmp-content">
+				<textarea cols="60" name="msg" rows="5" class="ipt-txt"></textarea>
+			</div>
+			<div class="dcmp-post">
+				<div class="dcmp-userinfo" id="_ajax_feedback">
+					<input type="text" name="username" size="12" class="ipt-txt" placeholder="昵称" style="text-transform:uppercase;" />
+					<input type="checkbox" name="notuser" id="dcmp-submit-guest" />
+					<label for="dcmp-submit-guest" />匿名</label>
+					
+					<button type="button" onClick='PostComment()'>评论</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+  <link href="/templets/default/style/image-preview.css" rel="stylesheet" media="screen"
+    type="text/css" />
+  <script src="/templets/default/js/image-preview.js"></script><!-- 图片预览 -->
+  <script src="/templets/default/js/image-caption.js"></script><!-- 图片标题 -->
+  <script src="/templets/default/js/mobile-menu.js"></script><!-- 手机导航栏 -->
+  <script src="/templets/default/js/image-carousel.js"></script><!-- 图片轮播 -->
+  <script src="/templets/default/js/like-particles.js"></script><!-- 点赞粒子效果 -->
+</body>
+
+</html>

@@ -60,7 +60,7 @@ $cfg_rm_remote = 'Y';
 $cfg_arc_dellink = 'N';
 $cfg_arc_autopic = 'Y';
 $cfg_arc_autokeyword = 'Y';
-$cfg_title_maxlen = 60;
+$cfg_title_maxlen = 200;
 $cfg_album_width = 800;
 $cfg_check_title = 'Y';
 $cfg_album_row = 3;
@@ -209,7 +209,6 @@ $cfg_font_icon = '@font-face {
     -webkit-text-stroke-width: 0.2px;
     -moz-osx-font-smoothing: grayscale;
 }
-
 .iconfontb {
     font-family:\'iconfontb\' !important;
     font-style:normal;
