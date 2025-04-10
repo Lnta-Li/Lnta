@@ -228,8 +228,7 @@
         <div class="carousel-container">
           {dede:field name='imgurls' alt='图片输出区'}
           <div class="carousel-item">
-            <img src='[field:imgsrc/]' alt='[field:alttext /]' />
-            <div class="carousel-caption">[field:alttext /]</div>
+            <img src='[field:imgsrc/]' alt='[field:alttext function="cn_substr(@me,36)"/]' />
           </div>
           {/dede:field}
         </div>

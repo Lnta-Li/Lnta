@@ -68,7 +68,7 @@ if($dopost=="save")
     {
         if(preg_match("#^edit___#", $k))
         {
-            $v = cn_substrR(${$k}, 1024);
+            $v = cn_substrR(${$k}, 10240);
         }
         else
         {

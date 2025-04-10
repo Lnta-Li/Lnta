@@ -168,6 +168,53 @@ $cfg_readmore_speed = 180;
 $cfg_head_image = '/uploads/allimg/250315/1-2503151600300-L.jpg';
 $cfg_readmore_quantit = 15;
 $cfg_Default_theme = 0;
-$cfg_iconfont = '@font-face {     font-family: \'iconfont\';  /* Project id 4858194 */     src:           url(\'//at.alicdn.com/t/c/font_4858194_hlglylgk9au.woff2?t=1743996269621\') format(\'woff2\'),          url(\'//at.alicdn.com/t/c/font_4858194_hlglylgk9au.woff?t=1743996269621\') format(\'woff\'),          url(\'//at.alicdn.com/t/c/font_4858194_hlglylgk9au.ttf?t=1743996269621\') format(\'truetype\');   }';
-$cfg_iconfontb = '@font-face {     font-family: \'iconfontb\';  /* Project id 4883100 */     src: url(\'//at.alicdn.com/t/c/font_4883100_z97dru1b51.woff2?t=1744023181166\') format(\'woff2\'),          url(\'//at.alicdn.com/t/c/font_4883100_z97dru1b51.woff?t=1744023181166\') format(\'woff\'),          url(\'//at.alicdn.com/t/c/font_4883100_z97dru1b51.ttf?t=1744023181166\') format(\'truetype\'),          url(\'//at.alicdn.com/t/c/font_4883100_z97dru1b51.svg?t=1744023181166#iconfontb\') format(\'svg\');   }';
+$cfg_font_icon = '@font-face {
+    font-family: \'PT Mono\';
+    src: url(\'/templets/default/fonts/PTMono-Regular.ttf\') format(\'truetype\');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: \'AlimamaFangYuanTiVF\';
+    src: url(\'/templets/default/fonts/AlimamaFangYuanTiVF-Thin.ttf\') format(\'truetype\');
+    font-weight: 100;
+    font-style: normal;
+}
+@font-face {
+    font-family: \'HarmonySans SC\';
+    src: url(\'/templets/default/fonts/HarmonyOS_Sans_SC_Regular.ttf\') format(\'truetype\');
+    font-weight: 100;
+    font-style: normal;
+}
+/* 在线链接服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
+@font-face {
+  font-family: \'iconfontb\';  /* Project id 4883100 */
+  src: url(\'//at.alicdn.com/t/c/font_4883100_v2ooqn1685h.woff2?t=1744262451597\') format(\'woff2\'),
+       url(\'//at.alicdn.com/t/c/font_4883100_v2ooqn1685h.woff?t=1744262451597\') format(\'woff\'),
+       url(\'//at.alicdn.com/t/c/font_4883100_v2ooqn1685h.ttf?t=1744262451597\') format(\'truetype\'),
+       url(\'//at.alicdn.com/t/c/font_4883100_v2ooqn1685h.svg?t=1744262451597#iconfontb\') format(\'svg\');
+}
+/* 在线链接服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
+@font-face {
+  font-family: \'iconfont\';  /* Project id 4858194 */
+  src: 
+       url(\'//at.alicdn.com/t/c/font_4858194_hlglylgk9au.woff2?t=1743996269621\') format(\'woff2\'),
+       url(\'//at.alicdn.com/t/c/font_4858194_hlglylgk9au.woff?t=1743996269621\') format(\'woff\'),
+       url(\'//at.alicdn.com/t/c/font_4858194_hlglylgk9au.ttf?t=1743996269621\') format(\'truetype\');
+}
+.iconfont {
+    font-family:\'iconfont\' !important;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.iconfontb {
+    font-family:\'iconfontb\' !important;
+    font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+}';
 ?>
