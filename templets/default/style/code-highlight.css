@@ -1,0 +1,54 @@
+
+/* 代码块样式 */
+code {
+    display: block;
+    padding: 15px;
+    margin: 10px 0;
+    background: #212228;
+    border-radius: 8px;
+    font-family: 'PT Mono', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    overflow-x: auto;
+    position: relative;
+}
+
+/* CSS代码样式 */
+code.css {
+    color: #61afef;
+}
+
+code.css .selector {
+    color: #e06c75;
+}
+
+code.css .property {
+    color: #d19a66;
+}
+
+code.css .value {
+    color: #98c379;
+}
+
+code.css .string {
+    color: #98c379;
+}
+
+code.css .comment {
+    color: #5c6370;
+    font-style: italic;
+}
+
+/* 代码语言标签 */
+code::before {
+    content: attr(data-lang);
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 5px 10px;
+    background: var(--background-code-lang);
+    color: var(--color-code-lang);
+    font-size: 12px;
+    border-radius: 0 8px 0 8px;
+}
