@@ -5,11 +5,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
     codeBlocks.forEach(code => {
         // 检测代码类型
-        const content = code.textContent.trim();
+        const codeContent = code.textContent.trim();
         let codeType = 'plain';
         
         // 检测CSS代码
-        if (content.includes('@font-face') || content.includes('{') || content.includes('}')) {
+        if (codeContent.includes('@font-face') || codeContent.includes('{') || codeContent.includes('}')) {
             codeType = 'css';
             code.classList.add('css');
         }
@@ -18,27 +18,70 @@ document.addEventListener('DOMContentLoaded', function() {
         if (codeType === 'css') {
             highlightCSS(code);
         }
+        
+        // 最后添加代码类型标签
+        const langLabel = document.createElement('div');
+        langLabel.className = 'code-lang-label';
+        langLabel.textContent = codeType.toUpperCase();
+        code.insertBefore(langLabel, code.firstChild);
+        
+        // 处理多余的换行
+        const finalContent = code.innerHTML;
+        code.innerHTML = finalContent.replace(/<br><br>/g, '<br>');
     });
 });
 
+function escapeHtml(text) {
+    return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
 function highlightCSS(code) {
-    const content = code.textContent;
+    // 获取原始内容，保留 HTML 标签
+    const originalContent = code.innerHTML;
     
-    // 替换选择器
-    let highlighted = content.replace(/([^{}]+)(?={)/g, '<span class="selector">$1</span>');
+    // 处理换行符，将 <br> 转换为 \n
+    const normalizedContent = originalContent.replace(/<br\s*\/?>/gi, '\n');
+    
+    // 替换选择器 - 修改正则表达式，避免匹配到 @规则和 HTML 标签
+    let highlighted = normalizedContent.replace(/([^{}]+)(?={)/g, function(match) {
+        // 如果匹配到的是 HTML 标签或 @规则，直接返回
+        if (match.trim().startsWith('<') || 
+            match.trim().startsWith('&lt;') || 
+            match.trim().startsWith('@')) {
+            return match;
+        }
+        return '<span class="selector">' + match + '</span>';
+    });
     
     // 替换属性
-    highlighted = highlighted.replace(/([a-zA-Z-]+)(?=:)/g, '<span class="property">$1</span>');
+    highlighted = highlighted.replace(/([a-zA-Z-]+)(?=:)/g, function(match) {
+        return '<span class="property">' + match + '</span>';
+    });
     
     // 替换值
-    highlighted = highlighted.replace(/(?<=:)([^;]+)(?=;)/g, '<span class="value">$1</span>');
+    highlighted = highlighted.replace(/(?<=:)([^;]+)(?=;)/g, function(match) {
+        return '<span class="value">' + match + '</span>';
+    });
     
     // 替换字符串
-    highlighted = highlighted.replace(/(['"])(.*?)\1/g, '<span class="string">$1$2$1</span>');
+    highlighted = highlighted.replace(/(['"])(.*?)\1/g, function(match, quote, content) {
+        return '<span class="string">' + quote + content + quote + '</span>';
+    });
     
     // 替换注释
-    highlighted = highlighted.replace(/\/\*[\s\S]*?\*\//g, '<span class="comment">$&</span>');
+    highlighted = highlighted.replace(/\/\*[\s\S]*?\*\//g, function(match) {
+        return '<span class="comment">' + match + '</span>';
+    });
     
+    // 将 \n 转换回 <br>
+    highlighted = highlighted.replace(/\n/g, '<br>');
+    
+    // 设置高亮后的内容
     code.innerHTML = highlighted;
 } 
 </script>
