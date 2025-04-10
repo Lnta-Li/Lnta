@@ -168,4 +168,6 @@ $cfg_readmore_speed = 180;
 $cfg_head_image = '/uploads/allimg/250315/1-2503151600300-L.jpg';
 $cfg_readmore_quantit = 15;
 $cfg_Default_theme = 0;
+$cfg_iconfont = '@font-face {     font-family: \'iconfont\';  /* Project id 4858194 */     src:           url(\'//at.alicdn.com/t/c/font_4858194_hlglylgk9au.woff2?t=1743996269621\') format(\'woff2\'),          url(\'//at.alicdn.com/t/c/font_4858194_hlglylgk9au.woff?t=1743996269621\') format(\'woff\'),          url(\'//at.alicdn.com/t/c/font_4858194_hlglylgk9au.ttf?t=1743996269621\') format(\'truetype\');   }';
+$cfg_iconfontb = '@font-face {     font-family: \'iconfontb\';  /* Project id 4883100 */     src: url(\'//at.alicdn.com/t/c/font_4883100_z97dru1b51.woff2?t=1744023181166\') format(\'woff2\'),          url(\'//at.alicdn.com/t/c/font_4883100_z97dru1b51.woff?t=1744023181166\') format(\'woff\'),          url(\'//at.alicdn.com/t/c/font_4883100_z97dru1b51.ttf?t=1744023181166\') format(\'truetype\'),          url(\'//at.alicdn.com/t/c/font_4883100_z97dru1b51.svg?t=1744023181166#iconfontb\') format(\'svg\');   }';
 ?>
