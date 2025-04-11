@@ -8,7 +8,7 @@ INSERT INTO `dede_arctiny` VALUES('39','5','0','0','2','1743676453','1744173854'
 INSERT INTO `dede_arctiny` VALUES('35','2','0','0','2','1743062448','1743895312','1');
 INSERT INTO `dede_arctiny` VALUES('40','5','0','0','2','1743677074','1743895209','1');
 INSERT INTO `dede_arctiny` VALUES('27','7','0','0','2','1743061735','1743907940','1');
-INSERT INTO `dede_arctiny` VALUES('37','7','0','0','2','1743402431','1775377579','1');
+INSERT INTO `dede_arctiny` VALUES('37','7','0','0','2','1743402431','1775469299','1');
 INSERT INTO `dede_arctiny` VALUES('38','6','0','0','2','1743654480','1743896642','1');
 INSERT INTO `dede_arctiny` VALUES('41','5','0','0','2','1743677797','1743895190','1');
 INSERT INTO `dede_arctiny` VALUES('42','5','0','0','2','1743679490','1743895160','1');
@@ -17,4 +17,4 @@ INSERT INTO `dede_arctiny` VALUES('44','5','0','0','2','1743680803','1743895122'
 INSERT INTO `dede_arctiny` VALUES('45','5','0','0','2','1743680975','1743895101','1');
 INSERT INTO `dede_arctiny` VALUES('46','5','0','0','2','1743681050','1743908894','1');
 INSERT INTO `dede_arctiny` VALUES('47','4','0','0','2','1743910202','1743986970','1');
-INSERT INTO `dede_arctiny` VALUES('48','7','0','0','2','1744275934','1744276914','1');
+INSERT INTO `dede_arctiny` VALUES('48','7','0','0','2','1744275934','1744360341','1');
