@@ -2,6 +2,7 @@
 Copyright (c) 2003-2011, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.html or http://ckeditor.com/license
 */
+@import url('/templets/default/style/theme-light.css');
 
 body
 {
@@ -158,27 +159,40 @@ iframe {
 
 blockquote {
     position: relative;
-    padding: 10px 30px;
     margin: 40px auto;
-    max-width: 800px;
-    font-family: 'AlimamaFangYuanTiVF';
-    font-size: 1.2em;
-    line-height: 2.6;
-    color: rgba(33, 36, 44, 0.84);
-    background: rgba(174, 129, 43, 0.1);
-    border-left: 4px solid #ae812b;
+    background: var(--background-blockquote);
+    border-radius: 8px;
+    padding: 4px 26px 4px 35px;
 }
 
 blockquote::before {
     content: "“";
     position: absolute;
-    left: 20px;
-    top: -10px;
+    left: 12px;
+    top: 0;
     font-family: Arial;
     font-size: 120px;
-    color: rgba(174, 129, 43, 0.3);
+    color: var(--blockquote-color);
     line-height: 1;
     z-index: 1;
+}
+
+big {
+    font-size: 0.9em;
+    background: #eab30824;
+    color: var(--Key-color);
+    padding: 5px 6px;
+    border-radius: 4px;
+    margin: 0 4px;
+}
+
+tt {
+    padding: 5px 6px;
+    border-radius: 4px;
+    font-family: PT Mono, HarmonySans SC;
+    background-color: rgb(142 150 170 / 15%);
+    font-size: 0.9em;
+    margin: 0 4px;
 }
 
 a {
@@ -200,4 +214,12 @@ a:hover {
     color: #fff;
     font-size: 19px;
     background-color: #8da5ff;
+}
+
+big {
+    font-size: 1em;
+    background: #eab30824;
+    color: #915930;
+    padding: 4px 6px;
+    border-radius: 4px;
 }

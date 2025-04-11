@@ -1,88 +1,74 @@
-<script text="javascript">
+<!-- 引入highlight.js库和样式 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+<!-- 引入常用语言包 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/xml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/php.min.js"></script>
+
+<script>
 document.addEventListener('DOMContentLoaded', function() {
-    // 获取所有代码块
-    const codeBlocks = document.querySelectorAll('code');
+    // 初始化highlight.js
+    hljs.configure({
+        ignoreUnescapedHTML: true
+    });
     
-    codeBlocks.forEach(code => {
-        // 检测代码类型
-        const codeContent = code.textContent.trim();
-        let codeType = 'plain';
+    // 为裸露的code标签添加pre标签包装
+    document.querySelectorAll('code:not(pre code)').forEach((codeBlock) => {
+        const preElement = document.createElement('pre');
+        const parent = codeBlock.parentNode;
+        parent.insertBefore(preElement, codeBlock);
+        preElement.appendChild(codeBlock);
+    });
+    
+    // 应用代码高亮
+    hljs.highlightAll();
+    
+    // 为每个代码块添加语言标签和复制按钮
+    document.querySelectorAll('pre code').forEach((block, index) => {
+        const language = block.result?.language || 'plaintext';
         
-        // 检测CSS代码
-        if (codeContent.includes('@font-face') || codeContent.includes('{') || codeContent.includes('}')) {
-            codeType = 'css';
-            code.classList.add('css');
-        }
+        // 创建控制栏容器
+        const controlBar = document.createElement('div');
+        controlBar.className = 'code-control-bar';
         
-        // 根据代码类型进行高亮处理
-        if (codeType === 'css') {
-            highlightCSS(code);
-        }
-        
-        // 最后添加代码类型标签
+        // 创建语言标签
         const langLabel = document.createElement('div');
         langLabel.className = 'code-lang-label';
-        langLabel.textContent = codeType.toUpperCase();
-        code.insertBefore(langLabel, code.firstChild);
+        langLabel.textContent = language.toUpperCase();
+        controlBar.appendChild(langLabel);
+
+        // 添加复制按钮
+        const copyButton = document.createElement('button');
+        copyButton.className = 'code-copy-button';
+        copyButton.setAttribute('data-clipboard-target', `#code-block-${index}`);
+        copyButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"/></svg>';
+        controlBar.appendChild(copyButton);
         
-        // 处理多余的换行
-        const finalContent = code.innerHTML;
-        code.innerHTML = finalContent.replace(/<br><br>/g, '<br>');
+        // 将控制栏添加到代码块容器中
+        block.parentNode.insertBefore(controlBar, block);
+
+        // 为代码块添加唯一ID
+        block.id = `code-block-${index}`;
+    });
+
+    // 初始化clipboard.js
+    const clipboard = new ClipboardJS('.code-copy-button');
+    
+    clipboard.on('success', function(e) {
+        const button = e.trigger;
+        button.classList.add('copied');
+        setTimeout(() => button.classList.remove('copied'), 2000);
+        e.clearSelection();
+    });
+
+    clipboard.on('error', function(e) {
+        console.error('复制失败');
     });
 });
-
-function escapeHtml(text) {
-    return text
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-}
-
-function highlightCSS(code) {
-    // 获取原始内容，保留 HTML 标签
-    const originalContent = code.innerHTML;
-    
-    // 处理换行符，将 <br> 转换为 \n
-    const normalizedContent = originalContent.replace(/<br\s*\/?>/gi, '\n');
-    
-    // 替换选择器 - 修改正则表达式，避免匹配到 @规则和 HTML 标签
-    let highlighted = normalizedContent.replace(/([^{}]+)(?={)/g, function(match) {
-        // 如果匹配到的是 HTML 标签或 @规则，直接返回
-        if (match.trim().startsWith('<') || 
-            match.trim().startsWith('&lt;') || 
-            match.trim().startsWith('@')) {
-            return match;
-        }
-        return '<span class="selector">' + match + '</span>';
-    });
-    
-    // 替换属性
-    highlighted = highlighted.replace(/([a-zA-Z-]+)(?=:)/g, function(match) {
-        return '<span class="property">' + match + '</span>';
-    });
-    
-    // 替换值
-    highlighted = highlighted.replace(/(?<=:)([^;]+)(?=;)/g, function(match) {
-        return '<span class="value">' + match + '</span>';
-    });
-    
-    // 替换字符串
-    highlighted = highlighted.replace(/(['"])(.*?)\1/g, function(match, quote, content) {
-        return '<span class="string">' + quote + content + quote + '</span>';
-    });
-    
-    // 替换注释
-    highlighted = highlighted.replace(/\/\*[\s\S]*?\*\//g, function(match) {
-        return '<span class="comment">' + match + '</span>';
-    });
-    
-    // 将 \n 转换回 <br>
-    highlighted = highlighted.replace(/\n/g, '<br>');
-    
-    // 设置高亮后的内容
-    code.innerHTML = highlighted;
-} 
 </script>
+
 <link href="{dede:global.cfg_templets_skin/}/style/code-highlight.css" rel="stylesheet" media="screen" type="text/css" />
