@@ -1,9 +1,23 @@
 /* 全局样式 */
+:root {
+    --nav-font-family: PT Mono, HarmonySans SC; /* 导航栏字体 */
+    --index-h6-font-family: PT Mono, HarmonySans SC;    /* 首页列表栏目字体 */
+    --index-h3-font-family: PT Mono, HarmonySans SC; /* 首页列表序号字体 */
+    --h2-font-family: PT Mono, HarmonySans SC; /* 首页列表标题字体 */
+    --content-h3-font-family: PT Mono, 'AlimamaFangYuanTiVF'; /* 正文标题字体 */
+    --pageinfo-font-family: PT Mono, HarmonySans SC; /* 页面信息字体 */
+    --h1-font-family: "PT Sans", Helvetica, Arial, sans-serif; /* 正文标题字体 */
+    --headtext-font-family: "PT Sans", Helvetica, Arial, sans-serif; /* 首页头部字体 */
+    --defult-font-family: "PT Sans", Helvetica, Arial, sans-serif; /* 默认字体 */
+    --content-font-family: 'AlimamaFangYuanTiVF'; /* 正文字体 */
+    --tt-font-family: PT Mono, HarmonySans SC; /* <tt>字体 */
+}
+
 body {
     background: var(--background-body);
     margin: 0;
     padding: 0;
-    font-family: "PT Sans", Helvetica, Arial, sans-serif;
+    font-family: var(--defult-font-family);
     transition: background-color .3s ease;
     -webkit-transition: background-color .3s ease;
 }
@@ -26,7 +40,7 @@ h1 a strong,h1 strong {
 
 h1,h1 a {
     color: var(--solid-color);
-    font-family: PT Sans, Helvetica, Arial, sans-serif;
+    font-family: var(--h1-font-family);
     font-size: 48px;
     font-weight: 700;
     line-height: 1.15;
@@ -34,10 +48,8 @@ h1,h1 a {
 
 a,h6 {
     display: block;
-    font-family: PT Mono, HarmonySans SC;
-    font-size: 17px;
-    margin-bottom: 8px;
     text-decoration: none;
+    font-size: 17px;
 }
 
 a,h6,li,p {
@@ -72,6 +84,11 @@ img {
     text-align: right;
     z-index: 3;
     align-items: flex-end;
+}
+
+.navigation a {
+    font-family: var(--nav-font-family);
+    font-size: 17px;
 }
 
 .navwidth {
@@ -123,7 +140,7 @@ h6.active {
     margin-bottom: 16px;
     max-width: 100% !important;
     box-sizing: border-box;
-    font-family: "PT Sans", Helvetica, Arial, sans-serif;
+    font-family: var(--headtext-font-family);
 }
 
 .highlighter strong {
@@ -265,6 +282,11 @@ ul {
     display: flex;
 }
 
+.project-link h6 {
+    font-size: 17px;
+    font-family: var(--index-h6-font-family);
+}
+
 h1 strong,
 h2 strong,
 h3 strong,
@@ -388,26 +410,20 @@ h6 strong {
     text-decoration-color: var(--Key-color);
 }
 
-h3 {
+.next-shelf a, .next-shelf h6 {
+    font-family: var(--index-h6-font-family);
+}
+.project-number h3 {
     color: var(--Key-color);
-    font-family: PT Mono, sans-serif, monospace;
+    font-family: var(--index-h3-font-family);
     font-size: 26px;
 }
 
-.Content-Type h3 {
-    font-family: 'AlimamaFangYuanTiVF';
-    font-variation-settings: 'wght' 600, 'ROND' 0;
+.conversation-starters {
+    font-family: var(--index-h3-font-family); 
 }
 
-.Content-Type p {
-    font-family: 'AlimamaFangYuanTiVF';
-    font-variation-settings: 'wght' 380, 'ROND' 0;
-    color: var(--faint-color-4);
-    line-height: 1.5em;
-    margin: 20px 0;
-}
-
-.Content-Type li {
+.Content-Type li, .project-area li {
     list-style-type: square;
 }
 
@@ -418,7 +434,6 @@ h3 {
     font-size: 17px;
     margin-top: 5px;
     margin-bottom: 15px;
-    font-family: 'AlimamaFangYuanTiVF';
     font-variation-settings: 'wght' 380, 'ROND' 0;
 }
 
@@ -446,16 +461,7 @@ h4 {
     border-radius: 8px;
 }
 
-.Content-Type img {
-    margin: 3px 0;
-    border-radius: 10px;
-    height: auto !important;
-    max-width: 100%;
-    width: 100%;
-    cursor: pointer; /* 添加指针样式提示可点击 */
-    transition: transform 0.3s ease; /* 添加过渡效果 */
-    -webkit-transition: all 0.3s ease;
-}
+
 
 .col-4 {
     width: 512px;
@@ -538,6 +544,7 @@ h4 {
 
 .project .project-link {
     position: relative;
+    margin-bottom: 8px;
 }
 
 /* 首页缩略图卡片尺寸限制 */
@@ -610,7 +617,7 @@ h4 {
 
 h2 {
     color: var(--solid-color);
-    font-family: PT Mono, 'HarmonySans SC';
+    font-family: var(--h2-font-family);
     font-size: 28px;
     font-weight: 700;
     line-height: 1.1;
@@ -702,7 +709,7 @@ p {
     font-size: 18px;
     line-height: 1.5em;
     color: var(--faint-color-4);
-    font-family: "PT Sans", Helvetica, Arial, sans-serif;
+    font-family: var(--defult-font-family);
 }
 
 /* 特定项目布局样式 */
@@ -737,7 +744,7 @@ p {
 
 .pageinfo {
     display: block;
-    font-family: PT Mono, HarmonySans SC;
+    font-family: var(--pageinfo-font-family);
     font-size: 14px;
     margin-bottom: 8px;
     text-decoration: none;
@@ -761,39 +768,47 @@ p {
     color: var(--solid-color-2);
 }
 
-.project-area img {
-    z-index: 2;
-    position: relative;
+.project-area img, .Content-Type img {
+    margin: 3px 0;
+    border-radius: 10px;
+    height: auto !important;
+    max-width: 100%;
+    width: 100%;
+    cursor: pointer; /* 添加指针样式提示可点击 */
+    transition: transform 0.3s ease; /* 添加过渡效果 */
+    -webkit-transition: all 0.3s ease;
 }
 
-.project-area .projects-wrapper {
-    padding-top: 150px;
-}
-
-.project-area .projects {
-    display: block;
-}
-
-.project-area h1 {
+.project-area h1, .content-area h1  {
     color: var(--solid-color);
-    padding-bottom: 20px;
     font-weight: 700;
 }
 
 .project-area h2 {
-    padding-bottom: 20px;
+    padding-top: 20px;
     color: var(--solid-color);
 }
 
-.project-area h3 {
+.project-area h3, .Content-Type h3 {
     padding-bottom: 20px;
-    font-weight: 800;
+    font-variation-settings: 'wght' 600, 'ROND' 0;
+    font-family: var(--content-h3-font-family);
+    font-size: 26px;
+    color: var(--Key-color);
 }
 
-.project-area p {
+.Content-Type h3 {
+    font-family: var(--content-font-family);
+}
+
+.project-area p, .Content-Type p {
     padding-bottom: 20px;
-    font-family: 'AlimamaFangYuanTiVF';
-    font-variation-settings: 'wght' 450, 'ROND' 0;
+    font-family: var(--content-font-family) !important;
+    font-variation-settings: 'wght' 380, 'ROND' 0;
+}
+
+blockquote p {
+   padding-top: 20px;
 }
 
 p strong {
@@ -807,7 +822,7 @@ h3 strong {
     background-color: var(--background-text);
 }
 
-.Content-Type h3 strong {
+.Content-Type h3 strong, .project-area h3 strong  {
     font-weight: normal!important;
 }
 
@@ -825,8 +840,6 @@ h3 strong {
     color: var(--Key-color);
     font-size: 18px;
     display: inline;
-    font-family: 'AlimamaFangYuanTiVF';
-    font-variation-settings: 'wght' 450, 'ROND' 0;
     transition: all 0.3s ease;
     -webkit-transition: all 0.3s ease;
     text-decoration: underline;
@@ -863,7 +876,7 @@ h3 strong {
     background: var(--faint-color-1);
     border-radius: 4px;
     color: var(--faint-color-3);
-    font-family: 'PT Mono', sans-serif;
+    font-family: var(--pageinfo-font-family);
     font-size: 14px;
     text-decoration: none;
     transition: all 0.3s ease;
@@ -910,19 +923,15 @@ iframe {
     max-width: 100%;
 }
 
-.Content-Type blockquote {
+.Content-Type blockquote, .project-area blockquote  {
     position: relative;
-    padding: 10px 30px;
     margin: 40px auto;
-    max-width: 800px;
-    font-family: 'AlimamaFangYuanTiVF';
-    font-size: 1.2em;
-    line-height: 2.6;
     background: var(--background-blockquote);
-    border-left: 4px solid var(--Key-color);
+    border-radius: 8px;
+    padding: 4px 26px 4px 35px;
 }
 
-.Content-Type blockquote::before {
+.Content-Type blockquote::before, .project-area blockquote::before {
     content: "“";
     position: absolute;
     left: 12px;
@@ -932,6 +941,24 @@ iframe {
     color: var(--blockquote-color);
     line-height: 1;
     z-index: 1;
+}
+
+.Content-Type big, .project-area big  {
+    font-size: 0.9em;
+    background: #eab30824;
+    color: var(--Key-color);
+    padding: 5px 6px;
+    border-radius: 4px;
+    margin: 0 4px;
+}
+
+.Content-Type tt, .project-area tt {
+    padding: 5px 6px;
+    border-radius: 4px;
+    font-family: var(--tt-font-family);
+    background-color: rgb(142 150 170 / 15%);
+    font-size: 0.9em;
+    margin: 0 4px;
 }
 
 .next-title {

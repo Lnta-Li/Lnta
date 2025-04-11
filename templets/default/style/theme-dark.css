@@ -5,7 +5,7 @@
     --background-carousel: #313733; /* 轮播图背景色 */
     --background-selection: #54ff9670; /* 选中背景色 */
     --background-text: rgb(230 255 102 / 26%); /* 文本背景 */
-    --background-blockquote: rgba(174, 129, 43, 0.1); /* 引用背景色 */
+    --background-blockquote: rgb(71 59 34); /* 引用背景色 */
     --blockquote-color: rgba(174, 129, 43, 0.3); /* 引用符号颜色 */
     --Aux-colors-1: #8b807e; /* Tag翻译字体色 */
     --Aux-colors-2: rgb(102 128 128 / 85%); /* 浏览点赞评论数量颜色 */
