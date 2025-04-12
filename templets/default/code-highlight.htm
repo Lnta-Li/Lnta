@@ -41,6 +41,13 @@ document.addEventListener('DOMContentLoaded', function() {
         langLabel.textContent = language.toUpperCase();
         controlBar.appendChild(langLabel);
 
+        // 创建换行切换按钮
+        const wrapButton = document.createElement('button');
+        wrapButton.className = 'code-wrap-button';
+        wrapButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M4,5V7H21V5M4,11H21V9H4M4,19H21V17H4M4,15H21V13H4V15Z"/></svg>';
+        wrapButton.title = '切换换行';
+        controlBar.appendChild(wrapButton);
+
         // 添加复制按钮
         const copyButton = document.createElement('button');
         copyButton.className = 'code-copy-button';
@@ -53,6 +60,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // 为代码块添加唯一ID
         block.id = `code-block-${index}`;
+    });
+
+    // 为每个代码块添加换行切换功能
+    document.querySelectorAll('pre code').forEach((block) => {
+        const wrapButton = block.parentNode.querySelector('.code-wrap-button');
+        // 默认开启自动换行
+        block.style.whiteSpace = 'pre-wrap';
+        block.style.wordWrap = 'break-word';
+        
+        wrapButton.addEventListener('click', () => {
+            const isWrapped = block.style.whiteSpace === 'pre-wrap';
+            block.style.whiteSpace = isWrapped ? 'pre' : 'pre-wrap';
+            block.style.wordWrap = isWrapped ? 'normal' : 'break-word';
+            wrapButton.classList.toggle('active');
+        });
     });
 
     // 初始化clipboard.js

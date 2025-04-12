@@ -3,6 +3,7 @@ Copyright (c) 2003-2011, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.html or http://ckeditor.com/license
 */
 @import url('/templets/default/style/theme-light.css');
+@import url('/templets/default/style/Lnta-style.css');
 
 body
 {
@@ -89,40 +90,6 @@ code {
     color: #fff;
 }
 
-p {
-    font-family: 'AlimamaFangYuanTiVF';
-    font-variation-settings: 'wght' 380, 'ROND' 0;
-    color: rgba(33, 36, 44, .84);
-    line-height: 1.5em;
-    margin: 20px 0;
-    font-size: 18px;
-}
-
-h1, h2, h3, h4, h5, h6 {
-    font-weight: normal;
-}
-
-h3 {
-    color: #ae812b;
-    font-size: 26px;
-    font-family: 'AlimamaFangYuanTiVF';
-    font-variation-settings: 'wght' 600, 'ROND' 0;
-}
-
-h3 strong {
-    font-weight: normal;
-}
-
-p strong {
-    color: #ae812b;
-    padding: 2px 2px;
-    margin: 0 2px;
-    font-weight: normal;
-}
-
-h3 strong {
-    background-color: #f7ff6373;
-}
 
 img {
     margin: 3px 0;
@@ -130,24 +97,78 @@ img {
     height: auto !important;
     max-width: 100%;
     width: 100%;
-    cursor: pointer;
-    transition: transform 0.3s ease;
+    cursor: pointer; /* 添加指针样式提示可点击 */
+    transition: transform 0.3s ease; /* 添加过渡效果 */
+    -webkit-transition: all 0.3s ease;
 }
 
-h4 {
-    text-align: center;
-    margin-top: -10px !important;
-    font-size: 17px;
-    font-family: HarmonySans SC;
-    color: #00000085;
-    font-weight: initial !important;
-    font-style: italic;
+h1  {
+    color: var(--solid-color);
+    font-weight: 700;
+}
+
+h2 {
+    padding-top: 20px;
+    color: var(--solid-color);
+}
+
+h3 {
+    padding-bottom: 20px;
+    font-variation-settings: 'wght' 600, 'ROND' 0;
+    font-weight: unset;
+    font-family: var(--content-h3-font-family);
+    font-size: 26px;
+    color: var(--Key-color);
+}
+
+p {
+    padding-bottom: 1em;
+    font-family: var(--content-font-family) !important;
+    font-variation-settings: 'wght' 380, 'ROND' 0;
+}
+
+blockquote p {
+   padding-top: 20px;
+}
+
+p strong {
+    color: var(--Key-color);
+    padding: 2px 2px;
+    margin: 0 2px;
+    font-weight: bold;
+    font-variation-settings: 'wght' 250, 'ROND' 0;
+}
+
+h3 strong {
+    background-color: var(--background-text);
+    font-weight: unset;
 }
 
 h6 {
     font-size: 50px;
     position: relative;
-    margin: 8px 0;
+    margin-left: 0;
+    padding-bottom: 4px;
+}
+
+a {
+    color: var(--Key-color);
+    font-size: 18px;
+    display: inline;
+    transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
+    text-decoration: underline;
+    text-underline-offset: 5px;
+    padding: 4px;
+}
+
+a:hover {
+    cursor: pointer;
+    text-decoration: none;
+    color: #fff;
+    font-size: 19px;
+    background-color: #8da5ff;
+    border-radius: 5px;
 }
 
 iframe {
@@ -157,7 +178,7 @@ iframe {
     max-width: 100%;
 }
 
-blockquote {
+blockquote  {
     position: relative;
     margin: 40px auto;
     background: var(--background-blockquote);
@@ -177,8 +198,8 @@ blockquote::before {
     z-index: 1;
 }
 
-big {
-    font-size: 0.9em;
+big  {
+    font-size: 1em;
     background: #eab30824;
     color: var(--Key-color);
     padding: 5px 6px;
@@ -189,37 +210,12 @@ big {
 tt {
     padding: 5px 6px;
     border-radius: 4px;
-    font-family: PT Mono, HarmonySans SC;
+    font-family: var(--tt-font-family);
     background-color: rgb(142 150 170 / 15%);
     font-size: 0.9em;
     margin: 0 4px;
 }
 
-a {
-    color: #ae812b;
-    font-size: 18px;
-    display: inline;
-    font-family: 'AlimamaFangYuanTiVF';
-    font-variation-settings: 'wght' 450, 'ROND' 0;
-    transition: all 0.3s ease;
-    text-decoration: underline;
-    text-underline-offset: 5px;
-    padding: 4px;
-}
-
-a:hover {
-    cursor: pointer;
-    text-decoration: underline;
-    text-decoration-color: #626aff;
-    color: #fff;
-    font-size: 19px;
-    background-color: #8da5ff;
-}
-
-big {
-    font-size: 1em;
-    background: #eab30824;
-    color: #915930;
-    padding: 4px 6px;
-    border-radius: 4px;
+li {
+    list-style-type: square;
 }
