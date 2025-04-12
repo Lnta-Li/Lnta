@@ -60,6 +60,7 @@ pre code {
     border: none;
     color: #98c379;
     cursor: pointer;
+    -webkit-transition: all 0.3s ease;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
@@ -79,6 +80,7 @@ pre code {
     border: none;
     color: #98c379;
     cursor: pointer;
+    -webkit-transition: all 0.3s ease;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
@@ -94,6 +96,7 @@ pre code {
     border: none;
     color: #98c379;
     cursor: pointer;
+    -webkit-transition: all 0.3s ease;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
@@ -118,15 +121,16 @@ pre code {
 
 /* 换行按钮动画效果 */
 .code-wrap-button svg path {
+    -webkit-transition: all 0.3s ease;
     transition: all 0.3s ease;
 }
 
 .code-wrap-button.active svg path {
-    d: path('M4,5V7H12V5M4,11H18V9H4M4,19H15V17H4M4,15H21V13H4V15Z');
+    d: path('M4,5V7H21V5M4,11H21V9H4M4,19H21V17H4M4,15H21V13H4V15Z');
 }
 
 .code-wrap-button:not(.active) svg path {
-    d: path('M4,5V7H21V5M4,11H21V9H4M4,19H21V17H4M4,15H21V13H4V15Z');
+    d: path('M4,5V7H12V5M4,11H18V9H4M4,19H15V17H4M4,15H21V13H4V15Z');
 }
 
 /* 滚动条样式 */

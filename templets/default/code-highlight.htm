@@ -65,9 +65,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // 为每个代码块添加换行切换功能
     document.querySelectorAll('pre code').forEach((block) => {
         const wrapButton = block.parentNode.querySelector('.code-wrap-button');
-        // 默认开启自动换行
-        block.style.whiteSpace = 'pre-wrap';
-        block.style.wordWrap = 'break-word';
+        // 默认不换行
+        block.style.whiteSpace = 'pre';
+        block.style.wordWrap = 'normal';
         
         wrapButton.addEventListener('click', () => {
             const isWrapped = block.style.whiteSpace === 'pre-wrap';

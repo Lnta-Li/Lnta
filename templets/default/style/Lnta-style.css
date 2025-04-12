@@ -778,12 +778,12 @@ p {
 }
 
 .project-area h2 {
-    padding-top: 20px;
+    padding-top: 1em;
     color: var(--solid-color);
 }
 
 .project-area h3, .Content-Type h3 {
-    padding-bottom: 20px;
+    margin-bottom: 1em;
     font-variation-settings: 'wght' 600, 'ROND' 0;
     font-weight: unset;
     font-family: var(--content-h3-font-family);
@@ -800,7 +800,7 @@ p {
 }
 
 .project-area p, .Content-Type p {
-    padding-bottom: 1em;
+    margin-bottom: 1em;
     font-family: var(--content-font-family) !important;
     font-variation-settings: 'wght' 380, 'ROND' 0;
 }
@@ -861,7 +861,7 @@ iframe {
 
 .Content-Type blockquote, .project-area blockquote  {
     position: relative;
-    margin: 40px auto;
+    margin: 2em auto;
     background: var(--background-blockquote);
     border-radius: 8px;
     padding: 4px 26px 4px 35px;
@@ -899,7 +899,6 @@ iframe {
 
 /* 标签列表样式 */
 .tags {
-    margin-bottom: 24px;
     padding-top: 8px;
 }
 
