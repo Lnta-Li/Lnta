@@ -190,7 +190,7 @@ function SpGetEditor($fname,$fvalue,$nheight="350",$etype="Basic",$gtype="print"
         $CKEditor = new CKEditor();
         $CKEditor->basePath = $GLOBALS['cfg_cmspath'].'/include/ckeditor/' ;
         $config = $events = array();
-        $config['extraPlugins'] = 'dedepage,multipic,addon';
+        $config['extraPlugins'] = 'dedepage,multipic,addon,video';
 		if($bbcode)
 		{
 			$CKEditor->initialized = true;

@@ -11,6 +11,10 @@
     --defult-font-family: "PT Sans", Helvetica, Arial, sans-serif; /* 默认字体 */
     --content-font-family: AlimamaFangYuanTiVF; /* 正文字体 */
     --tt-font-family: PT Mono, var(--content-font-family); /* <tt>字体 */
+    --line-height-content: 1.8em; /* 文章页正文行高 */
+    --line-height-after: 1em; /* 文章页段间距 */
+    --fontsize-p: 18px; /* 正文字体大小 */
+    --fontsize-a: 17px; /* a,h6等小号字体大小 */
 }
 
 body {
@@ -49,7 +53,7 @@ h1,h1 a {
 a,h6 {
     display: block;
     text-decoration: none;
-    font-size: 17px;
+    font-size: var(--fontsize-a);
 }
 
 a,h6,li,p {
@@ -60,7 +64,7 @@ a.active,h6.active {
     color: var(--Key-color);
 }
 
-img {
+img, video {
     filter: var(--img-brightness);
     transition: all 0.3s ease;
 }
@@ -88,7 +92,7 @@ img {
 
 .navigation a {
     font-family: var(--nav-font-family);
-    font-size: 17px;
+    font-size: var(--fontsize-a);
 }
 
 .navwidth {
@@ -276,7 +280,7 @@ ol,ul {
 }
 
 .project-link h6 {
-    font-size: 17px;
+    font-size: var(--fontsize-a);
     font-family: var(--index-h6-font-family);
 }
 
@@ -382,7 +386,7 @@ h6 strong {
     overflow: hidden;
 }
 
-.default-img img {
+.default-img img, .default-img video  {
     border-radius: 8px;
 }
 
@@ -424,7 +428,7 @@ h6 strong {
     text-align: left;
     font-style: italic;
     color: var(--faint-color-3);
-    font-size: 17px;
+    font-size: var(--fontsize-a);
     margin-top: 5px;
     margin-bottom: 15px;
     font-variation-settings: 'wght' 380, 'ROND' 0;
@@ -432,12 +436,8 @@ h6 strong {
 
 h4 {
     text-align: center;
-    margin-top: -10px !important;
-    font-size: 17px;
-    font-family: HarmonySans SC;
+    font-size: var(--fontsize-a);
     color: var(--faint-color-3);
-    font-weight: initial !important;
-    font-style: italic;
 }
 
 .design {
@@ -445,7 +445,7 @@ h4 {
     position: relative;
 }
 
-.design img {
+.design img, .design video  {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -643,12 +643,12 @@ h2 {
     page-break-inside: avoid;
 }
 
-.waterfall-link img {
+.waterfall-link img, .waterfall-link video {
     transition: all 0.3s ease;
     -webkit-transition: all 0.3s ease;
 }
 
-.waterfall-link:hover img, .project-link:hover img {
+.waterfall-link:hover img, .project-link:hover img, .waterfall-link:hover video, .project-link:hover video {
     filter: var(--img-brightness-hover);
     scale: 1.01;
 }
@@ -661,7 +661,7 @@ h2 {
     overflow: hidden;
 }
 
-.waterfall-img img {
+.waterfall-img img, .waterfall-img video {
     width: 100%;
     height: auto;
     display: block;
@@ -699,8 +699,8 @@ h2 {
 
 /* 段落样式 */
 p {
-    font-size: 18px;
-    line-height: 1.8em;
+    font-size: var(--fontsize-p);
+    line-height: var(--line-height-content);
     color: var(--faint-color-4);
     font-family: var(--defult-font-family);
 }
@@ -761,7 +761,7 @@ p {
     color: var(--solid-color-2);
 }
 
-.project-area img, .Content-Type img {
+.project-area img, .Content-Type img, .project-area video, .Content-Type video {
     margin: 3px 0;
     border-radius: 10px;
     height: auto !important;
@@ -772,18 +772,30 @@ p {
     -webkit-transition: all 0.3s ease;
 }
 
+.Content-Type q {
+   
+}
+
+q::before {
+    content: none;
+}
+
+q::after {
+    content: none
+}
+
 .project-area h1, .content-area h1  {
     color: var(--solid-color);
     font-weight: 700;
 }
 
 .project-area h2 {
-    padding-top: 1em;
+    padding-top: var(--line-height-after);
     color: var(--solid-color);
 }
 
 .project-area h3, .Content-Type h3 {
-    margin-bottom: 1em;
+    margin-bottom: var(--line-height-after);
     font-variation-settings: 'wght' 600, 'ROND' 0;
     font-weight: unset;
     font-family: var(--content-h3-font-family);
@@ -800,7 +812,7 @@ p {
 }
 
 .project-area p, .Content-Type p {
-    margin-bottom: 1em;
+    margin-bottom: var(--line-height-after);
     font-family: var(--content-font-family) !important;
     font-variation-settings: 'wght' 380, 'ROND' 0;
 }
@@ -834,7 +846,7 @@ h3 strong {
 
 .project-area a, .Content-Type a {
     color: var(--Key-color);
-    font-size: 18px;
+    font-size: var(--fontsize-p);
     display: inline;
     transition: all 0.3s ease;
     -webkit-transition: all 0.3s ease;
@@ -1039,4 +1051,15 @@ iframe {
 
 input[value="1"]:checked ~ .slider {
     transform: translateX(30px);
+}
+
+/* 自定义的图文排版样式 */
+.diy-1 {
+   display: flex;
+   gap: 1em;
+   margin-bottom: var(--line-height-content);
+}
+.diy-1 img, .diy-1 video {
+   width: 35%;
+   border-radius: 8px;
 }
