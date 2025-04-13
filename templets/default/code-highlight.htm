@@ -1,96 +1,85 @@
-<!-- 引入highlight.js库和样式 -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<!-- 引入 Highlight.js 核心文件 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
-<!-- 引入常用语言包 -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/css.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/xml.min.js"></script>
+
+<!-- 引入中文语言包 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/php.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/html.min.js"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // 初始化highlight.js
-    hljs.configure({
-        ignoreUnescapedHTML: true
-    });
+    // 获取所有代码块
+    const codeBlocks = document.querySelectorAll('code');
     
-    // 为裸露的code标签添加pre标签包装
-    document.querySelectorAll('code:not(pre code)').forEach((codeBlock) => {
-        const preElement = document.createElement('pre');
-        const parent = codeBlock.parentNode;
-        parent.insertBefore(preElement, codeBlock);
-        preElement.appendChild(codeBlock);
-    });
-    
-    // 应用代码高亮
-    hljs.highlightAll();
-    
-    // 为每个代码块添加语言标签和复制按钮
-    document.querySelectorAll('pre code').forEach((block, index) => {
-        const language = block.result?.language || 'plaintext';
+    codeBlocks.forEach(code => {
+        // 检测代码类型
+        const codeContent = code.textContent.trim();
+        let codeType = 'plain';
         
-        // 创建控制栏容器
-        const controlBar = document.createElement('div');
-        controlBar.className = 'code-control-bar';
+        // 检测代码类型
+        if (codeContent.includes('<?php') || codeContent.includes('$')) {
+            codeType = 'php';
+        } else if (codeContent.includes('@font-face') || codeContent.includes('{') || codeContent.includes('}')) {
+            codeType = 'css';
+        } else if (codeContent.includes('<') && codeContent.includes('>')) {
+            codeType = 'html';
+        } else if (codeContent.includes('function') || codeContent.includes('var') || codeContent.includes('const')) {
+            codeType = 'javascript';
+        }
         
-        // 创建语言标签
+        // 添加语言类
+        code.classList.add('hljs');
+        code.classList.add('language-' + codeType);
+        
+        // 添加代码类型标签
         const langLabel = document.createElement('div');
         langLabel.className = 'code-lang-label';
-        langLabel.textContent = language.toUpperCase();
-        controlBar.appendChild(langLabel);
-
-        // 创建换行切换按钮
-        const wrapButton = document.createElement('button');
-        wrapButton.className = 'code-wrap-button';
-        wrapButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M4,5V7H21V5M4,11H21V9H4M4,19H21V17H4M4,15H21V13H4V15Z"/></svg>';
-        wrapButton.title = '切换换行';
-        controlBar.appendChild(wrapButton);
-
-        // 添加复制按钮
-        const copyButton = document.createElement('button');
-        copyButton.className = 'code-copy-button';
-        copyButton.setAttribute('data-clipboard-target', `#code-block-${index}`);
-        copyButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"/></svg>';
-        controlBar.appendChild(copyButton);
+        langLabel.textContent = codeType.toUpperCase();
+        code.insertBefore(langLabel, code.firstChild);
         
-        // 将控制栏添加到代码块容器中
-        block.parentNode.insertBefore(controlBar, block);
-
-        // 为代码块添加唯一ID
-        block.id = `code-block-${index}`;
+        // 处理多余的换行
+        const finalContent = code.innerHTML;
+        code.innerHTML = finalContent.replace(/<br><br>/g, '<br>');
     });
-
-    // 为每个代码块添加换行切换功能
-    document.querySelectorAll('pre code').forEach((block) => {
-        const wrapButton = block.parentNode.querySelector('.code-wrap-button');
-        // 默认不换行
-        block.style.whiteSpace = 'pre';
-        block.style.wordWrap = 'normal';
-        
-        wrapButton.addEventListener('click', () => {
-            const isWrapped = block.style.whiteSpace === 'pre-wrap';
-            block.style.whiteSpace = isWrapped ? 'pre' : 'pre-wrap';
-            block.style.wordWrap = isWrapped ? 'normal' : 'break-word';
-            wrapButton.classList.toggle('active');
-        });
-    });
-
-    // 初始化clipboard.js
-    const clipboard = new ClipboardJS('.code-copy-button');
     
-    clipboard.on('success', function(e) {
-        const button = e.trigger;
-        button.classList.add('copied');
-        setTimeout(() => button.classList.remove('copied'), 2000);
-        e.clearSelection();
-    });
-
-    clipboard.on('error', function(e) {
-        console.error('复制失败');
-    });
+    // 初始化 Highlight.js
+    hljs.highlightAll();
 });
 </script>
 
-<link href="{dede:global.cfg_templets_skin/}/style/code-highlight.css" rel="stylesheet" media="screen" type="text/css" />
+<style>
+/* 自定义样式 */
+.code-lang-label {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    padding: 2px 8px;
+    background: #333;
+    color: #fff;
+    font-size: 12px;
+    border-radius: 3px;
+}
+
+code {
+    position: relative;
+    padding-top: 30px !important;
+    display: block;
+    background: #f8f8f8;
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+.hljs {
+    padding: 1em;
+    line-height: 1.5;
+    font-family: 'Consolas', 'Monaco', 'Andale Mono', monospace;
+}
+
+/* 移除关键词的加粗效果 */
+.hljs-attribute, .hljs-doctag, .hljs-keyword, .hljs-meta .hljs-keyword, .hljs-name, .hljs-selector-tag {
+    font-weight: normal !important;
+}
+</style>

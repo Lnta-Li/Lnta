@@ -51,3 +51,5 @@ INSERT INTO `dede_plus_seoinfo` VALUES('50','1744261013','0','0','0','0','0');
 INSERT INTO `dede_plus_seoinfo` VALUES('51','1744282698','0','0','0','0','0');
 INSERT INTO `dede_plus_seoinfo` VALUES('52','1744350714','0','0','0','0','0');
 INSERT INTO `dede_plus_seoinfo` VALUES('53','1744440007','0','0','0','0','0');
+INSERT INTO `dede_plus_seoinfo` VALUES('54','1744462009','0','0','0','0','0');
+INSERT INTO `dede_plus_seoinfo` VALUES('55','1744513918','0','0','0','0','0');
