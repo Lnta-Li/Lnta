@@ -190,6 +190,7 @@ CREATE TABLE `dede_archives` (
   `tackid` int(10) NOT NULL DEFAULT '0',
   `mtype` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `weight` int(10) NOT NULL DEFAULT '0',
+  `hide_thumb` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否隐藏缩略图',
   PRIMARY KEY (`id`),
   KEY `sortrank` (`sortrank`),
   KEY `mainindex` (`arcrank`,`typeid`,`channel`,`flag`,`mid`),

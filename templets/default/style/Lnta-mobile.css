@@ -328,5 +328,14 @@
     .carousel-item {
         min-height: 20vh!important; 
     }
+    
+    .diy-1 {
+        display: block;
+    }
+
+    .diy-1 img, .diy-1 video {
+        width: 100%;
+        border-radius: 8px;
+    }
 
 }

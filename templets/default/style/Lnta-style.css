@@ -1053,6 +1053,11 @@ input[value="1"]:checked ~ .slider {
     transform: translateX(30px);
 }
 
+#hide_thumb {
+    opacity: 0;
+    height: 25px;
+}
+
 /* 自定义的图文排版样式 */
 .diy-1 {
    display: flex;
@@ -1062,4 +1067,5 @@ input[value="1"]:checked ~ .slider {
 .diy-1 img, .diy-1 video {
    width: 35%;
    border-radius: 8px;
+   margin-bottom: var(--line-height-after);
 }

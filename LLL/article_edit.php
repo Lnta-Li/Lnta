@@ -206,6 +206,9 @@ else if($dopost=='save')
 
     //跳转网址的文档强制为动态
     if(preg_match("#j#", $flag)) $ismake = -1;
+    //处理隐藏缩略图选项
+    $hide_thumb = isset($hide_thumb) ? 1 : 0;
+
     //更新数据库的SQL语句
     $query = "UPDATE `#@__archives` SET
     `typeid` = '{$typeid}',
@@ -229,7 +232,8 @@ else if($dopost=='save')
     `shorttitle` = '{$shorttitle}',
     `filename` = '{$filename}',
     `dutyadmin` = '{$adminid}',
-    `weight` = '{$weight}'
+    `weight` = '{$weight}',
+    `hide_thumb` = '{$hide_thumb}'
     WHERE `id` = '{$id}';";
 
     if(!$dsql->ExecuteNoneQuery($query))
