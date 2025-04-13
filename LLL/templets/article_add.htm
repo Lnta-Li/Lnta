@@ -400,6 +400,8 @@ function delAlbPicOld(picfile, pid){
               删除非站内链接 <a href="javascript:OpenMyWin('article_allowurl_edit.php');">[设置]</a>
               <input name="autolitpic" type="checkbox" class="np" id="autolitpic" value="1"<?php if($cfg_arc_autopic=='Y') echo ' checked="1" '; ?> />
               提取第一个图片为缩略图
+              <input type='checkbox' id='hide_thumb' name='hide_thumb' value='1' class='np' />
+              隐藏缩略图
               <input type='checkbox' id='needwatermarkup' name='needwatermarkup' value='1' class='np' <?php if($photo_markup=='1') echo "checked"; ?> />
               上传图片是否加水印
               <input type='checkbox' id='needwatermarkdown' name='needwatermarkdown' value='1' class='np' <?php if($photo_markdown=='1') echo "checked"; ?> />

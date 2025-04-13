@@ -328,11 +328,15 @@ else if($dopost=='save')
 
     //跳转网址的文档强制为动态
     if(preg_match("#j#", $flag)) $ismake = -1;
+    
+    //处理隐藏缩略图选项
+    $hide_thumb = isset($hide_thumb) ? 1 : 0;
+    
     //加入主档案表
     $query = "INSERT INTO `#@__archives`(id,typeid,typeid2,sortrank,flag,ismake,channel,arcrank,click,money,title,shorttitle,
-     color,writer,source,litpic,pubdate,senddate,mid,notpost,description,keywords,filename,dutyadmin,weight)
+     color,writer,source,litpic,pubdate,senddate,mid,notpost,description,keywords,filename,dutyadmin,weight,hide_thumb)
     VALUES ('$arcID','$typeid','$typeid2','$sortrank','$flag','$ismake','$channelid','$arcrank','$click','$money','$title','$shorttitle',
-    '$color','$writer','$source','$litpic','$pubdate','$senddate','$adminid','$notpost','$description','$keywords','$filename','$adminid','$weight'); ";
+    '$color','$writer','$source','$litpic','$pubdate','$senddate','$adminid','$notpost','$description','$keywords','$filename','$adminid','$weight','$hide_thumb'); ";
     if(!$dsql->ExecuteNoneQuery($query))
     {
         $gerr = $dsql->GetError();
