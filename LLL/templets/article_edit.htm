@@ -269,10 +269,9 @@ function delAlbPicOld(picfile, pid){
             <td><input name="picname" type="text" id="picname" style="width:300px" value="<?php echo $arcRow["litpic"]?>">
               <input type="button" name="Submit" value="浏览..." style="width:70px" onClick="SelectImage('form1.picname','');">
               <input type="button" name="Submit2" value="裁剪" style="margin-left:8px;" onClick="imageCut('picname');" class='np coolbg'/>
-              <input type='checkbox' class='np' name='ddisremote' value='1' />
-              远程 
-              <input type='checkbox' class='np' name='hide_thumb' value='1' <?php if(isset($arcRow["hide_thumb"]) && $arcRow["hide_thumb"]==1) echo "checked"; ?> />
-              隐藏缩略图</td>
+              <br>
+              <input type='checkbox' class='np' name='ddisremote' value='1' />远程 
+              <input type='checkbox' class='np' name='hide_thumb' value='1' <?php if(isset($arcRow["hide_thumb"]) && $arcRow["hide_thumb"]==1) echo "checked"; ?> />隐藏缩略图</td>
             <td align="center"><img src="<?php if($arcRow["litpic"]!="") echo $arcRow["litpic"]; else echo "images/pview.gif";?>" width="150" height="100" id="picview" name="picview"></td>
           </tr>
         </table></td>

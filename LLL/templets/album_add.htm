@@ -174,8 +174,9 @@ function LoadTestDiv()
                   <span class="litpic_span"><input name="litpic" type="file" id="litpic"  onChange="seePicNewAlb(this, 'divpicview', 'uplitpicfra', 165, 'album_add.php');" size="1" class='np coolbg'/></span>
                   <input type="button" name="Submit2" value="站内选择" style="margin-left:8px;" onClick="SelectImage('form1.picname','small');" class='np coolbg'/>
                   <input type="button" name="Submit2" value="裁剪" style="margin-left:8px;" onClick="imageCut('picname');" class='np coolbg'/>
+                  <br/>
                   <input type='checkbox' class='np' name='ddisremote' value='1' id='ddisremote'/>远程
-                  <br />
+                  <input type='checkbox' id='hide_thumb' name='hide_thumb' value='1' class='np' />隐藏缩略图
                   <input type='checkbox' class='np' name='ddisfirst' value='1' />使用图集的第一幅图
                   </td>
                 </tr>
@@ -372,17 +373,6 @@ function LoadTestDiv()
           <td> <?php GetEditor("body","",450,"Diy"); ?></td>
         </tr>
       </table>
-      </td>
-    </tr>
-    <tr>
-      <td width="90">&nbsp;附加选项：</td>
-      <td>
-        <input type='checkbox' id='needwatermark' name='needwatermark' value='1' class='np' checked='1' />
-        图片加水印
-        <input type='checkbox' id='hide_thumb' name='hide_thumb' value='1' class='np' />
-        隐藏缩略图
-        <input name="isrm" type="checkbox" id="isrm" value="1" checked class="np" />
-        删除附件目录缩略图
       </td>
     </tr>
   </table>
