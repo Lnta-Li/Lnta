@@ -3,17 +3,23 @@ document.addEventListener('DOMContentLoaded', function() {
     const images = document.querySelectorAll('.Content-Type img');
     
     images.forEach(img => {
-        // 获取图片的 alt 属性内容
-        const altText = img.getAttribute('alt');
+        // 获取图片的 title 属性内容
+        const titleText = img.getAttribute('title');
         
-        if (altText) {
+        if (titleText) {
             // 创建注释文本元素
             const caption = document.createElement('div');
             caption.className = 'image-caption';
-            caption.textContent = altText;
+            caption.textContent = titleText;
             
-            // 将注释插入到图片后面
-            img.parentNode.insertBefore(caption, img.nextSibling);
+            // 创建外层包裹div
+            const wrapper = document.createElement('div');
+            wrapper.className = 'image-box';
+            
+            // 将图片和标题包裹在新div中
+            img.parentNode.insertBefore(wrapper, img);
+            wrapper.appendChild(img);
+            wrapper.appendChild(caption);
         }
     });
-}); 
+});
