@@ -425,13 +425,18 @@ h6 strong {
 }
 
 .image-caption {
-    text-align: left;
+    text-align: center;
     font-style: italic;
     color: var(--faint-color-3);
     font-size: var(--fontsize-a);
-    margin-top: 5px;
-    margin-bottom: 15px;
-    font-variation-settings: 'wght' 380, 'ROND' 0;
+}
+
+.image-box {
+    display: table-cell;
+}
+
+.image-box img,.image-box video {
+   width: 98%!important;
 }
 
 h4 {
@@ -648,7 +653,7 @@ h2 {
     -webkit-transition: all 0.3s ease;
 }
 
-.waterfall-link:hover img, .project-link:hover img, .waterfall-link:hover video, .project-link:hover video {
+.waterfall-link:hover img, .project-link:hover img, .Content-Type img:hover, .Content-Type video:hover  {
     filter: var(--img-brightness-hover);
     scale: 1.01;
 }

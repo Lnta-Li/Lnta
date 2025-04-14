@@ -58,6 +58,10 @@
         font-size: 12px !important;
     }
     
+    .image-box {
+        display: block;
+    }
+
     .mobile-half {
         width: 50% !important;
         float: left !important;
