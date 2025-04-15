@@ -118,10 +118,10 @@ document.addEventListener('DOMContentLoaded', function() {
         currentImageIndex = index;
         previewImg.src = images[index].src;
         // 更新描述文本
-        const altText = images[index].getAttribute('alt');
-        if (altText && altText.trim() !== '') {
+        const titleText = images[index].getAttribute('title');
+        if (titleText && titleText.trim() !== '') {
             captionText.style.display = 'block';
-            captionText.textContent = altText;
+            captionText.textContent = titleText;
         } else {
             captionText.style.display = 'none';
         }

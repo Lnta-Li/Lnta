@@ -65,7 +65,12 @@ body
     -webkit-font-smoothing: antialiased;
     -webkit-text-stroke-width: 0.2px;
     -moz-osx-font-smoothing: grayscale;
-}*/
+}
+
+.cke_show_borders {
+	width: 90vw;
+    margin: 5vw auto;
+}
 
 ol,ul,dl
 {
@@ -93,13 +98,12 @@ code {
 
 img {
     margin: 3px 0;
-    border-radius: 10px;
-    height: auto !important;
-    max-width: 100%;
-    width: 100%;
-    cursor: pointer; /* 添加指针样式提示可点击 */
-    transition: transform 0.3s ease; /* 添加过渡效果 */
-    -webkit-transition: all 0.3s ease;
+    object-fit: cover;
+    border-radius: 8px;
+    margin: 5px;
+    height: 200px;
+    width: 200px;
+    cursor: pointer;
 }
 
 h1  {
