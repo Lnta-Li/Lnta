@@ -432,11 +432,7 @@ h6 strong {
 }
 
 .image-box {
-    display: table-cell;
-}
 
-.image-box img,.image-box video {
-   width: 98%!important;
 }
 
 h4 {
@@ -653,9 +649,13 @@ h2 {
     -webkit-transition: all 0.3s ease;
 }
 
-.waterfall-link:hover img, .project-link:hover img, .Content-Type img:hover, .Content-Type video:hover  {
+.waterfall-link:hover img, .project-link:hover img  {
     filter: var(--img-brightness-hover);
     scale: 1.01;
+}
+
+.Content-Type img:hover, .Content-Type video:hover {
+    filter: var(--img-brightness-hover);
 }
 
 .waterfall-img {
@@ -772,9 +772,12 @@ p {
     height: auto !important;
     max-width: 100%;
     width: 100%;
-    cursor: pointer; /* 添加指针样式提示可点击 */
     transition: transform 0.3s ease; /* 添加过渡效果 */
     -webkit-transition: all 0.3s ease;
+}
+
+.project-area img:hover,.Content-Type img:hover {
+    cursor: pointer; /* 添加指针样式提示可点击 */ 
 }
 
 .Content-Type q {
@@ -1073,4 +1076,13 @@ input[value="1"]:checked ~ .slider {
    width: 35%;
    border-radius: 8px;
    margin-bottom: var(--line-height-after);
+}
+
+.diy-2 .image-box {
+  display: table-cell; 
+  padding-right: 10px;
+}
+
+.diy-2 .image-box:last-child {
+  padding-right: 0;
 }

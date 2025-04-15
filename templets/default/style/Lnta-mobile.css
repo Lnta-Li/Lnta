@@ -58,8 +58,9 @@
         font-size: 12px !important;
     }
     
-    .image-box {
+    .diy-2 .image-box {
         display: block;
+        margin-bottom: var(--line-height-after);
     }
 
     .mobile-half {
