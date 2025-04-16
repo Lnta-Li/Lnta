@@ -277,7 +277,18 @@
     }
 
     .image-caption {
-        font-size: 14px !important;
+        font-size: var(--fontsize-mini) !important;
+        height: auto !important;
+    }
+
+    .small-box {
+        margin: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    .small-img-notice {
+        display: none;
     }
 
     .tagtheader {

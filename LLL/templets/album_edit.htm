@@ -162,6 +162,7 @@ function LoadTestDiv()
               <br>
               <input type='checkbox' class='np' name='ddisremote' value='1' />远程 
               <input type='checkbox' class='np' name='hide_thumb' value='1' <?php if(isset($arcRow["hide_thumb"]) && $arcRow["hide_thumb"]==1) echo "checked"; ?> />隐藏缩略图
+              <input type='checkbox' class='np' name='small_img' value='1' <?php if(isset($arcRow["small_img"]) && $arcRow["small_img"]==1) echo "checked"; ?> />小图模式
               </td>
             <td align="center"><img src="<?php if($arcRow["litpic"]!="") echo $arcRow["litpic"]; else echo "images/pview.gif";?>" width="150" height="100" id="picview" name="picview"></td>
           </tr>

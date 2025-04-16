@@ -1087,3 +1087,51 @@ input[value="1"]:checked ~ .slider {
 .diy-2 .image-box:last-child {
   padding-right: 0;
 }
+
+/* 小图模式提示条样式 */
+.small-img-notice {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--background-color);
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 999;
+}
+
+.notice-text {
+    color: var(--solid-color);
+    font-size: var(--fontsize-a);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.countdown-text {
+    color: var(--Key-color);
+    font-size: 0.9em;
+}
+
+.notice-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.notice-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: var(--fontsize-a);
+    transition: all 0.3s ease;
+    background: rgb(255 255 255 / 30%);
+    color: var(--faint-color-3);
+}
+
+.notice-btn:hover {
+    background: var(--Key-color);
+    color: #fff;
+}

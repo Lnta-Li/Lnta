@@ -208,6 +208,9 @@ else if($dopost=='save')
     if(preg_match("#j#", $flag)) $ismake = -1;
     //处理隐藏缩略图选项
     $hide_thumb = isset($hide_thumb) ? 1 : 0;
+    
+    //处理小图模式选项  
+    $small_img = isset($small_img) ? 1 : 0;
 
     //更新数据库的SQL语句
     $query = "UPDATE `#@__archives` SET
@@ -233,7 +236,8 @@ else if($dopost=='save')
     `filename` = '{$filename}',
     `dutyadmin` = '{$adminid}',
     `weight` = '{$weight}',
-    `hide_thumb` = '{$hide_thumb}'
+    `hide_thumb` = '{$hide_thumb}',
+    `small_img` = '{$small_img}'
     WHERE `id` = '{$id}';";
 
     if(!$dsql->ExecuteNoneQuery($query))

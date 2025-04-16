@@ -332,11 +332,14 @@ else if($dopost=='save')
     //处理隐藏缩略图选项
     $hide_thumb = isset($hide_thumb) ? 1 : 0;
     
+    //处理小图模式选项
+    $small_img = isset($small_img) ? 1 : 0;
+    
     //加入主档案表
     $query = "INSERT INTO `#@__archives`(id,typeid,typeid2,sortrank,flag,ismake,channel,arcrank,click,money,title,shorttitle,
-     color,writer,source,litpic,pubdate,senddate,mid,notpost,description,keywords,filename,dutyadmin,weight,hide_thumb)
+     color,writer,source,litpic,pubdate,senddate,mid,notpost,description,keywords,filename,dutyadmin,weight,hide_thumb,small_img)
     VALUES ('$arcID','$typeid','$typeid2','$sortrank','$flag','$ismake','$channelid','$arcrank','$click','$money','$title','$shorttitle',
-    '$color','$writer','$source','$litpic','$pubdate','$senddate','$adminid','$notpost','$description','$keywords','$filename','$adminid','$weight','$hide_thumb'); ";
+    '$color','$writer','$source','$litpic','$pubdate','$senddate','$adminid','$notpost','$description','$keywords','$filename','$adminid','$weight','$hide_thumb','$small_img'); ";
     if(!$dsql->ExecuteNoneQuery($query))
     {
         $gerr = $dsql->GetError();
