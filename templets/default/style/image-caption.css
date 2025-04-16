@@ -1,0 +1,73 @@
+.samll-img-box {
+    max-height: 600px;
+    overflow: hidden;
+    margin-bottom: -8px;
+    border-radius: 8px;
+}
+
+.caption-img {
+    
+}
+
+.samll-img-box img {
+    z-index: 1;
+}
+
+.title-bar {
+    background: var(--solid-color-3);
+    width: -webkit-fill-available;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    padding-top: 18px;
+    flex-direction: row;
+    border-radius: 0 0 8px 8px;
+}
+
+#click-expand {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+#click-expand i {
+    transition: transform 0.3s ease;
+    -webkit-transition: background-color .3s ease;
+    display: inline-block;
+}
+
+.small-box {
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 8px;
+    display: inline-block;
+    margin: 5px;
+}
+
+.small-box img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover; 
+    margin: 0;
+}
+
+.small-box .image-caption {
+    font-size: 0;
+    height: 0;
+}
+
+#switch-img-mode {
+    padding: 6px 12px;
+    background: var(--faint-color-1);
+    border-radius: 4px;
+    color: var(--faint-color-3);
+    font-family: var(--pageinfo-font-family);
+    font-size: 14px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
+    margin-bottom: 0 !important;
+    border: none;
+}

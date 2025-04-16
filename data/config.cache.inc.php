@@ -189,10 +189,10 @@ $cfg_font_icon = '@font-face {
 /* 在线链接服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
 @font-face {
   font-family: \'iconfontb\';  /* Project id 4883100 */
-  src: url(\'//at.alicdn.com/t/c/font_4883100_v2ooqn1685h.woff2?t=1744262451597\') format(\'woff2\'),
-       url(\'//at.alicdn.com/t/c/font_4883100_v2ooqn1685h.woff?t=1744262451597\') format(\'woff\'),
-       url(\'//at.alicdn.com/t/c/font_4883100_v2ooqn1685h.ttf?t=1744262451597\') format(\'truetype\'),
-       url(\'//at.alicdn.com/t/c/font_4883100_v2ooqn1685h.svg?t=1744262451597#iconfontb\') format(\'svg\');
+  src: url(\'//at.alicdn.com/t/c/font_4883100_7iuczh88pck.woff2?t=1744773498979\') format(\'woff2\'),
+       url(\'//at.alicdn.com/t/c/font_4883100_7iuczh88pck.woff?t=1744773498979\') format(\'woff\'),
+       url(\'//at.alicdn.com/t/c/font_4883100_7iuczh88pck.ttf?t=1744773498979\') format(\'truetype\'),
+       url(\'//at.alicdn.com/t/c/font_4883100_7iuczh88pck.svg?t=1744773498979#iconfontb\') format(\'svg\');
 }
 /* 在线链接服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
 @font-face {

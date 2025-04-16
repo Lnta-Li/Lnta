@@ -15,6 +15,7 @@
     --line-height-after: 1em; /* 文章页段间距 */
     --fontsize-p: 18px; /* 正文字体大小 */
     --fontsize-a: 17px; /* a,h6等小号字体大小 */
+    --fontsize-mini: 14px; /* 最小字号 */
 }
 
 body {
@@ -432,7 +433,7 @@ h6 strong {
 }
 
 .image-box {
-
+    
 }
 
 h4 {
@@ -937,7 +938,7 @@ iframe {
     border-radius: 4px;
     color: var(--faint-color-3);
     font-family: var(--pageinfo-font-family);
-    font-size: 14px;
+    font-size: var(--fontsize-mini);
     text-decoration: none;
     transition: all 0.3s ease;
     -webkit-transition: all 0.3s ease;
