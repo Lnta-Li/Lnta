@@ -75,6 +75,7 @@
 
     .header-image-wrapper {
         width: 80% !important;
+        padding: 0 10px!important;
     }
 
     .mobile-no-offset {
@@ -187,7 +188,7 @@
     }
 
     .header-image {
-        height: 256px !important;
+        height: 300px !important;
     }
 
     .mobile-nav.active {
