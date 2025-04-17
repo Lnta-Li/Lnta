@@ -288,8 +288,8 @@
         height: 100% !important;
     }
 
-    .small-img-notice {
-        display: none;
+    .small-img-notice, .img-float-bar {
+        display: none !important;
     }
 
     .tagtheader {
