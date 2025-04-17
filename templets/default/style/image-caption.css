@@ -1,4 +1,4 @@
-.samll-img-box {
+.small-img-box {
     max-height: 600px;
     overflow: hidden;
     margin-bottom: -8px;
@@ -9,7 +9,7 @@
     
 }
 
-.samll-img-box img {
+.small-img-box img {
     z-index: 1;
 }
 
