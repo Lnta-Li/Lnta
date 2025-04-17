@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let smallImgHeight = 0;
     // 计算过渡时间的函数（1000px/1s）
     const calculateTransitionDuration = (height) => {
-        return (height / 5000).toFixed(2) + 's';
+        return (height / 2000).toFixed(2) + 's';
     };
     // 处理普通图片
     images.forEach((img, index) => {
@@ -61,8 +61,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const transitionDuration = calculateTransitionDuration(smallImgHeight);
         // 创建small-img-box容器
         const smallImgBox = document.createElement('div');
-        smallImgBox.className = 'samll-img-box';
+        smallImgBox.className = 'small-img-box';
         smallImgBox.style.transition = `all ${transitionDuration} ease`;
+        smallImgBox.style.WebkitTransition = `all ${transitionDuration} ease`;
         // 创建title-bar容器
         const titleBar = document.createElement('div');
         titleBar.className = 'title-bar';
