@@ -432,10 +432,6 @@ h6 strong {
     font-size: var(--fontsize-a);
 }
 
-.image-box {
-    
-}
-
 h4 {
     text-align: center;
     font-size: var(--fontsize-a);
@@ -768,7 +764,6 @@ p {
 }
 
 .project-area img, .Content-Type img, .project-area video, .Content-Type video {
-    margin: 3px 0;
     border-radius: 10px;
     height: auto !important;
     max-width: 100%;

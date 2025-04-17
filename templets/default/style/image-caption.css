@@ -33,13 +33,19 @@
 
 #click-expand i {
     transition: transform 0.3s ease;
-    -webkit-transition: background-color .3s ease;
+    -webkit-transition: transform 0.3s ease;
     display: inline-block;
 }
 
+.image-box {
+    width: 100%;
+    transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
+}
+
 .small-box {
-    width: 200px;
-    height: 200px;
+    width: 23%;
+    aspect-ratio: 1 / 1;
     overflow: hidden;
     border-radius: 8px;
     display: inline-block;
@@ -50,7 +56,6 @@
     width: 100% !important;
     height: 100% !important;
     object-fit: cover; 
-    margin: 0;
 }
 
 .small-box .image-caption {
