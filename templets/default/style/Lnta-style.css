@@ -877,7 +877,7 @@ iframe {
 
 .Content-Type blockquote, .project-area blockquote  {
     position: relative;
-    margin: 2em auto;
+    margin: var(--line-height-content) auto;
     background: var(--background-blockquote);
     border-radius: 8px;
     padding: 4px 26px 4px 35px;
@@ -1069,14 +1069,16 @@ input[value="1"]:checked ~ .slider {
    margin-bottom: var(--line-height-content);
 }
 .diy-1 img, .diy-1 video {
-   width: 35%;
-   border-radius: 8px;
-   margin-bottom: var(--line-height-after);
+    width: 35%;
+    border-radius: 8px;
+    object-fit: cover;
+    height: 100% !important;
 }
 
 .diy-2 .image-box {
-  display: table-cell; 
-  padding-right: 10px;
+    width: auto !important;
+    display: table-cell; 
+    padding-right: 10px;
 }
 
 .diy-2 .image-box:last-child {
