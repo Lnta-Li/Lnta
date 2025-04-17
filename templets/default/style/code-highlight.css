@@ -41,6 +41,8 @@ pre code {
     border-radius: 0 8px 0 8px;
     z-index: 2;
     padding: 0 8px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
 }
 
 /* 代码语言标签样式 */
