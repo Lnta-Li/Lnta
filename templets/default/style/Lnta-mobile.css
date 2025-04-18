@@ -284,6 +284,7 @@
 
     .small-box {
         margin: 0 !important;
+        margin-bottom: 12px !important;
         width: 100% !important;
         height: 100% !important;
     }
@@ -353,6 +354,7 @@
     .diy-1 img, .diy-1 video {
         width: 100%;
         border-radius: 8px;
+        margin-bottom: var(--line-height-after);
     }
 
 }
