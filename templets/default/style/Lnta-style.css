@@ -429,7 +429,10 @@ h6 strong {
     text-align: center;
     font-style: italic;
     color: var(--faint-color-3);
-    font-size: var(--fontsize-a);
+    font-size: 0.85em;
+    font-weight: 300;
+    font-family: system-ui;
+    margin: 5px 0;
 }
 
 h4 {
@@ -1073,6 +1076,10 @@ input[value="1"]:checked ~ .slider {
     border-radius: 8px;
     object-fit: cover;
     height: 100% !important;
+}
+
+.diy-2 {
+    margin-bottom: var(--line-height-after);
 }
 
 .diy-2 .image-box {
