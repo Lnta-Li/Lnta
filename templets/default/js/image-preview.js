@@ -78,8 +78,11 @@ document.addEventListener('DOMContentLoaded', function() {
     modal.appendChild(thumbnailsContainer);
     document.body.appendChild(modal);
     
-    // 获取所有Content-Type类下的图片
-    const images = Array.from(document.querySelectorAll('.Content-Type img'));
+    // 获取.image-carousel内所有图片和Content-Type类下的图片
+    const carouselImages = Array.from(document.querySelectorAll('.image-carousel img'));
+    const contentTypeImages = Array.from(document.querySelectorAll('.Content-Type img'));
+    // 合并两组图片，carousel图片在前
+    const images = [...carouselImages, ...contentTypeImages];
     
     // 当前缩放比例和位置
     let scale = 1;
@@ -166,7 +169,60 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 为每个图片添加点击事件
     images.forEach((img, index) => {
-        img.addEventListener('click', () => showImage(index));
+        // 跟踪触摸/点击起始位置和是否发生拖动
+        let startPosX = 0;
+        let startPosY = 0;
+        let isDraggingImg = false;
+        
+        // 添加鼠标按下事件
+        img.addEventListener('mousedown', (e) => {
+            startPosX = e.clientX;
+            startPosY = e.clientY;
+            isDraggingImg = false;
+        });
+        
+        // 添加鼠标移动事件
+        img.addEventListener('mousemove', (e) => {
+            // 如果移动距离超过5px，视为拖拽
+            if (Math.abs(e.clientX - startPosX) > 5 || Math.abs(e.clientY - startPosY) > 5) {
+                isDraggingImg = true;
+            }
+        });
+        
+        // 鼠标点击事件
+        img.addEventListener('click', (e) => {
+            if (!isDraggingImg) {
+                showImage(index);
+            }
+        });
+        
+        // 触摸开始事件
+        img.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                startPosX = e.touches[0].clientX;
+                startPosY = e.touches[0].clientY;
+                isDraggingImg = false;
+            }
+        });
+        
+        // 触摸移动事件
+        img.addEventListener('touchmove', (e) => {
+            // 如果移动距离超过5px，视为拖拽
+            if (e.touches.length === 1 && 
+                (Math.abs(e.touches[0].clientX - startPosX) > 5 || 
+                 Math.abs(e.touches[0].clientY - startPosY) > 5)) {
+                isDraggingImg = true;
+            }
+        });
+        
+        // 触摸结束事件
+        img.addEventListener('touchend', (e) => {
+            if (!isDraggingImg) {
+                e.preventDefault();
+                showImage(index);
+            }
+        });
+        
         // 禁用默认拖拽行为
         img.draggable = false;
     });
