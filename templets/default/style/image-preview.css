@@ -170,6 +170,7 @@
     -ms-user-select: none;
     transition: opacity 0.3s ease;
     padding: 10px;
+    border: 2px solid transparent;
 }
 
 .img-preview-thumbnails.grabbing {
