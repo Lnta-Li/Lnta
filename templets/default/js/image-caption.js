@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', function() {
         noticeBar.style.opacity = '0';
         noticeBar.style.transition = 'opacity 0.3s ease';
         
-        // 延迟3秒后显示
+        // 延迟5秒后显示
         setTimeout(() => {
             noticeBar.style.opacity = '1';
             // 设置10秒倒计时（不显示倒计时文本）
@@ -250,6 +250,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     createFloatBar();
                 }, 1000);
             });
-        }, 0000);
+        }, 5000);
     }
 });
