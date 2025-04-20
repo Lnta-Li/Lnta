@@ -2,7 +2,6 @@
 @media screen and (max-width: 768px) {
     .img-preview-thumbnail {
        max-width: 30vw!important; 
-       min-width: 8vw!important;
     }
 
     .img-preview-nav {
@@ -19,6 +18,24 @@
     .img-preview-nav.next {
         right: 40%!important;
     }
+    .img-preview-img {
+        max-height: 100vh!important; /*做缩放平移功能之前，先固定高度*/
+        max-width: 100vw!important;
+        border-radius: 0!important;
+    }
+    .img-preview-thumbnails {
+        height: var(--bottombar-height-m)!important;
+    }
+    .img-preview-slide {
+        height: var(--viewer-height-m)!important;
+    }
+}
+
+:root {
+    --bottombar-height: 7vh;
+    --viewer-height: 93vh;
+    --bottombar-height-m: 7vh;
+    --viewer-height-m: 93vh;
 }
 
 .img-preview-modal {
@@ -30,9 +47,9 @@
     width: 100%;
     height: 100%;
     background-color: rgb(51 51 51);
-    overflow: auto;
+    overflow: hidden;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.3s ease, background-color 0.3s ease;
 }
 
 .img-preview-modal.active {
@@ -51,7 +68,29 @@
     align-items: center;
     height: 100%;
     width: 100%;
-    overflow: hidden;
+}
+
+/* 新增滑动容器样式 */
+.img-preview-slides {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.3s ease;
+}
+
+/* 垂直拖动时的样式 */
+.img-preview-slides.vertical-dragging {
+    transition: transform 0.2s ease, scale 0.2s ease;
+}
+
+.img-preview-slide {
+    flex: 0 0 100%;
+    width: 100%;
+    height: var(--viewer-height);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
 }
 
 .img-preview-img {
@@ -59,14 +98,13 @@
     max-width: 90vw;
     object-fit: contain;
     border-radius: 8px;
-    transform: scale(0.9);
-    transition: none;
-    cursor: move;
+    transition: transform 0s;
+    cursor: pointer;
     transform-origin: center;
 }
 
 .img-preview-modal.active .img-preview-img {
-    transform: scale(1);
+    
 }
 
 .img-preview-close {
@@ -115,52 +153,47 @@
 }
 
 .img-preview-thumbnails {
-    height: 100px;
+    z-index: 1001;
     background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 10px 0;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     width: 100%;
-    position: relative;
+    height: var(--bottombar-height);
+    position: fixed;
+    bottom: 0;
     cursor: grab;
     user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
+    transition: opacity 0.3s ease;
+    padding: 10px;
 }
 
-.img-preview-thumbnails:active {
+.img-preview-thumbnails.grabbing {
     cursor: grabbing;
 }
 
 .img-preview-thumbnails-wrapper {
     display: flex;
-    gap: 10px;
-    padding: 0 10px;
+    height: 100%;
     pointer-events: none;
+    gap: 10px;
 }
 
 .img-preview-thumbnail {
     pointer-events: auto;
-    height: 80px;
-    width: auto;
-    cursor: pointer;
-    border: 2px solid transparent;
     transition: all 0.3s ease;
-    flex-shrink: 0;
     -webkit-user-drag: none;
     -khtml-user-drag: none;
     -moz-user-drag: none;
     -o-user-drag: none;
     border-radius: 4px;
-    max-width: 10vw;
-    min-width: 2vw;
     object-fit: cover;
+    height: 100%;
+    width: auto;
 }
 
 .img-preview-thumbnail:hover {
@@ -169,9 +202,9 @@
 }
 
 .img-preview-thumbnail.active {
-    border-color: #fff;
     transform: scale(1.1);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    z-index: 1;
+    border: 2px solid #fff;
 }
 
 .img-zoom-info {
@@ -206,4 +239,26 @@
 
 .img-preview-caption:hover {
     opacity: 1;
+}
+
+/* 添加隐藏类，用于垂直拖动时隐藏元素 */
+.img-preview-hidden {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* 滚动行为样式 */
+.img-preview-smooth-scroll {
+    scroll-behavior: smooth;
+}
+
+.img-preview-caption-container {
+    position: fixed;
+    top: 15px;
+    border-radius: 4px;
+    background: rgb(255 255 255 / 50%);
+    backdrop-filter: blur(30px) brightness(1.5);
+    color: #000;
+    padding: 5px 10px;
+    z-index: 1;
 }

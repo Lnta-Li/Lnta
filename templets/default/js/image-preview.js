@@ -1,6 +1,6 @@
 /**
  * 图片预览功能
- * 允许用户点击图片查看大图，支持鼠标滚轮缩放、拖拽平移和图片切换
+ * 允许用户点击图片查看大图
  */
 document.addEventListener('DOMContentLoaded', function() {
     // 创建模态框元素
@@ -10,29 +10,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const modalContent = document.createElement('div');
     modalContent.className = 'img-preview-content';
     
-    const closeBtn = document.createElement('span');
-    closeBtn.className = 'img-preview-close';
-    closeBtn.innerHTML = '&times;';
-    
-    const previewImg = document.createElement('img');
-    previewImg.className = 'img-preview-img';
-    
-    // 添加图片描述文本元素
-    const captionText = document.createElement('div');
-    captionText.className = 'img-preview-caption';
-    
-    // 添加切换按钮
-    const prevBtn = document.createElement('button');
-    prevBtn.className = 'img-preview-nav prev';
-    prevBtn.innerHTML = '&#10094;';
-    
-    const nextBtn = document.createElement('button');
-    nextBtn.className = 'img-preview-nav next';
-    nextBtn.innerHTML = '&#10095;';
-    
     // 添加缩略图容器
     const thumbnailsContainer = document.createElement('div');
     thumbnailsContainer.className = 'img-preview-thumbnails';
+    
+    // 添加标题栏容器
+    const captionContainer = document.createElement('div');
+    captionContainer.className = 'img-preview-caption-container';
     
     // 添加缩略图拖动功能
     let isThumbDragging = false;
@@ -43,7 +27,8 @@ document.addEventListener('DOMContentLoaded', function() {
     thumbnailsContainer.addEventListener('mousedown', (e) => {
         isThumbDragging = true;
         hasDragged = false;
-        thumbnailsContainer.style.cursor = 'grabbing';
+        thumbnailsContainer.classList.add('grabbing');
+        thumbnailsContainer.style.scrollBehavior = 'auto'; // 拖拽时禁用平滑滚动
         startThumbX = e.clientX;
         scrollLeft = thumbnailsContainer.scrollLeft;
     });
@@ -61,19 +46,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     document.addEventListener('mouseup', () => {
         isThumbDragging = false;
-        thumbnailsContainer.style.cursor = 'grab';
+        thumbnailsContainer.classList.remove('grabbing');
+        thumbnailsContainer.style.scrollBehavior = 'smooth'; // 拖拽结束后恢复平滑滚动
     });
     
     document.addEventListener('mouseleave', () => {
         isThumbDragging = false;
-        thumbnailsContainer.style.cursor = 'grab';
+        thumbnailsContainer.classList.remove('grabbing');
     });
     
-    modalContent.appendChild(previewImg);
-    modalContent.appendChild(captionText);
-    modal.appendChild(closeBtn);
-    modal.appendChild(prevBtn);
-    modal.appendChild(nextBtn);
+    modal.appendChild(captionContainer);
     modal.appendChild(modalContent);
     modal.appendChild(thumbnailsContainer);
     document.body.appendChild(modal);
@@ -84,16 +66,41 @@ document.addEventListener('DOMContentLoaded', function() {
     // 合并两组图片，carousel图片在前
     const images = [...carouselImages, ...contentTypeImages];
     
-    // 当前缩放比例和位置
-    let scale = 1;
-    let originalWidth = 0;
-    let originalHeight = 0;
+    // 当前图片索引
     let currentImageIndex = 0;
-    let isDragging = false;
-    let startX = 0;
-    let startY = 0;
-    let translateX = 0;
-    let translateY = 0;
+    
+    // 创建图片滑动容器
+    const slidesContainer = document.createElement('div');
+    slidesContainer.className = 'img-preview-slides';
+    modalContent.appendChild(slidesContainer);
+    
+    // 为每张图片创建独立的slide元素
+    images.forEach((img, index) => {
+        const slide = document.createElement('div');
+        slide.className = 'img-preview-slide';
+        slide.dataset.index = index;
+        
+        const previewImg = document.createElement('img');
+        previewImg.className = 'img-preview-img';
+        previewImg.src = img.src;
+        previewImg.draggable = false;
+        
+        // 保存描述文本到dataset，不再创建caption元素
+        let descriptionText = '';
+        if (carouselImages.includes(img)) {
+            descriptionText = img.getAttribute('alt');
+        } else {
+            descriptionText = img.getAttribute('title');
+        }
+        
+        // 将描述文本保存到slide的dataset中
+        if (descriptionText && descriptionText.trim() !== '') {
+            slide.dataset.caption = descriptionText;
+        }
+        
+        slide.appendChild(previewImg);
+        slidesContainer.appendChild(slide);
+    });
     
     // 创建缩略图
     const thumbnailsWrapper = document.createElement('div');
@@ -103,6 +110,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const thumbnail = document.createElement('img');
         thumbnail.src = img.src;
         thumbnail.className = 'img-preview-thumbnail';
+        thumbnail.dataset.index = index;
         thumbnail.addEventListener('click', (e) => {
             if (!hasDragged) {
                 showImage(index);
@@ -119,53 +127,82 @@ document.addEventListener('DOMContentLoaded', function() {
     function showImage(index) {
         if (index < 0 || index >= images.length) return;
         currentImageIndex = index;
-        previewImg.src = images[index].src;
-        // 更新描述文本
-        const titleText = images[index].getAttribute('title');
-        if (titleText && titleText.trim() !== '') {
-            captionText.style.display = 'block';
-            captionText.textContent = titleText;
+        
+        // 先激活模态框再获取宽度
+        modal.classList.add('active');
+        
+        // 异步获取准确宽度
+        requestAnimationFrame(() => {
+        const slideWidth = modalContent.offsetWidth;
+        slidesContainer.style.transform = `translateX(${-index * slideWidth}px)`;
+        });
+        
+        // 重置垂直位移和缩放
+        slidesContainer.style.transformOrigin = 'center';
+        slidesContainer.classList.remove('vertical-dragging');
+        
+        // 重置所有图片的垂直位置
+        slidesContainer.querySelectorAll('.img-preview-img').forEach(img => {
+            img.style.transform = '';
+        });
+        
+        // 更新活动状态
+        const slides = slidesContainer.querySelectorAll('.img-preview-slide');
+        slides.forEach((slide, i) => {
+            slide.classList.toggle('active', i === index);
+        });
+        
+        // 更新标题栏内容
+        const activeSlide = slides[index];
+        const captionText = activeSlide.dataset.caption;
+        
+        if (captionText && captionText.trim() !== '') {
+            captionContainer.textContent = captionText;
+            captionContainer.style.display = 'block';
         } else {
-            captionText.style.display = 'none';
+            captionContainer.style.display = 'none';
         }
-        previewImg.onload = function() {
-            originalWidth = this.width;
-            originalHeight = this.height;
-            scale = 1;
-            translateX = 0;
-            translateY = 0;
-            updateImageTransform();
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden'; // 禁用背景页面滚动
-            
-            // 更新缩略图状态
-            const thumbnails = thumbnailsWrapper.querySelectorAll('.img-preview-thumbnail');
-            thumbnails.forEach((thumb, i) => {
-                thumb.classList.toggle('active', i === index);
-            });
-            
-            // 滚动缩略图到当前图片位置
-            const activeThumb = thumbnails[index];
-            const containerWidth = thumbnailsContainer.offsetWidth;
-            const thumbWidth = activeThumb.offsetWidth;
-            const thumbLeft = activeThumb.offsetLeft;
-            const scrollLeft = thumbLeft - (containerWidth / 2) + (thumbWidth / 2);
-            
-            // 添加平滑滚动效果
-            thumbnailsContainer.style.scrollBehavior = 'smooth';
-            thumbnailsContainer.scrollLeft = scrollLeft;
-            
-            // 滚动完成后移除平滑效果，以便拖动时保持即时响应
-            setTimeout(() => {
-                thumbnailsContainer.style.scrollBehavior = 'auto';
-            }, 500);
-        };
+        
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // 禁用背景页面滚动
+        
+        // 更新缩略图状态
+        const thumbnails = thumbnailsWrapper.querySelectorAll('.img-preview-thumbnail');
+        thumbnails.forEach((thumb, i) => {
+            thumb.classList.toggle('active', i === index);
+        });
+        
+        // 滚动缩略图到当前图片位置
+        const activeThumb = thumbnails[index];
+        const containerWidth = thumbnailsContainer.offsetWidth;
+        const thumbWidth = activeThumb.offsetWidth;
+        const thumbLeft = activeThumb.offsetLeft;
+        const scrollLeft = thumbLeft - (containerWidth / 2) + (thumbWidth / 2);
+        
+        // 添加平滑滚动效果
+        thumbnailsContainer.classList.add('img-preview-smooth-scroll');
+        thumbnailsContainer.scrollLeft = scrollLeft;
+        
+        // 滚动完成后移除平滑效果，以便拖动时保持即时响应
+        setTimeout(() => {
+            thumbnailsContainer.classList.remove('img-preview-smooth-scroll');
+            thumbnailsContainer.classList.add('img-preview-auto-scroll');
+        }, 500);
     }
     
-    // 更新图片变换
-    function updateImageTransform() {
-        previewImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
-    }
+    // 监听窗口大小变化，保持当前图片居中
+    window.addEventListener('resize', () => {
+        if (modal.classList.contains('active')) {
+            const slideWidth = modalContent.offsetWidth;
+            slidesContainer.style.transition = 'none';
+            slidesContainer.style.transform = `translateX(${-currentImageIndex * slideWidth}px)`;
+            slidesContainer.querySelectorAll('.img-preview-img').forEach(img => img.style.transform = '');
+            // 恢复过渡效果
+            setTimeout(() => {
+                slidesContainer.style.transition = '';
+            }, 50);
+        }
+    });
     
     // 为每个图片添加点击事件
     images.forEach((img, index) => {
@@ -227,135 +264,270 @@ document.addEventListener('DOMContentLoaded', function() {
         img.draggable = false;
     });
     
-    // 禁用预览图片的默认拖拽行为
-    previewImg.draggable = false;
+    // 实现水平滑动功能
+    let startX = 0;
+    let startY = 0;
+    let startTranslate = 0;
+    let isDragging = false;
+    let isVerticalDragging = false;
+    let verticalTranslate = 0;
+    let verticalDistance = 0;
     
-    // 关闭模态框
-    closeBtn.addEventListener('click', closeModal);
-    modal.addEventListener('click', function(e) {
-        if (e.target === modal) {
-            closeModal();
+    slidesContainer.addEventListener('mousedown', (e) => {
+        if (!modal.classList.contains('active')) return;
+        
+        isDragging = true;
+        isVerticalDragging = false;
+        startX = e.clientX;
+        startY = e.clientY;
+        startTranslate = getTranslateX(slidesContainer);
+        verticalTranslate = 0;
+        slidesContainer.style.transition = 'none';
+    });
+    
+    document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        
+        const x = e.clientX;
+        const y = e.clientY;
+        const diffX = x - startX;
+        const diffY = y - startY;
+        
+        // 判断拖动方向
+        if (!isVerticalDragging && Math.abs(diffY) > Math.abs(diffX) && diffY > 0) {
+            // 向下拖动且角度大于45度
+            isVerticalDragging = true;
+            slidesContainer.classList.add('vertical-dragging');
+            thumbnailsContainer.classList.add('img-preview-hidden');
+            // 隐藏标题栏
+            captionContainer.classList.add('img-preview-hidden');
+        }
+        
+        if (isVerticalDragging) {
+            // 垂直拖动 - 向下移动并缩小
+            verticalDistance = diffY;
+            if (verticalDistance > 0) { // 只在向下拖动时执行
+                const scale = Math.max(0.2, 1 - verticalDistance / 1000);
+                const blurValue = Math.max(0, 20 - (verticalDistance / 500) * 20);
+                verticalTranslate = verticalDistance;
+                
+                // 应用变换
+                const activeImg = slidesContainer.querySelector(`.img-preview-slide[data-index="${currentImageIndex}"] .img-preview-img`);
+                activeImg.style.transform = `translateY(${verticalTranslate}px) scale(${scale})`;
+                activeImg.style.transformOrigin = 'center';
+                
+                // 调整模态框透明度和模糊效果
+                const opacity = Math.max(0.3, 1 - verticalDistance / 300);
+                modal.style.backgroundColor = `rgba(51, 51, 51, ${opacity})`;
+                modal.style.backdropFilter = `blur(${blurValue}px)`;
+                modal.style.webkitBackdropFilter = `blur(${blurValue}px)`;
+            }
+        } else {
+            // 水平拖动 - 切换图片
+            slidesContainer.style.transform = `translateX(${startTranslate + diffX}px)`;
         }
     });
+    
+    document.addEventListener('mouseup', (e) => {
+        if (!isDragging) return;
+        
+        if (isVerticalDragging) {
+            // 处理垂直拖动结束
+            if (verticalDistance > 150) {
+                // 如果拖动距离超过150px，关闭预览
+                closeModal();
+            } else {
+                // 否则回到原位
+                slidesContainer.style.transition = 'transform 0.3s ease';
+                slidesContainer.style.transform = `translateX(${-currentImageIndex * modalContent.offsetWidth}px)`;
+            const activeSlide = slidesContainer.querySelector(`.img-preview-slide[data-index="${currentImageIndex}"]`);
+            activeSlide.querySelector('.img-preview-img').style.transform = '';
+                slidesContainer.classList.remove('vertical-dragging');
+                thumbnailsContainer.classList.remove('img-preview-hidden');
+                // 恢复标题栏显示
+                captionContainer.classList.remove('img-preview-hidden');
+                modal.style.backgroundColor = '';
+            }
+        } else {
+            // 处理水平拖动结束
+            const finalTranslate = getTranslateX(slidesContainer);
+            const diff = finalTranslate - startTranslate;
+            const slideWidth = modalContent.offsetWidth;
+            
+            slidesContainer.style.transition = 'transform 0.3s ease';
+            
+            if (Math.abs(diff) > 100) {
+                // 如果拖动超过100px，切换到下一张或上一张
+                if (diff > 0 && currentImageIndex > 0) {
+                    showImage(currentImageIndex - 1);
+                } else if (diff < 0 && currentImageIndex < images.length - 1) {
+                    showImage(currentImageIndex + 1);
+                } else {
+                    // 回到当前图片
+                    slidesContainer.style.transform = `translateX(${-currentImageIndex * slideWidth}px)`;
+            slidesContainer.querySelectorAll('.img-preview-img').forEach(img => img.style.transform = '');
+                }
+            } else {
+                // 回到当前图片
+                slidesContainer.style.transform = `translateX(${-currentImageIndex * slideWidth}px)`;
+            slidesContainer.querySelectorAll('.img-preview-img').forEach(img => img.style.transform = '');
+            }
+        }
+        
+        isDragging = false;
+        isVerticalDragging = false;
+    });
+    
+    // 触摸滑动支持
+    slidesContainer.addEventListener('touchstart', (e) => {
+        if (!modal.classList.contains('active')) return;
+        
+        if (e.touches.length === 1) {
+            isDragging = true;
+            isVerticalDragging = false;
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            startTranslate = getTranslateX(slidesContainer);
+            verticalTranslate = 0;
+            slidesContainer.style.transition = 'none';
+        }
+    }, { passive: false });
+    
+    slidesContainer.addEventListener('touchmove', (e) => {
+        if (!isDragging || e.touches.length !== 1) return;
+        
+        const x = e.touches[0].clientX;
+        const y = e.touches[0].clientY;
+        const diffX = x - startX;
+        const diffY = y - startY;
+        
+        // 判断拖动方向
+        if (!isVerticalDragging && Math.abs(diffY) > Math.abs(diffX) && diffY > 0) {
+            // 向下拖动且角度大于45度
+            isVerticalDragging = true;
+            slidesContainer.classList.add('vertical-dragging');
+            thumbnailsContainer.classList.add('img-preview-hidden');
+            // 隐藏标题栏
+            captionContainer.classList.add('img-preview-hidden');
+        }
+        
+        if (isVerticalDragging) {
+            // 垂直拖动 - 向下移动并缩小
+            verticalDistance = diffY;
+            if (verticalDistance > 0) { // 只在向下拖动时执行
+                const scale = Math.max(0.5, 1 - verticalDistance / 500);
+                const blurValue = Math.max(0, 20 - (verticalDistance / 300) * 20);
+                verticalTranslate = verticalDistance;
+                
+                // 应用变换
+                const activeImg = slidesContainer.querySelector(`.img-preview-slide[data-index="${currentImageIndex}"] .img-preview-img`);
+                activeImg.style.transform = `translateY(${verticalTranslate}px) scale(${scale})`;
+                activeImg.style.transformOrigin = 'center';
+                
+                // 调整模态框透明度和模糊效果
+                const opacity = Math.max(0.3, 1 - verticalDistance / 300);
+                modal.style.backgroundColor = `rgba(51, 51, 51, ${opacity})`;
+                modal.style.backdropFilter = `blur(${blurValue}px)`;
+                modal.style.webkitBackdropFilter = `blur(${blurValue}px)`;
+            }
+            
+            // 阻止页面滚动
+            e.preventDefault();
+        } else {
+            // 水平拖动 - 切换图片
+            slidesContainer.style.transform = `translateX(${startTranslate + diffX}px)`;
+            
+            // 阻止页面滚动
+            e.preventDefault();
+        }
+    }, { passive: false });
+    
+    slidesContainer.addEventListener('touchend', (e) => {
+        if (!isDragging) return;
+        
+        if (isVerticalDragging) {
+            // 处理垂直拖动结束
+            if (verticalDistance > 150) {
+                // 如果拖动距离超过150px，关闭预览
+                closeModal();
+            } else {
+                // 否则回到原位
+                slidesContainer.style.transition = 'transform 0.3s ease';
+                slidesContainer.style.transform = `translateX(${-currentImageIndex * modalContent.offsetWidth}px)`;
+            const activeSlide = slidesContainer.querySelector(`.img-preview-slide[data-index="${currentImageIndex}"]`);
+            activeSlide.querySelector('.img-preview-img').style.transform = '';
+                slidesContainer.classList.remove('vertical-dragging');
+                thumbnailsContainer.classList.remove('img-preview-hidden');
+                // 恢复标题栏显示
+                captionContainer.classList.remove('img-preview-hidden');
+                modal.style.backgroundColor = '';
+            }
+        } else {
+            // 处理水平拖动结束
+            const finalTranslate = getTranslateX(slidesContainer);
+            const diff = finalTranslate - startTranslate;
+            const slideWidth = modalContent.offsetWidth;
+            
+            slidesContainer.style.transition = 'transform 0.3s ease';
+            
+            if (Math.abs(diff) > 100) {
+                // 如果拖动超过100px，切换到下一张或上一张
+                if (diff > 0 && currentImageIndex > 0) {
+                    showImage(currentImageIndex - 1);
+                } else if (diff < 0 && currentImageIndex < images.length - 1) {
+                    showImage(currentImageIndex + 1);
+                } else {
+                    // 回到当前图片
+                    slidesContainer.style.transform = `translateX(${-currentImageIndex * slideWidth}px)`;
+            slidesContainer.querySelectorAll('.img-preview-img').forEach(img => img.style.transform = '');
+                }
+            } else {
+                // 回到当前图片
+                slidesContainer.style.transform = `translateX(${-currentImageIndex * slideWidth}px)`;
+            slidesContainer.querySelectorAll('.img-preview-img').forEach(img => img.style.transform = '');
+            }
+        }
+        
+        isDragging = false;
+        isVerticalDragging = false;
+    });
+    
+    // 获取元素的translateX值
+    function getTranslateX(element) {
+        const style = window.getComputedStyle(element);
+        const matrix = new WebKitCSSMatrix(style.transform);
+        return matrix.m41;
+    }
     
     // 按ESC键关闭模态框
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && modal.classList.contains('active')) {
             closeModal();
-        }
-    });
-    
-    // 鼠标滚轮缩放
-    modal.addEventListener('wheel', function(e) {
-        e.preventDefault();
-        
-        if (!modal.classList.contains('active')) return;
-        
-        // 确定缩放方向
-        const delta = e.deltaY < 0 ? 0.1 : -0.1;
-        
-        // 限制缩放范围
-        const newScale = Math.max(0.1, Math.min(5, scale + delta));
-        
-        if (newScale !== scale) {
-            scale = newScale;
-            updateImageTransform();
-        }
-    });
-    
-    // 触摸缩放变量
-    let initialDistance = 0;
-    let initialScale = 1;
-    
-    // 计算两个触摸点之间的距离
-    function getDistance(touch1, touch2) {
-        return Math.hypot(
-            touch2.clientX - touch1.clientX,
-            touch2.clientY - touch1.clientY
-        );
-    }
-    
-    // 触摸事件处理
-    previewImg.addEventListener('touchstart', function(e) {
-        if (!modal.classList.contains('active')) return;
-        e.preventDefault();
-        
-        if (e.touches.length === 2) {
-            // 双指缩放
-            initialDistance = getDistance(e.touches[0], e.touches[1]);
-            initialScale = scale;
-        } else if (e.touches.length === 1) {
-            // 单指拖动
-            isDragging = true;
-            startX = e.touches[0].clientX - translateX;
-            startY = e.touches[0].clientY - translateY;
-        }
-    }, { passive: false });
-    
-    previewImg.addEventListener('touchmove', function(e) {
-        if (!modal.classList.contains('active')) return;
-        e.preventDefault();
-        
-        if (e.touches.length === 2) {
-            // 双指缩放
-            const currentDistance = getDistance(e.touches[0], e.touches[1]);
-            const scaleDiff = (currentDistance / initialDistance) - 1;
-            const newScale = Math.max(0.1, Math.min(5, initialScale + scaleDiff));
-            
-            if (newScale !== scale) {
-                scale = newScale;
-                updateImageTransform();
+        } else if (e.key === 'ArrowLeft' && modal.classList.contains('active')) {
+            // 左箭头键显示上一张图片
+            if (currentImageIndex > 0) {
+                showImage(currentImageIndex - 1);
             }
-        } else if (e.touches.length === 1 && isDragging) {
-            // 单指拖动
-            translateX = e.touches[0].clientX - startX;
-            translateY = e.touches[0].clientY - startY;
-            updateImageTransform();
+        } else if (e.key === 'ArrowRight' && modal.classList.contains('active')) {
+            // 右箭头键显示下一张图片
+            if (currentImageIndex < images.length - 1) {
+                showImage(currentImageIndex + 1);
+            }
         }
-    }, { passive: false });
-    
-    previewImg.addEventListener('touchend', function(e) {
-        isDragging = false;
-        initialDistance = 0;
-        initialScale = scale;
-    });
-    
-    // 拖拽功能
-    previewImg.addEventListener('mousedown', function(e) {
-        if (!modal.classList.contains('active')) return;
-        isDragging = true;
-        startX = e.clientX - translateX;
-        startY = e.clientY - translateY;
-    });
-    
-    document.addEventListener('mousemove', function(e) {
-        if (!isDragging) return;
-        
-        translateX = e.clientX - startX;
-        translateY = e.clientY - startY;
-        updateImageTransform();
-    });
-    
-    document.addEventListener('mouseup', function() {
-        isDragging = false;
-    });
-    
-    // 切换图片
-    prevBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        showImage(currentImageIndex - 1);
-    });
-    
-    nextBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        showImage(currentImageIndex + 1);
     });
     
     function closeModal() {
         modal.classList.remove('active');
         document.body.style.overflow = ''; // 恢复背景页面滚动
+        
+        // 重置模态框样式
         setTimeout(() => {
-            previewImg.src = '';
+            slidesContainer.style.transform = '';
+            slidesContainer.classList.remove('vertical-dragging');
+            thumbnailsContainer.classList.remove('img-preview-hidden');
+            // 恢复标题栏显示
+            captionContainer.classList.remove('img-preview-hidden');
+            modal.style.backgroundColor = '';
         }, 300);
     }
 });
