@@ -35,7 +35,7 @@
     <div class="fillwidth-3"></div>
     <div class="projects-container waterfall-container">
         <ul class="waterfall-list" style="padding: 0;">
-            {dede:list orderby='sortrank' pagesize='10'}
+            {dede:list orderby='sortrank' row='999'}
             <li class="waterfall-item">
                 <a class="waterfall-link" href="[field:arcurl/]">
                     <div class="waterfall-img">
@@ -53,16 +53,22 @@
                 </a>
             </li>
             {/dede:list}
-        </ul>
-        
+        </ul>        
     </div>
+    <div class="fillwidth-3"></div>
+    <div class="projects nested mobile-full mobile-no-offset">
+        <ul class="col-8 nested next-shelf pagelist mobile-full">
+            {dede:pagelist listitem="index,end,pre,next,pageno,option" listsize="5"/}
+        </ul>
+    </div>
+    <!--
     <div style="text-align: left;padding: 30px 0;">
         <ul style="padding: 0;">
             {dede:pagelist listitem="index,end,pre,next,pageno,option" listsize="5"/}
         </ul>
     </div>
-
-
+    -->
+    <div style="height: 50px;"></div>
     </div>
     </div>
   </div>

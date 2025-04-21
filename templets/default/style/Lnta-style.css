@@ -670,7 +670,7 @@ h2 {
     width: 100%;
     height: auto;
     display: block;
-    min-height: 14vh;
+    min-height: 20vh;
     max-height: 60vh; 
     object-fit: cover;
 }
