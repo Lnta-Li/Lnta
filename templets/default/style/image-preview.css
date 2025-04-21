@@ -1,7 +1,8 @@
 /* 图片预览模态框样式 */
 @media screen and (max-width: 768px) {
     .img-preview-thumbnail {
-       max-width: 30vw!important; 
+        /*min-width: 7vw !important;
+        max-width: 25vw !important;*/
     }
 
     .img-preview-nav {
@@ -19,23 +20,16 @@
         right: 40%!important;
     }
     .img-preview-img {
-        max-height: 100vh!important; /*做缩放平移功能之前，先固定高度*/
-        max-width: 100vw!important;
+        max-height: 100%!important; /*做缩放平移功能之前，先固定高度*/
+        max-width: 100%!important;
         border-radius: 0!important;
-    }
-    .img-preview-thumbnails {
-        height: var(--bottombar-height-m)!important;
-    }
-    .img-preview-slide {
-        height: var(--viewer-height-m)!important;
     }
 }
 
 :root {
     --bottombar-height: 7vh;
-    --viewer-height: 93vh;
-    --bottombar-height-m: 7vh;
-    --viewer-height-m: 93vh;
+    --viewer-height: 91vh;
+    --img-space: 1vh;
 }
 
 .img-preview-modal {
@@ -46,10 +40,11 @@
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgb(51 51 51);
+    background-color: rgba(51, 51, 51);
     overflow: hidden;
     opacity: 0;
     transition: opacity 0.3s ease, background-color 0.3s ease;
+    -webkit-transition: opacity 0.3s ease, background-color 0.3s ease;
 }
 
 .img-preview-modal.active {
@@ -58,6 +53,10 @@
     display: flex;
     flex-direction: column;
     opacity: 1;
+    /* 确保在iOS Safari上正确处理触摸事件 */
+    touch-action: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .img-preview-content {
@@ -68,6 +67,9 @@
     align-items: center;
     height: 100%;
     width: 100%;
+    /* 确保iOS Safari上的触摸事件能被正确处理 */
+    touch-action: none;
+    -webkit-touch-callout: none;
 }
 
 /* 新增滑动容器样式 */
@@ -75,12 +77,14 @@
     display: flex;
     width: 100%;
     height: 100%;
-    transition: transform 0.3s ease;
+    /* 确保iOS Safari上的触摸事件能被正确处理 */
+    touch-action: pan-y pan-x;
 }
 
 /* 垂直拖动时的样式 */
 .img-preview-slides.vertical-dragging {
     transition: transform 0.2s ease, scale 0.2s ease;
+    -webkit-transition: transform 0.2s ease, scale 0.2s ease;
 }
 
 .img-preview-slide {
@@ -91,16 +95,23 @@
     justify-content: center;
     align-items: center;
     position: relative;
+    /* 确保支持iOS Safari的触摸事件 */
+    touch-action: none;
 }
 
 .img-preview-img {
-    max-height: 80vh;
-    max-width: 90vw;
+    max-height: 90%;
+    max-width: 90%;
     object-fit: contain;
     border-radius: 8px;
     transition: transform 0s;
+    -webkit-transition: transform 0s;
     cursor: pointer;
     transform-origin: center;
+    /* 确保iOS Safari上可以正常拖拽 */
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .img-preview-modal.active .img-preview-img {
@@ -117,6 +128,7 @@
     cursor: pointer;
     z-index: 1001;
     transition: color 0.2s;
+    -webkit-transition: color 0.2s;
 }
 
 .img-preview-close:hover {
@@ -135,6 +147,7 @@
     font-size: 18px;
     z-index: 10000;
     transition: background-color 0.3s;
+    -webkit-transition: background-color 0.3s;
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     border-radius: 8px;
@@ -169,8 +182,15 @@
     -moz-user-select: none;
     -ms-user-select: none;
     transition: opacity 0.3s ease;
-    padding: 10px;
-    border: 2px solid transparent;
+    -webkit-transition: opacity 0.3s ease;
+    padding: var(--img-space);
+    /*border: 2px solid transparent;*/
+    display: flex;
+    align-items: center;
+}
+
+.img-preview-thumbnails::-webkit-scrollbar {
+    display: none; /* Safari和Chrome中隐藏滚动条但保持功能 */
 }
 
 .img-preview-thumbnails.grabbing {
@@ -181,12 +201,21 @@
     display: flex;
     height: 100%;
     pointer-events: none;
-    gap: 10px;
+    gap: 2px;
+    min-width: min-content;
+    padding: 0 5px;
+    width: max-content;
+    /* 确保flexbox布局在iOS上正常工作 */
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 .img-preview-thumbnail {
     pointer-events: auto;
+    aspect-ratio: 4 / 3;
     transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease; 
     -webkit-user-drag: none;
     -khtml-user-drag: none;
     -moz-user-drag: none;
@@ -195,6 +224,11 @@
     object-fit: cover;
     height: 100%;
     width: auto;
+    border: 2px solid transparent;
+    flex-shrink: 0;
+    /*min-width: 2vw;
+    max-width: 10vw;*/
+    margin: 0;
 }
 
 .img-preview-thumbnail:hover {
@@ -206,6 +240,7 @@
     transform: scale(1.1);
     z-index: 1;
     border: 2px solid #fff;
+    margin: 0 10px;
 }
 
 .img-zoom-info {
@@ -236,6 +271,7 @@
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     transition: opacity 0.3s ease;
+    -webkit-transition: opacity 0.3s ease;
 }
 
 .img-preview-caption:hover {
@@ -246,6 +282,7 @@
 .img-preview-hidden {
     opacity: 0;
     transition: opacity 0.3s ease;
+    -webkit-transition: opacity 0.3s ease;
 }
 
 /* 滚动行为样式 */
@@ -259,7 +296,41 @@
     border-radius: 4px;
     background: rgb(255 255 255 / 50%);
     backdrop-filter: blur(30px) brightness(1.5);
+    -webkit-backdrop-filter: blur(30px) brightness(1.5);
     color: #000;
     padding: 5px 10px;
     z-index: 1;
+}
+
+/* 图片缩放相关样式 */
+.img-preview-zoom-initial {
+    transform: scale(2);
+    transform-origin: center;
+    z-index: 1;
+    transition: none;
+    -webkit-transition: none;
+    position: relative;
+    opacity: 0;
+    transform-origin: top;
+}
+
+.img-preview-zoom-reset {
+    transform: none;
+    z-index: auto;
+    transform-origin: center;
+}
+
+/* 图片缩放动画 */
+.img-preview-zoom-animation {
+    animation: zoom-out 0.3s cubic-bezier(0.11, 0.83, 0.39, 1.1) forwards;
+    opacity: 1;
+}
+
+@keyframes zoom-out {
+    0% {
+        transform: scale(2);
+    }
+    100% {
+        transform: scale(1);
+    }
 }

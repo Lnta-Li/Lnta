@@ -60,6 +60,54 @@ document.addEventListener('DOMContentLoaded', function() {
     modal.appendChild(thumbnailsContainer);
     document.body.appendChild(modal);
     
+    // 点击模态框内容区域关闭预览
+    let modalContentStartX = 0;
+    let modalContentStartY = 0;
+    let isModalContentDragging = false;
+    
+    // 鼠标事件
+    modalContent.addEventListener('mousedown', (e) => {
+        modalContentStartX = e.clientX;
+        modalContentStartY = e.clientY;
+        isModalContentDragging = false;
+    });
+    
+    modalContent.addEventListener('mousemove', (e) => {
+        if (Math.abs(e.clientX - modalContentStartX) > 5 || Math.abs(e.clientY - modalContentStartY) > 5) {
+            isModalContentDragging = true;
+        }
+    });
+    
+    modalContent.addEventListener('click', function(e) {
+        if (!isModalContentDragging) {
+            closeModal();
+        }
+    });
+    
+    // 触摸事件支持
+    modalContent.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+            modalContentStartX = e.touches[0].clientX;
+            modalContentStartY = e.touches[0].clientY;
+            isModalContentDragging = false;
+        }
+    }, { passive: true });
+    
+    modalContent.addEventListener('touchmove', (e) => {
+        if (e.touches.length === 1) {
+            if (Math.abs(e.touches[0].clientX - modalContentStartX) > 5 || 
+                Math.abs(e.touches[0].clientY - modalContentStartY) > 5) {
+                isModalContentDragging = true;
+            }
+        }
+    }, { passive: true });
+    
+    modalContent.addEventListener('touchend', (e) => {
+        if (!isModalContentDragging && e.changedTouches.length === 1) {
+            closeModal();
+        }
+    });
+    
     // 获取.image-carousel内所有图片和Content-Type类下的图片
     const carouselImages = Array.from(document.querySelectorAll('.image-carousel img'));
     const contentTypeImages = Array.from(document.querySelectorAll('.Content-Type img'));
@@ -79,6 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const slide = document.createElement('div');
         slide.className = 'img-preview-slide';
         slide.dataset.index = index;
+        slide.style.marginRight = '50px'; // 添加右侧间距
         
         const previewImg = document.createElement('img');
         previewImg.className = 'img-preview-img';
@@ -133,8 +182,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // 异步获取准确宽度
         requestAnimationFrame(() => {
-        const slideWidth = modalContent.offsetWidth;
-        slidesContainer.style.transform = `translateX(${-index * slideWidth}px)`;
+            const slideWidth = modalContent.offsetWidth;
+            // 计算位移时考虑每个slide的右侧间距50px
+            slidesContainer.style.transform = `translateX(${-index * (slideWidth + 50)}px)`;
         });
         
         // 重置垂直位移和缩放
@@ -170,6 +220,22 @@ document.addEventListener('DOMContentLoaded', function() {
         const thumbnails = thumbnailsWrapper.querySelectorAll('.img-preview-thumbnail');
         thumbnails.forEach((thumb, i) => {
             thumb.classList.toggle('active', i === index);
+            
+            // 为激活的缩略图添加aspect-ratio样式
+            if (i === index) {
+                // 获取当前显示的原图
+                const originalImg = images[index];
+                // 获取原图的自然宽高
+                const imgWidth = originalImg.naturalWidth || originalImg.width;
+                const imgHeight = originalImg.naturalHeight || originalImg.height;
+                // 设置缩略图的宽高比为原图的宽高比
+                if (imgWidth && imgHeight) {
+                    thumb.style.aspectRatio = `${imgWidth} / ${imgHeight}`;
+                }
+            } else {
+                // 移除非激活缩略图的aspect-ratio样式
+                thumb.style.aspectRatio = '';
+            }
         });
         
         // 滚动缩略图到当前图片位置
@@ -188,6 +254,37 @@ document.addEventListener('DOMContentLoaded', function() {
             thumbnailsContainer.classList.remove('img-preview-smooth-scroll');
             thumbnailsContainer.classList.add('img-preview-auto-scroll');
         }, 500);
+
+        // 同步背景网页位置
+        const currentImg = images[index];
+        
+        // 移除之前可能的动画类和样式类
+        images.forEach(img => {
+            img.classList.remove('img-preview-zoom-animation');
+            img.classList.remove('img-preview-zoom-initial');
+            img.classList.remove('img-preview-zoom-reset');
+        });
+        
+        // 预先设置背景图片的2倍缩放
+        currentImg.classList.add('img-preview-zoom-initial');
+        
+        if (currentImg.closest('.image-carousel')) {
+            // 如果是轮播图，滚动到顶部并切换到对应图片
+            window.scrollTo(0, 0);
+            const carousel = currentImg.closest('.image-carousel');
+            const carouselImgs = Array.from(carousel.querySelectorAll('.carousel-item img'));
+            const carouselIndex = carouselImgs.indexOf(currentImg);
+            if (carouselIndex !== -1 && carousel._carouselInstance) {
+                // 使用实例方法更新轮播图状态
+                carousel._carouselInstance.currentIndex = carouselIndex;
+                carousel._carouselInstance.updateCarousel();
+            }
+        } else if (currentImg.closest('.Content-Type')) {
+            // 如果是普通图片，滚动到图片位置
+            const imgRect = currentImg.getBoundingClientRect();
+            const scrollTop = window.pageYOffset + imgRect.top;
+            window.scrollTo(0, scrollTop);
+        }
     }
     
     // 监听窗口大小变化，保持当前图片居中
@@ -195,7 +292,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (modal.classList.contains('active')) {
             const slideWidth = modalContent.offsetWidth;
             slidesContainer.style.transition = 'none';
-            slidesContainer.style.transform = `translateX(${-currentImageIndex * slideWidth}px)`;
+            slidesContainer.style.transform = `translateX(${-currentImageIndex * (slideWidth + 50)}px)`;
             slidesContainer.querySelectorAll('.img-preview-img').forEach(img => img.style.transform = '');
             // 恢复过渡效果
             setTimeout(() => {
@@ -328,9 +425,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    document.addEventListener('mouseup', (e) => {
-        if (!isDragging) return;
-        
+    // 处理拖动结束的公共函数
+    function handleDragEnd(verticalDistance, isVerticalDragging) {
         if (isVerticalDragging) {
             // 处理垂直拖动结束
             if (verticalDistance > 150) {
@@ -339,9 +435,9 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 // 否则回到原位
                 slidesContainer.style.transition = 'transform 0.3s ease';
-                slidesContainer.style.transform = `translateX(${-currentImageIndex * modalContent.offsetWidth}px)`;
-            const activeSlide = slidesContainer.querySelector(`.img-preview-slide[data-index="${currentImageIndex}"]`);
-            activeSlide.querySelector('.img-preview-img').style.transform = '';
+                slidesContainer.style.transform = `translateX(${-currentImageIndex * (modalContent.offsetWidth + 50)}px)`;
+                const activeSlide = slidesContainer.querySelector(`.img-preview-slide[data-index="${currentImageIndex}"]`);
+                activeSlide.querySelector('.img-preview-img').style.transform = '';
                 slidesContainer.classList.remove('vertical-dragging');
                 thumbnailsContainer.classList.remove('img-preview-hidden');
                 // 恢复标题栏显示
@@ -364,18 +460,23 @@ document.addEventListener('DOMContentLoaded', function() {
                     showImage(currentImageIndex + 1);
                 } else {
                     // 回到当前图片
-                    slidesContainer.style.transform = `translateX(${-currentImageIndex * slideWidth}px)`;
-            slidesContainer.querySelectorAll('.img-preview-img').forEach(img => img.style.transform = '');
+                    slidesContainer.style.transform = `translateX(${-currentImageIndex * (slideWidth + 50)}px)`;
+                    slidesContainer.querySelectorAll('.img-preview-img').forEach(img => img.style.transform = '');
                 }
             } else {
                 // 回到当前图片
-                slidesContainer.style.transform = `translateX(${-currentImageIndex * slideWidth}px)`;
-            slidesContainer.querySelectorAll('.img-preview-img').forEach(img => img.style.transform = '');
+                slidesContainer.style.transform = `translateX(${-currentImageIndex * (slideWidth + 50)}px)`;
+                slidesContainer.querySelectorAll('.img-preview-img').forEach(img => img.style.transform = '');
             }
         }
         
         isDragging = false;
         isVerticalDragging = false;
+    }
+
+    document.addEventListener('mouseup', (e) => {
+        if (!isDragging) return;
+        handleDragEnd(verticalDistance, isVerticalDragging);
     });
     
     // 触摸滑动支持
@@ -391,6 +492,15 @@ document.addEventListener('DOMContentLoaded', function() {
             verticalTranslate = 0;
             slidesContainer.style.transition = 'none';
         }
+        
+        // 解决iOS Safari触摸事件问题
+        e.preventDefault();
+    }, { passive: false });
+    
+    // 确保整个modalContent区域可以响应触摸事件 - 解决iOS Safari上的触摸事件问题
+    modalContent.addEventListener('touchstart', (e) => {
+        // 仅阻止默认行为，不执行其他操作
+        e.preventDefault();
     }, { passive: false });
     
     slidesContainer.addEventListener('touchmove', (e) => {
@@ -444,52 +554,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     slidesContainer.addEventListener('touchend', (e) => {
         if (!isDragging) return;
-        
-        if (isVerticalDragging) {
-            // 处理垂直拖动结束
-            if (verticalDistance > 150) {
-                // 如果拖动距离超过150px，关闭预览
-                closeModal();
-            } else {
-                // 否则回到原位
-                slidesContainer.style.transition = 'transform 0.3s ease';
-                slidesContainer.style.transform = `translateX(${-currentImageIndex * modalContent.offsetWidth}px)`;
-            const activeSlide = slidesContainer.querySelector(`.img-preview-slide[data-index="${currentImageIndex}"]`);
-            activeSlide.querySelector('.img-preview-img').style.transform = '';
-                slidesContainer.classList.remove('vertical-dragging');
-                thumbnailsContainer.classList.remove('img-preview-hidden');
-                // 恢复标题栏显示
-                captionContainer.classList.remove('img-preview-hidden');
-                modal.style.backgroundColor = '';
-            }
-        } else {
-            // 处理水平拖动结束
-            const finalTranslate = getTranslateX(slidesContainer);
-            const diff = finalTranslate - startTranslate;
-            const slideWidth = modalContent.offsetWidth;
-            
-            slidesContainer.style.transition = 'transform 0.3s ease';
-            
-            if (Math.abs(diff) > 100) {
-                // 如果拖动超过100px，切换到下一张或上一张
-                if (diff > 0 && currentImageIndex > 0) {
-                    showImage(currentImageIndex - 1);
-                } else if (diff < 0 && currentImageIndex < images.length - 1) {
-                    showImage(currentImageIndex + 1);
-                } else {
-                    // 回到当前图片
-                    slidesContainer.style.transform = `translateX(${-currentImageIndex * slideWidth}px)`;
-            slidesContainer.querySelectorAll('.img-preview-img').forEach(img => img.style.transform = '');
-                }
-            } else {
-                // 回到当前图片
-                slidesContainer.style.transform = `translateX(${-currentImageIndex * slideWidth}px)`;
-            slidesContainer.querySelectorAll('.img-preview-img').forEach(img => img.style.transform = '');
-            }
-        }
-        
-        isDragging = false;
-        isVerticalDragging = false;
+        handleDragEnd(verticalDistance, isVerticalDragging);
     });
     
     // 获取元素的translateX值
@@ -517,6 +582,34 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     function closeModal() {
+        // 获取当前显示的图片
+        const currentImg = images[currentImageIndex];
+        
+        // 添加缩放动画类
+        if (currentImg) {
+            // 确保背景图片已经设置了初始缩放
+            if (!currentImg.classList.contains('img-preview-zoom-initial')) {
+                currentImg.classList.add('img-preview-zoom-initial');
+            }
+            
+            // 添加CSS动画类
+            currentImg.classList.add('img-preview-zoom-animation');
+            
+            // 动画结束后清理样式
+            currentImg.addEventListener('animationend', function onAnimEnd() {
+                currentImg.classList.remove('img-preview-zoom-initial');
+                currentImg.classList.remove('img-preview-zoom-animation');
+                currentImg.classList.add('img-preview-zoom-reset');
+                
+                // 延迟一小段时间后移除重置类，确保样式已应用
+                setTimeout(() => {
+                    currentImg.classList.remove('img-preview-zoom-reset');
+                }, 100);
+                
+                currentImg.removeEventListener('animationend', onAnimEnd);
+            }, { once: true });
+        }
+        
         modal.classList.remove('active');
         document.body.style.overflow = ''; // 恢复背景页面滚动
         
@@ -528,6 +621,14 @@ document.addEventListener('DOMContentLoaded', function() {
             // 恢复标题栏显示
             captionContainer.classList.remove('img-preview-hidden');
             modal.style.backgroundColor = '';
+            
+            // 处理iOS Safari触摸事件可能的残留状态
+            isDragging = false;
+            isVerticalDragging = false;
+            isModalContentDragging = false;
         }, 300);
     }
+    
+    // 修复缩略图容器中最后一个缩略图之后的空白问题
+    thumbnailsWrapper.style.paddingRight = '20px'; // 确保缩略图容器右侧有足够的内边距
 });

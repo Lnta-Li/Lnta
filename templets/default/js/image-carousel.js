@@ -23,6 +23,9 @@ class ImageCarousel {
 
             // 添加事件监听
             this.addEventListeners();
+            
+            // 存储实例引用到DOM元素上，以便外部访问
+            container._carouselInstance = this;
         });
     }
 
@@ -251,5 +254,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const carouselContainers = document.querySelectorAll('.image-carousel');
     carouselContainers.forEach(container => {
         new ImageCarousel(container);
+    });
+    
+    // 监听外部更新事件
+    document.addEventListener('carouselExternalUpdate', (e) => {
+        const { carouselElement, targetIndex } = e.detail;
+        if (carouselElement && carouselElement._carouselInstance) {
+            // 如果能找到轮播图实例，直接调用goToSlide方法
+            carouselElement._carouselInstance.currentIndex = targetIndex;
+        }
     });
 });
