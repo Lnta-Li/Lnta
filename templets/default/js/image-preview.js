@@ -114,6 +114,32 @@ document.addEventListener('DOMContentLoaded', function() {
     // 合并两组图片，carousel图片在前
     const images = [...carouselImages, ...contentTypeImages];
     
+    // 存储图片比例信息的缓存对象
+    const imageAspectRatios = {};
+    
+    // 用于计算图片比例并返回对应的aspect-ratio值的函数
+    function getImageAspectRatio(img) {
+        const imgIndex = images.indexOf(img);
+        
+        // 如果已经计算过，直接返回缓存的结果
+        if (imageAspectRatios[imgIndex]) {
+            return imageAspectRatios[imgIndex];
+        }
+        
+        // 计算图片的宽高比并缓存结果
+        const imgWidth = img.naturalWidth || img.width;
+        const imgHeight = img.naturalHeight || img.height;
+        
+        // 保存原始宽高比和预设比例
+        imageAspectRatios[imgIndex] = {
+            original: `${imgWidth} / ${imgHeight}`,
+            isPortrait: imgWidth / imgHeight < 1,
+            preset: imgWidth / imgHeight < 1 ? '9 / 16' : '1 / 1'
+        };
+        
+        return imageAspectRatios[imgIndex];
+    }
+    
     // 当前图片索引
     let currentImageIndex = 0;
     
@@ -160,6 +186,12 @@ document.addEventListener('DOMContentLoaded', function() {
         thumbnail.src = img.src;
         thumbnail.className = 'img-preview-thumbnail';
         thumbnail.dataset.index = index;
+        
+        // 获取图片的比例信息
+        const aspectRatio = getImageAspectRatio(img);
+        // 设置缩略图比例为预设值
+        thumbnail.style.aspectRatio = aspectRatio.preset;
+        
         thumbnail.addEventListener('click', (e) => {
             if (!hasDragged) {
                 showImage(index);
@@ -221,20 +253,16 @@ document.addEventListener('DOMContentLoaded', function() {
         thumbnails.forEach((thumb, i) => {
             thumb.classList.toggle('active', i === index);
             
-            // 为激活的缩略图添加aspect-ratio样式
+            // 获取图片的比例信息
+            const aspectRatio = getImageAspectRatio(images[i]);
+            
+            // 设置正确的aspect-ratio
             if (i === index) {
-                // 获取当前显示的原图
-                const originalImg = images[index];
-                // 获取原图的自然宽高
-                const imgWidth = originalImg.naturalWidth || originalImg.width;
-                const imgHeight = originalImg.naturalHeight || originalImg.height;
-                // 设置缩略图的宽高比为原图的宽高比
-                if (imgWidth && imgHeight) {
-                    thumb.style.aspectRatio = `${imgWidth} / ${imgHeight}`;
-                }
+                // 激活状态的缩略图使用原图的宽高比
+                thumb.style.aspectRatio = aspectRatio.original;
             } else {
-                // 移除非激活缩略图的aspect-ratio样式
-                thumb.style.aspectRatio = '';
+                // 非激活状态的缩略图使用预设比例
+                thumb.style.aspectRatio = aspectRatio.preset;
             }
         });
         
@@ -537,8 +565,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 // 调整模态框透明度和模糊效果
                 const opacity = Math.max(0.3, 1 - verticalDistance / 300);
                 modal.style.backgroundColor = `rgba(51, 51, 51, ${opacity})`;
-                modal.style.backdropFilter = `blur(${blurValue}px)`;
-                modal.style.webkitBackdropFilter = `blur(${blurValue}px)`;
+                //modal.style.backdropFilter = `blur(${blurValue}px)`;
+                //modal.style.webkitBackdropFilter = `blur(${blurValue}px)`;
             }
             
             // 阻止页面滚动
