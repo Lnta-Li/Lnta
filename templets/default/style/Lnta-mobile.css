@@ -8,6 +8,12 @@
     }
 }
 @media screen and (max-width: 768px) {
+    :root {
+        --blur-pagbbodyshow: 0px; /* 页面显示模糊度 0 */
+        --blur-pagebody: 0px; /* 页面隐藏模糊度 10 */
+        --blur-pagebodynav: 0px; /* 页面导航模糊度 1 */
+        --blur-mobnav: 0px; /* 移动端导航模糊度 15 */
+    }
     /* 通用布局调整 */
     .mobile-full {
         width: 100% !important;
@@ -156,8 +162,8 @@
         z-index: 999;
         padding: 0 20px !important;
         transition: left 0.3s;
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
+        backdrop-filter: blur(var(--blur-mobnav));
+        -webkit-backdrop-filter: blur(var(--blur-mobnav));
     }
     
     .navwidth {
