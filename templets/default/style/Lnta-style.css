@@ -20,6 +20,7 @@
     --blur-pagebody: 10px; /* 页面隐藏模糊度 */
     --blur-pagebodynav: 1px; /* 页面导航模糊度 */
     --blur-mobnav: 15px; /* 移动端导航模糊度 */
+    --blur-imgtitle: 30px; /* 图片预览标题框 */
 }
 
 body {

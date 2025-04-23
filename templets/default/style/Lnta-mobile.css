@@ -13,6 +13,7 @@
         --blur-pagebody: 0px; /* 页面隐藏模糊度 10 */
         --blur-pagebodynav: 0px; /* 页面导航模糊度 1 */
         --blur-mobnav: 0px; /* 移动端导航模糊度 15 */
+        --blur-imgtitle: 0px; /* 图片预览标题框 */
     }
     /* 通用布局调整 */
     .mobile-full {
