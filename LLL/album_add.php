@@ -129,13 +129,31 @@ else if($dopost=='save')
         }
     }
     
-
+    //检测上传的图片是否存在问题
+    if(!empty($_POST['picinfos']))
+    {
+        $dsql->SetQuery("SELECT aid FROM `#@__uploads` WHERE aid='{$_POST['picinfos']}' AND type='album' ");
+        $row = $dsql->GetArray();
+        if(!is_array($row))
+        {
+            ShowMsg("无法找到已上传的图片，请重新上传！", "-1");
+            exit();
+        }
+    }
+    
     //生成文档ID
     $arcID = GetIndexKey($arcrank,$typeid,$sortrank,$channelid,$senddate,$adminid);
     if(empty($arcID))
     {
         ShowMsg("无法获得主键，因此无法进行后续操作！","-1");
         exit();
+    }
+
+    // 生成子缩略图
+    $subpic = '';
+    if(!empty($picname) && isset($make_subpic) && $make_subpic==1) {
+        require_once(DEDEINC.'/extend.func.php');
+        $subpic = createSubPic($picname, 40, 40, $arcID);
     }
 
     $imgurls = "{dede:pagestyle maxwidth='$maxwidth' pagepicnum='$pagepicnum' ddmaxwidth='$ddmaxwidth' row='$row' col='$col' value='$pagestyle'/}\r\n";
@@ -336,15 +354,17 @@ else if($dopost=='save')
     $small_img = isset($small_img) ? 1 : 0;
     
     //加入主档案表
-    $query = "INSERT INTO `#@__archives`(id,typeid,typeid2,sortrank,flag,ismake,channel,arcrank,click,money,title,shorttitle,
-     color,writer,source,litpic,pubdate,senddate,mid,notpost,description,keywords,filename,dutyadmin,weight,hide_thumb,small_img)
-    VALUES ('$arcID','$typeid','$typeid2','$sortrank','$flag','$ismake','$channelid','$arcrank','$click','$money','$title','$shorttitle',
-    '$color','$writer','$source','$litpic','$pubdate','$senddate','$adminid','$notpost','$description','$keywords','$filename','$adminid','$weight','$hide_thumb','$small_img'); ";
-    if(!$dsql->ExecuteNoneQuery($query))
+    $okdd = 0;
+    $litpic = $picname;
+    $inQuery = "INSERT INTO `#@__archives`(id,typeid,sortrank,flag,ismake,channel,arcrank,click,money,title,shorttitle,
+      color,writer,source,litpic,subpic,pubdate,senddate,mid,voteid,notpost,description,keywords,filename,dutyadmin,weight)
+    VALUES ('$arcID','$typeid','$sortrank','$flag','$ismake','$channelid','$arcrank','$click','$money','$title',
+      '$shorttitle','$color','$writer','$source','$litpic','$subpic','$pubdate','$senddate','$adminid','$voteid',
+      '$notpost','$description','$keywords','$filename','$adminid','$weight');";
+    if(!$dsql->ExecuteNoneQuery($inQuery))
     {
-        $gerr = $dsql->GetError();
-        $dsql->ExecuteNoneQuery(" DELETE FROM `#@__arctiny` WHERE id='$arcID' ");
-        ShowMsg("把数据保存到数据库主表 `#@__archives` 时出错，请把相关信息提交给DedeCMS官方。".str_replace('"','',$gerr),"javascript:;");
+        $dsql->ExecuteNoneQuery("Delete From `#@__arctiny` where id='$arcID'");
+        ShowMsg("把数据保存到数据库主表 `#@__archives` 时出错，请检查你的参数是否存在问题！","javascript:;");
         exit();
     }
 
@@ -422,4 +442,15 @@ else if($dopost=='save')
     $win->AddMsgItem($msg);
     $winform = $win->GetWindow("hand","&nbsp;",FALSE);
     $win->Display();
+
+    if(empty($rowfiles->picnames))
+    {
+        $inQuery = "INSERT INTO `#@__addonimages`(aid,typeid,pagestyle,maxwidth,imgurls,row,col,isrm,ddmaxwidth,ddmaxheight,body,redirecturl,templet,userip,subpic)
+          VALUES ('$arcID','$typeid','$pagestyle','$maxwidth','$imgurls','$row','$col','$isrm','$ddmaxwidth','$ddmaxheight','$body','','','$userip','$subpic');";
+    }
+    else
+    {
+        $inQuery = "INSERT INTO `#@__addonimages`(aid,typeid,pagestyle,maxwidth,imgurls,row,col,isrm,ddmaxwidth,ddmaxheight,body,redirecturl,templet,userip,subpic)
+          VALUES ('$arcID','$typeid','$pagestyle','$maxwidth','$imgurls','$row','$col','$isrm','$ddmaxwidth','$ddmaxheight','$body','','','$userip','$subpic');";
+    }
 }

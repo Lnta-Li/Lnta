@@ -212,6 +212,13 @@ else if($dopost=='save')
     //处理小图模式选项  
     $small_img = isset($small_img) ? 1 : 0;
 
+    //生成子缩略图
+    $subpic = '';
+    if(!empty($picname) && isset($make_subpic) && $make_subpic==1) {
+        require_once(DEDEINC.'/extend.func.php');
+        $subpic = createSubPic($picname, 40, 40, $id);
+    }
+
     //更新数据库的SQL语句
     $query = "UPDATE `#@__archives` SET
     `typeid` = '{$typeid}',
@@ -237,7 +244,8 @@ else if($dopost=='save')
     `dutyadmin` = '{$adminid}',
     `weight` = '{$weight}',
     `hide_thumb` = '{$hide_thumb}',
-    `small_img` = '{$small_img}'
+    `small_img` = '{$small_img}',
+    `subpic` = '{$subpic}'
     WHERE `id` = '{$id}';";
 
     if(!$dsql->ExecuteNoneQuery($query))
@@ -252,7 +260,7 @@ else if($dopost=='save')
     {
         $useip = GetIP();
         $templet = empty($templet) ? '' : $templet;
-        $iquery = "UPDATE `$addtable` SET typeid='$typeid',body='$body'{$inadd_f},redirecturl='$redirecturl',templet='$templet',userip='$useip' WHERE aid='$id'";
+        $iquery = "UPDATE `$addtable` SET typeid='$typeid',body='$body'{$inadd_f},redirecturl='$redirecturl',templet='$templet',userip='$useip',subpic='$subpic' WHERE aid='$id'";
         if(!$dsql->ExecuteNoneQuery($iquery))
         {
             ShowMsg("更新附加表 `$addtable`  时出错，请检查原因！","javascript:;");

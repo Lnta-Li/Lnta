@@ -114,3 +114,173 @@ function auto_translate($text) {
         return ($translated !== $text) ? $translated : $text;
     }
 }
+
+/**
+ * 生成子缩略图并返回路径
+ * @param string $litpic 原缩略图路径
+ * @param int $width 生成的子缩略图宽度，默认40px
+ * @param int $height 生成的子缩略图高度，默认40px
+ * @param int $aid 文章ID，用于绑定缩略图文件名和关联uploads表记录
+ * @return string 子缩略图路径
+ */
+function createSubPic($litpic, $width = 40, $height = 40, $aid = 0)
+{
+    global $dsql;
+    
+    if(empty($litpic)) {
+        return '';
+    }
+    
+    // 检查原图是否存在
+    $litpic = str_replace($GLOBALS['cfg_basehost'], '', $litpic);
+    $fullLitpicPath = $GLOBALS['cfg_basedir'] . $litpic;
+    
+    if(!file_exists($fullLitpicPath)) {
+        return '';
+    }
+    
+    // 创建保存子缩略图的目录
+    $subPicDir = $GLOBALS['cfg_basedir'] . '/uploads/subpic';
+    if(!is_dir($subPicDir)) {
+        mkdir($subPicDir, 0777, true);
+    }
+    
+    // 生成子缩略图文件名（基于文章ID和宽高）
+    $fileInfo = pathinfo($litpic);
+    $fileExt = isset($fileInfo['extension']) ? $fileInfo['extension'] : 'jpg';
+    
+    if($aid > 0) {
+        // 使用文章ID作为文件名前缀
+        $fileName = 'article_' . $aid . '_' . $width . 'x' . $height . '.' . $fileExt;
+    } else {
+        // 如果没有文章ID，使用哈希值
+        $fileName = md5($litpic) . '_' . $width . 'x' . $height . '.' . $fileExt;
+    }
+    
+    $subPicPath = '/uploads/subpic/' . $fileName;
+    $fullSubPicPath = $GLOBALS['cfg_basedir'] . $subPicPath;
+    
+    // 获取原图信息
+    list($srcWidth, $srcHeight, $srcType) = getimagesize($fullLitpicPath);
+    
+    // 创建新图像
+    $dst = imagecreatetruecolor($width, $height);
+    
+    // 根据原图类型创建图像资源
+    switch($srcType) {
+        case 1: // GIF
+            $src = imagecreatefromgif($fullLitpicPath);
+            break;
+        case 2: // JPEG
+            $src = imagecreatefromjpeg($fullLitpicPath);
+            break;
+        case 3: // PNG
+            $src = imagecreatefrompng($fullLitpicPath);
+            // 保留PNG透明度
+            imagealphablending($dst, false);
+            imagesavealpha($dst, true);
+            break;
+        case 18: // WEBP (PHP 7.1.0及以上支持)
+            if(function_exists('imagecreatefromwebp')) {
+                $src = imagecreatefromwebp($fullLitpicPath);
+                // 保留WEBP透明度
+                imagealphablending($dst, false);
+                imagesavealpha($dst, true);
+            } else {
+                return '';
+            }
+            break;
+        default:
+            return '';
+    }
+    
+    // 计算等比例缩放后的尺寸和裁切位置
+    $ratio_orig = $srcWidth / $srcHeight;
+    $ratio_target = $width / $height;
+    
+    if ($ratio_orig > $ratio_target) {
+        // 原图较宽，高度缩放到目标高度，宽度按比例缩放，然后裁切多余宽度
+        $temp_height = $height;
+        $temp_width = ceil($height * $ratio_orig);
+        $src_x = ceil(($temp_width - $width) / 2);
+        $src_y = 0;
+    } else {
+        // 原图较高或相等，宽度缩放到目标宽度，高度按比例缩放，然后裁切多余高度
+        $temp_width = $width;
+        $temp_height = ceil($width / $ratio_orig);
+        $src_x = 0;
+        $src_y = ceil(($temp_height - $height) / 2);
+    }
+    
+    // 创建临时画布进行等比例缩放
+    $temp = imagecreatetruecolor($temp_width, $temp_height);
+    
+    // 对临时画布设置透明度处理
+    if($srcType == 3 || $srcType == 18) {
+        imagealphablending($temp, false);
+        imagesavealpha($temp, true);
+    }
+    
+    // 将原图等比例缩放到临时画布
+    imagecopyresampled($temp, $src, 0, 0, 0, 0, $temp_width, $temp_height, $srcWidth, $srcHeight);
+    
+    // 将临时画布上的图像裁切到目标尺寸
+    imagecopy($dst, $temp, 0, 0, $src_x, $src_y, $width, $height);
+    
+    // 释放临时资源
+    imagedestroy($temp);
+    
+    // 保存缩略图
+    switch($srcType) {
+        case 1: // GIF
+            imagegif($dst, $fullSubPicPath);
+            break;
+        case 2: // JPEG
+            imagejpeg($dst, $fullSubPicPath, 50); // 质量为50
+            break;
+        case 3: // PNG
+            imagepng($dst, $fullSubPicPath);
+            break;
+        case 18: // WEBP
+            if(function_exists('imagewebp')) {
+                imagewebp($dst, $fullSubPicPath, 50); // 质量为50
+            }
+            break;
+    }
+    
+    // 释放资源
+    imagedestroy($src);
+    imagedestroy($dst);
+    
+    // 记录到uploads表中，便于管理和删除
+    if($aid > 0) {
+        // 获取文件大小
+        $filesize = filesize($fullSubPicPath);
+        $adminid = isset($GLOBALS['adminid']) ? $GLOBALS['adminid'] : 1;
+        $title = "子缩略图{$width}x{$height}";
+        
+        // 检查是否已经存在相同aid、url的记录
+        $check_query = "SELECT `aid` FROM `#@__uploads` WHERE `arcid`='{$aid}' AND `url`='{$subPicPath}' LIMIT 0,1";
+        $row = $dsql->GetOne($check_query);
+        
+        if(is_array($row)) {
+            // 更新现有记录
+            $update_query = "UPDATE `#@__uploads` SET 
+                           `title`='{$title}',
+                           `mediatype`='1',
+                           `width`='{$width}',
+                           `height`='{$height}',
+                           `filesize`='{$filesize}',
+                           `uptime`='".time()."'
+                           WHERE `arcid`='{$aid}' AND `url`='{$subPicPath}'";
+            $dsql->ExecuteNoneQuery($update_query);
+        } else {
+            // 插入新记录
+            $insert_query = "INSERT INTO `#@__uploads`(title,url,mediatype,width,height,playtime,filesize,uptime,mid,arcid) 
+                           VALUES('{$title}','{$subPicPath}','1','{$width}','{$height}','0','{$filesize}','".time()."','{$adminid}','{$aid}')";
+            $dsql->ExecuteNoneQuery($insert_query);
+        }
+    }
+    
+    return $subPicPath;
+}

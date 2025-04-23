@@ -194,17 +194,58 @@ else if($dopost=='save')
     $small_img = isset($small_img) ? 1 : 0;
 
     //保存到主表
-    $query = "INSERT INTO `#@__archives`(id,typeid,typeid2,sortrank,flag,ismake,channel,arcrank,click,money,title,shorttitle,
-    color,writer,source,litpic,pubdate,senddate,mid,voteid,notpost,description,keywords,filename,dutyadmin,weight,hide_thumb,small_img)
-    VALUES ('$arcID','$typeid','$typeid2','$sortrank','$flag','$ismake','$channelid','$arcrank','$click','$money',
-    '$title','$shorttitle','$color','$writer','$source','$litpic','$pubdate','$senddate',
-    '$adminid','$voteid','$notpost','$description','$keywords','$filename','$adminid','$weight','$hide_thumb','$small_img');";
+    $litpic = "";
+    if(!empty($picname))
+    {
+        $litpic = $picname;
+        $title = HtmlReplace($title,1);
+    }
+    else
+    {
+        $title = HtmlReplace($title,0);
+    }
 
-    if(!$dsql->ExecuteNoneQuery($query))
+    // 生成子缩略图
+    $subpic = '';
+    if(!empty($litpic) && isset($make_subpic) && $make_subpic==1) {
+        require_once(DEDEINC.'/extend.func.php');
+        $subpic = createSubPic($litpic, 40, 40, $arcID);
+    }
+
+    //如果不用缩略图，清空缩略图字段
+    if($litpic=='litpic' || empty($litpic))
+    {
+        $litpic = '';
+    }
+
+    $channelid = -1;
+    if(isset($channelid) && is_numeric($channelid))
+    {
+        $channelid = $channelid;
+    }
+    //处理自定义字段会用到这些变量
+    if(!isset($autokey)) $autokey = 0;
+    if(!isset($remote)) $remote = 0;
+    if(!isset($dellink)) $dellink = 0;
+    if(!isset($autolitpic)) $autolitpic = 0;
+    if(!isset($writer)) $writer = '';
+    if(!isset($source)) $source = '';
+    if(!isset($shorttitle)) $shorttitle = '';
+
+    //增加文档
+    if(empty($click)) $click = ($cfg_arc_click=='-1' ? mt_rand(50, 200) : $cfg_arc_click);
+
+    $inQuery = "INSERT INTO `#@__archives`(id,typeid,typeid2,sortrank,flag,ismake,channel,arcrank,click,money,title,shorttitle,
+    color,writer,source,litpic,subpic,pubdate,senddate,mid,voteid,notpost,description,keywords,filename,dutyadmin,weight)
+    VALUES ('$arcID','$typeid','$typeid2','$sortrank','$flag','$ismake','$channelid','$arcrank','$click','$money',
+    '$title','$shorttitle','$color','$writer','$source','$litpic','$subpic','$pubdate','$senddate',
+    '$adminid','$voteid','$notpost','$description','$keywords','$filename','$adminid','$weight');";
+
+    if(!$dsql->ExecuteNoneQuery($inQuery))
     {
         $gerr = $dsql->GetError();
         $dsql->ExecuteNoneQuery("DELETE FROM `#@__arctiny` WHERE id='$arcID'");
-        ShowMsg("把数据保存到数据库主表 `#@__archives` 时出错，请把相关信息提交给DedeCMS官方。".str_replace('"','',$gerr),"javascript:;");
+        ShowMsg("把数据保存到数据库主表 `#@__archives` 时出错，请把相关信息提交给DedeCms官方。".str_replace('"','',$gerr),"javascript:;");
         exit();
     }
 
@@ -278,7 +319,6 @@ else if($dopost=='save')
         $artUrl = $cfg_phpurl."/view.php?aid=$arcID";
     }
     ClearMyAddon($arcID, $title);
-
 
     //返回成功信息
     $msg = "    　　请选择你的后续操作：
