@@ -40,7 +40,7 @@
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(51, 51, 51, 0.5);
+    background-color: rgb(51, 51, 51);
     overflow: hidden;
     opacity: 0;
     transition: opacity 0.3s ease, background-color 0.3s ease;
@@ -134,7 +134,7 @@
 .img-preview-close:hover {
     color: var(--Key-color);
 }
-
+/*
 .img-preview-nav {
     position: absolute;
     top: 50%;
@@ -164,7 +164,7 @@
 .img-preview-nav.next {
     right: 20px;
 }
-
+*/
 .img-preview-thumbnails {
     z-index: 1001;
     background: rgba(0, 0, 0, 0.5);
@@ -293,8 +293,8 @@
     top: 15px;
     border-radius: 4px;
     background: rgb(255 255 255 / 50%);
-    backdrop-filter: blur(30px) brightness(1.5);
-    -webkit-backdrop-filter: blur(30px) brightness(1.5);
+    backdrop-filter: blur(var(--blur-imgtitle)) brightness(1.5);
+    -webkit-backdrop-filter: blur(var(--blur-imgtitle)) brightness(1.5);
     color: #000;
     padding: 5px 10px;
     z-index: 1;
