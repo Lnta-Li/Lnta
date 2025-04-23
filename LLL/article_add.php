@@ -205,11 +205,11 @@ else if($dopost=='save')
         $title = HtmlReplace($title,0);
     }
 
-    // 生成子缩略图
+    // 生成小尺寸缩略图
     $subpic = '';
     if(!empty($litpic) && isset($make_subpic) && $make_subpic==1) {
         require_once(DEDEINC.'/extend.func.php');
-        $subpic = createSubPic($litpic, 40, 40, $arcID);
+        $subpic = createSubPic($litpic, 0, 0, $arcID);
     }
 
     //如果不用缩略图，清空缩略图字段

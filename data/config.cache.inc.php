@@ -216,4 +216,5 @@ $cfg_font_icon = '@font-face {
     -webkit-text-stroke-width: 0.2px;
     -moz-osx-font-smoothing: grayscale;
 }';
+$cfg_subpic_size = 80;
 ?>

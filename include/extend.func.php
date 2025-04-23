@@ -116,16 +116,20 @@ function auto_translate($text) {
 }
 
 /**
- * 生成子缩略图并返回路径
+ * 生成小尺寸缩略图并返回路径
  * @param string $litpic 原缩略图路径
- * @param int $width 生成的子缩略图宽度，默认40px
- * @param int $height 生成的子缩略图高度，默认40px
+ * @param int $width 生成的小尺寸缩略图宽度，默认使用cfg_subpic_size配置
+ * @param int $height 生成的小尺寸缩略图高度，默认使用cfg_subpic_size配置
  * @param int $aid 文章ID，用于绑定缩略图文件名和关联uploads表记录
- * @return string 子缩略图路径
+ * @return string 小尺寸缩略图路径
  */
-function createSubPic($litpic, $width = 40, $height = 40, $aid = 0)
+function createSubPic($litpic, $width = 0, $height = 0, $aid = 0)
 {
-    global $dsql;
+    global $dsql, $cfg_subpic_size;
+    
+    // 如果未指定宽高，使用全局配置
+    if($width == 0) $width = empty($cfg_subpic_size) ? 80 : $cfg_subpic_size;
+    if($height == 0) $height = empty($cfg_subpic_size) ? 80 : $cfg_subpic_size;
     
     if(empty($litpic)) {
         return '';
@@ -139,7 +143,7 @@ function createSubPic($litpic, $width = 40, $height = 40, $aid = 0)
         return '';
     }
     
-    // 创建保存子缩略图的目录
+    // 创建保存小尺寸缩略图的目录
     $subPicDir = $GLOBALS['cfg_basedir'] . '/uploads/subpic';
     if(!is_dir($subPicDir)) {
         mkdir($subPicDir, 0777, true);
@@ -150,15 +154,20 @@ function createSubPic($litpic, $width = 40, $height = 40, $aid = 0)
     $fileExt = isset($fileInfo['extension']) ? $fileInfo['extension'] : 'jpg';
     
     if($aid > 0) {
-        // 使用文章ID作为文件名前缀
-        $fileName = 'article_' . $aid . '_' . $width . 'x' . $height . '.' . $fileExt;
+        // 使用文档ID作为文件名前缀
+        $fileName = 'subpic_' . $aid . '.' . $fileExt;
     } else {
-        // 如果没有文章ID，使用哈希值
-        $fileName = md5($litpic) . '_' . $width . 'x' . $height . '.' . $fileExt;
+        // 如果没有文档ID，使用哈希值
+        $fileName = 'subpic_' . substr(md5($litpic), 0, 8) . '.' . $fileExt;
     }
     
     $subPicPath = '/uploads/subpic/' . $fileName;
     $fullSubPicPath = $GLOBALS['cfg_basedir'] . $subPicPath;
+    
+    // 如果文件已存在，直接返回路径
+    if(file_exists($fullSubPicPath)) {
+        return $subPicPath;
+    }
     
     // 获取原图信息
     list($srcWidth, $srcHeight, $srcType) = getimagesize($fullLitpicPath);
@@ -236,14 +245,14 @@ function createSubPic($litpic, $width = 40, $height = 40, $aid = 0)
             imagegif($dst, $fullSubPicPath);
             break;
         case 2: // JPEG
-            imagejpeg($dst, $fullSubPicPath, 50); // 质量为50
+            imagejpeg($dst, $fullSubPicPath, 70); // 质量为70
             break;
         case 3: // PNG
             imagepng($dst, $fullSubPicPath);
             break;
         case 18: // WEBP
             if(function_exists('imagewebp')) {
-                imagewebp($dst, $fullSubPicPath, 50); // 质量为50
+                imagewebp($dst, $fullSubPicPath, 70); // 质量为70
             }
             break;
     }
@@ -257,7 +266,7 @@ function createSubPic($litpic, $width = 40, $height = 40, $aid = 0)
         // 获取文件大小
         $filesize = filesize($fullSubPicPath);
         $adminid = isset($GLOBALS['adminid']) ? $GLOBALS['adminid'] : 1;
-        $title = "子缩略图{$width}x{$height}";
+        $title = "小尺寸缩略图(subpic_{$aid})";
         
         // 检查是否已经存在相同aid、url的记录
         $check_query = "SELECT `aid` FROM `#@__uploads` WHERE `arcid`='{$aid}' AND `url`='{$subPicPath}' LIMIT 0,1";
