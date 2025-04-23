@@ -161,11 +161,11 @@ else if($dopost=='save')
     //处理小图模式选项
     $small_img = isset($small_img) ? 1 : 0;
     
-    // 生成子缩略图
+    // 生成小尺寸缩略图
     $subpic = '';
     if(!empty($litpic) && isset($make_subpic) && $make_subpic==1) {
         require_once(DEDEINC.'/extend.func.php');
-        $subpic = createSubPic($litpic, 40, 40, $id);
+        $subpic = createSubPic($litpic, 0, 0, $id);
     }
     
     //更新数据库的SQL语句

@@ -149,11 +149,11 @@ else if($dopost=='save')
         exit();
     }
 
-    // 生成子缩略图
+    // 生成小尺寸缩略图
     $subpic = '';
     if(!empty($picname) && isset($make_subpic) && $make_subpic==1) {
         require_once(DEDEINC.'/extend.func.php');
-        $subpic = createSubPic($picname, 40, 40, $arcID);
+        $subpic = createSubPic($picname, 0, 0, $arcID);
     }
 
     $imgurls = "{dede:pagestyle maxwidth='$maxwidth' pagepicnum='$pagepicnum' ddmaxwidth='$ddmaxwidth' row='$row' col='$col' value='$pagestyle'/}\r\n";
