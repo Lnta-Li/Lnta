@@ -656,7 +656,4 @@ document.addEventListener('DOMContentLoaded', function() {
             isModalContentDragging = false;
         }, 300);
     }
-    
-    // 修复缩略图容器中最后一个缩略图之后的空白问题
-    thumbnailsWrapper.style.paddingRight = '20px'; // 确保缩略图容器右侧有足够的内边距
 });
