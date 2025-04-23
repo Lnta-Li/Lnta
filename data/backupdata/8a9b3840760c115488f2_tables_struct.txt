@@ -25,6 +25,7 @@ CREATE TABLE `dede_addonimages` (
   `userip` char(15) NOT NULL DEFAULT '',
   `redirecturl` varchar(255) NOT NULL DEFAULT '',
   `body` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `subpic` varchar(100) NOT NULL DEFAULT '',
   PRIMARY KEY (`aid`),
   KEY `imagesMain` (`typeid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -174,6 +175,7 @@ CREATE TABLE `dede_archives` (
   `writer` char(20) NOT NULL DEFAULT '',
   `source` char(30) NOT NULL DEFAULT '',
   `litpic` char(100) NOT NULL DEFAULT '',
+  `subpic` varchar(100) NOT NULL DEFAULT '',
   `pubdate` int(10) unsigned NOT NULL DEFAULT '0',
   `senddate` int(10) unsigned NOT NULL DEFAULT '0',
   `mid` mediumint(8) unsigned NOT NULL DEFAULT '0',

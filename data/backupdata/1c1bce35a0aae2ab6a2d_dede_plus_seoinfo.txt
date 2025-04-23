@@ -64,3 +64,5 @@ INSERT INTO `dede_plus_seoinfo` VALUES('63','1744851904','0','0','0','0','0');
 INSERT INTO `dede_plus_seoinfo` VALUES('64','1744937893','0','0','0','0','0');
 INSERT INTO `dede_plus_seoinfo` VALUES('65','1744963870','0','0','0','0','0');
 INSERT INTO `dede_plus_seoinfo` VALUES('66','1745285905','0','0','0','0','0');
+INSERT INTO `dede_plus_seoinfo` VALUES('67','1745335993','0','0','0','0','0');
+INSERT INTO `dede_plus_seoinfo` VALUES('68','1745388445','0','0','0','0','0');
