@@ -722,3 +722,54 @@ function list_sort_by($list, $field, $sortby='asc') {
    }
    return false;
 }
+
+//获取档案的链接
+function GetArcUrl($aid,$typeid,$timetag,$title,$ismake,$rank,$namerule,$typedir,$money,$filename,$morecheck='')
+{
+    return GetFileUrl($aid,$typeid,$timetag,$title,$ismake,$rank,$namerule,$typedir,$money,$filename,$morecheck);
+}
+
+//获取指定字段的值
+function GetField($aid, $field)
+{
+    global $dsql;
+    if(isset($this->ChannelUnit->ChannelFields[$field]))
+    {
+        $row = $dsql->GetOne("SELECT `$field` FROM `{$this->ChannelUnit->ChannelInfos['addtable']}` WHERE aid='$aid' ");
+        return $row[$field];
+    }
+    else if($field == 'arcurl')
+    {
+        return $this->GetArcUrl($aid);
+    }
+    else if($field == 'typeurl')
+    {
+        if(!empty($this->TypeLinks[$typeid]))
+        {
+            return $this->TypeLinks[$typeid];
+        }
+        else
+        {
+            return $this->GetTypeUrl($typeid);
+        }
+    }
+    else if($field == 'subpic' || preg_match("#[0-9a-z]{32}#", $field))
+    {
+        $row = $dsql->GetOne("SELECT arc.subpic,arc.aid,arc.typeid,ch.addtable FROM `#@__archives` arc LEFT JOIN `#@__channeltype` ch ON ch.id=arc.channel WHERE arc.id='$aid'");
+        if($field == 'subpic')
+        {
+            return $row['subpic'];
+        }
+        else
+        {
+            $addtable = $row['addtable'];
+            $row = $dsql->GetOne("SELECT `$field` FROM `$addtable` WHERE aid='{$row['aid']}' ");
+            return isset($row[$field]) ? $row[$field] : '';
+        }
+    }
+    else
+    {
+        $row = $dsql->GetOne("SELECT `$field` FROM `#@__archives` WHERE id='$aid'");
+        return isset($row[$field]) ? $row[$field] : '';
+    }
+}

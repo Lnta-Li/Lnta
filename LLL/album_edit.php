@@ -161,6 +161,13 @@ else if($dopost=='save')
     //处理小图模式选项
     $small_img = isset($small_img) ? 1 : 0;
     
+    // 生成子缩略图
+    $subpic = '';
+    if(!empty($litpic) && isset($make_subpic) && $make_subpic==1) {
+        require_once(DEDEINC.'/extend.func.php');
+        $subpic = createSubPic($litpic, 40, 40, $id);
+    }
+    
     //更新数据库的SQL语句
     $query = "
     UPDATE `#@__archives` SET
@@ -177,6 +184,7 @@ else if($dopost=='save')
     source='$source',
     writer='$writer',
     litpic='$litpic',
+    subpic='$subpic',
     pubdate='$pubdate',
     notpost='$notpost',
     description='$description',
@@ -430,7 +438,8 @@ else if($dopost=='save')
             `col` = '{$col}',
             `isrm` = '{$isrm}' {$inadd_f},
             `redirecturl` = '{$redirecturl}',
-            `userip` = '{$useip}'
+            `userip` = '{$useip}',
+            `subpic` = '{$subpic}'
             WHERE `aid` = '{$id}';";
         if(!$dsql->ExecuteNoneQuery($query))
         {

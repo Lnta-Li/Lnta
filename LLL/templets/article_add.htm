@@ -267,25 +267,15 @@ function delAlbPicOld(picfile, pid){
       <td height="24" colspan="5" class="bline">
       	<table width="800" border="0" cellspacing="0" cellpadding="0">
           <tr>
-            <td width="90"> &nbsp;缩 略 图：</td>
-            <td width="560">
-            	<table width="100%" border="0" cellspacing="1" cellpadding="1">
-                <tr>
-                  <td height="30">
-                  <input name="picname" type="text" id="picname" style="width:240px" />
-                  <input type="button"  value="本地上传" style="width:70px;cursor:pointer;" />
-                  <iframe name='uplitpicfra' id='uplitpicfra' src='' width='200' height='200' style='display:none'></iframe>
-                  <span class="litpic_span"><input name="litpic" type="file" id="litpic"  onChange="SeePicNew(this, 'divpicview', 'uplitpicfra', 165, 'article_add.php');" size="1" class='np coolbg'/></span>
-                  <input type="button" name="Submit2" value="站内选择" style="margin-left:8px;" onClick="SelectImage('form1.picname','small');" class='np coolbg'/>
-                  <input type="button" name="Submit2" value="裁剪" style="margin-left:8px;" onClick="imageCut('picname');" class='np coolbg'/>
-                  <br>
-                  <input type='checkbox' class='np' name='ddisremote' value='1' id='ddisremote'/>远程
-                  <input type='checkbox' id='hide_thumb' name='hide_thumb' value='1' class='np' />隐藏缩略图
-                  <input type='checkbox' id='small_img' name='small_img' value='1' class='np' />小图模式
-                  </td>
-                </tr>
-              </table>
-             </td>
+            <td width="90" height="81">&nbsp;缩 略 图：</td>
+            <td><input name="litpic" type="text" id="litpic" style="width:300px" />
+              <input type="button" name="Submit" value="浏览..." style="width:70px" onClick="SelectImage('form1.litpic','');">
+              <input type="button" name="Submit2" value="裁剪" style="margin-left:8px;" onClick="imageCut('litpic');" class='np coolbg'/>
+              <br/>
+              <input type='checkbox' class='np' name='ddisremote' value='1' />远程 
+              <input type='checkbox' class='np' name='autolitpic' value='1' checked />提取第一个图片为缩略图
+              <input type='checkbox' class='np' name='make_subpic' value='1' checked />生成子缩略图
+            </td>
             <td width="150" align="center">
             <div id='divpicview' class='divpre'></div>
             </td>

@@ -565,8 +565,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 // 调整模态框透明度和模糊效果
                 const opacity = Math.max(0.3, 1 - verticalDistance / 300);
                 modal.style.backgroundColor = `rgba(51, 51, 51, ${opacity})`;
-                //modal.style.backdropFilter = `blur(${blurValue}px)`;
-                //modal.style.webkitBackdropFilter = `blur(${blurValue}px)`;
+                modal.style.backdropFilter = `blur(${blurValue}px)`;
+                modal.style.webkitBackdropFilter = `blur(${blurValue}px)`;
             }
             
             // 阻止页面滚动
