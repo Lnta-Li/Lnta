@@ -9,10 +9,10 @@
 }
 @media screen and (max-width: 768px) {
     :root {
-        --blur-pagebody: 0px; /* 页面隐藏模糊度 10 */
-        --blur-pagebodynav: 0px; /* 页面导航模糊度 1 */
-        --blur-mobnav: 0px; /* 移动端导航模糊度 15 */
-        --blur-imgtitle: 0px; /* 图片预览标题框 30 */
+        --blur-pagebody: 10px; /* 页面隐藏模糊度 10 */
+        --blur-pagebodynav: 1px; /* 页面导航模糊度 1 */
+        --blur-mobnav: 15px; /* 移动端导航模糊度 15 */
+        --blur-imgtitle: 30px; /* 图片预览标题框 30 */
         --blur-carouseltitle: 50px; /* 轮播图标题框 50 */
     }
     /* 通用布局调整 */
@@ -167,12 +167,17 @@
         -webkit-backdrop-filter: blur(var(--blur-mobnav));
     }
     
+    .waterfall-img img {
+        min-height: 10vh;
+    }
+
+
     .navwidth {
        max-width: none; 
     }
     
     .home-active .home, .mobile-nav .active {
-        color: var(--Key-color);
+        color: var(--menu-text-active);
     }
 
     .header {

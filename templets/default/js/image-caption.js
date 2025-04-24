@@ -5,12 +5,19 @@ link.href = '/templets/default/style/image-caption.css';
 document.head.appendChild(link);
 
 document.addEventListener('DOMContentLoaded', function() {    
-    // 检查是否为小图模式
+    // 检查是否为iPhone设备，这里的检查是为了解决\js\image-preview.js里面的一个不知道原因的bug即：iphone上只有小图模式背景网页的位置才能跟随图片浏览器切换，但也有例外，比如在/a/Orther/2025/0417/49.html这个页面，虽然是小图模式，但还是无法正常切换
     let isSmallImg = false;
-    // 方法1：通过meta标签获取
-    const smallImgMeta = document.querySelector('meta[name="small_img"]');
-    if (smallImgMeta) {
-        isSmallImg = smallImgMeta.getAttribute('content') === '1';
+    const userAgent = navigator.userAgent.toLowerCase();
+    if (userAgent.indexOf('iphone') > -1) {
+        // 如果是iPhone设备，直接启用小图模式
+        isSmallImg = true;
+    } else {
+        // 不是iPhone设备，再检查是否为小图模式
+        // 方法1：通过meta标签获取
+        const smallImgMeta = document.querySelector('meta[name="small_img"]');
+        if (smallImgMeta) {
+            isSmallImg = smallImgMeta.getAttribute('content') === '1';
+        }
     }
     // 获取文章内容区域中的所有图片，并排除id为no-title的图片
     const images = Array.from(document.querySelectorAll('.Content-Type img')).filter(img => img.id !== 'no-title');

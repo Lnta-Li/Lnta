@@ -1,0 +1,24 @@
+# Nginx配置，添加到server块中
+# error_page 404 /404.html;
+# location = /404.html {
+#     root /path/to/your/site;
+#     internal;
+# }
+
+# 伪静态规则
+location / {
+    if (!-e $request_filename) {
+        rewrite ^/index\.html$ /index.php last;
+        rewrite ^/tags\.html$ /tags.php last;
+        rewrite ^/tags/([^/]+)\.html$ /tags.php?/$1 last;
+        rewrite ^/tags/([^/]+)/$ /tags.php?/$1 last;
+        rewrite ^/tags/([^/]+)/([0-9]+)\.html$ /tags.php?/$1/$2 last;
+        rewrite ^/tags/([^/]+)/([0-9]+)/$ /tags.php?/$1/$2 last;
+        rewrite ^/(.*)/$ /plus/list.php?tid=$1 last;
+        rewrite ^/(.*)/list_([0-9]+)_([0-9]+)\.html$ /plus/list.php?tid=$1&PageNo=$2 last;
+        rewrite ^/(.*)/([0-9]+)\.html$ /plus/view.php?aid=$1 last;
+        rewrite ^/(.*)/([0-9]+)_([0-9]+)\.html$ /plus/view.php?aid=$1&pageno=$2 last;
+        rewrite ^/search/(.*)-([0-9]+)\.html$ /plus/search.php?q=$1&PageNo=$2&pagesize=10&searchtype=title last;
+        rewrite ^/search/(.*)\.html$ /plus/search.php?q=$1&pagesize=10&searchtype=title last;
+    }
+}

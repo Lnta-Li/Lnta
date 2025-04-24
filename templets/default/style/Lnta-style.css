@@ -671,7 +671,7 @@ h2 {
     overflow: hidden;
 }
 
-.waterfall-img img, .waterfall-img video {
+.waterfall-img img {
     width: 100%;
     height: auto;
     display: block;

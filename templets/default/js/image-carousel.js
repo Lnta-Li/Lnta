@@ -251,6 +251,14 @@ class ImageCarousel {
 
 // DOM加载完成后初始化轮播
 document.addEventListener('DOMContentLoaded', () => {
+    // 添加CSS样式链接
+    const cssLink = document.createElement('link');
+    cssLink.href = '/templets/default/style/image-carousel.css';
+    cssLink.rel = 'stylesheet';
+    cssLink.media = 'screen';
+    cssLink.type = 'text/css';
+    document.head.appendChild(cssLink);
+    
     const carouselContainers = document.querySelectorAll('.image-carousel');
     carouselContainers.forEach(container => {
         new ImageCarousel(container);
