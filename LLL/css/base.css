@@ -566,6 +566,11 @@ option.stype {
 	border-top: 1px dashed #BCBCBC;
 	border-bottom: 1px dashed #BCBCBC;
 	border-left: 1px dashed #BCBCBC;
+	background-color: rgb(250 250 241);
+}
+
+a:hover .ilist {
+	background-color: #fff;
 }
 
 .ilist td {

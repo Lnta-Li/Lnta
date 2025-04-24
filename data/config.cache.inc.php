@@ -15,7 +15,7 @@ $cfg_medias_dir = '/uploads';
 $cfg_ddimg_width = 240;
 $cfg_ddimg_height = 180;
 $cfg_domain_cookie = '';
-$cfg_imgtype = 'jpg|jpeg|gif|png|webp';
+$cfg_imgtype = 'jpg|jpeg|gif|png|webp|mp4';
 $cfg_softtype = 'zip|gz|rar|iso|doc|xsl|ppt|wps';
 $cfg_mediatype = 'swf|mpg|mp3|mp4|rm|rmvb|wmv|wma|wav|mid|mov';
 $cfg_specnote = 6;
@@ -216,5 +216,4 @@ $cfg_font_icon = '@font-face {
     -webkit-text-stroke-width: 0.2px;
     -moz-osx-font-smoothing: grayscale;
 }';
-$cfg_subpic_size = 80;
 ?>

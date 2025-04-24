@@ -2,7 +2,15 @@
  * 图片预览功能
  * 允许用户点击图片查看大图
  */
-document.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('load', function() {
+    // 添加CSS样式链接
+    const cssLink = document.createElement('link');
+    cssLink.href = '/templets/default/style/image-preview.css';
+    cssLink.rel = 'stylesheet';
+    cssLink.media = 'screen';
+    cssLink.type = 'text/css';
+    document.head.appendChild(cssLink);
+    
     // 创建模态框元素
     const modal = document.createElement('div');
     modal.className = 'img-preview-modal';
@@ -308,9 +316,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 carousel._carouselInstance.updateCarousel();
             }
         } else if (currentImg.closest('.Content-Type')) {
-            // 如果是普通图片，滚动到图片位置
+            // 如果是普通图片，滚动到图片位置，使图片位于视口中间
             const imgRect = currentImg.getBoundingClientRect();
-            const scrollTop = window.pageYOffset + imgRect.top;
+            const windowHeight = window.innerHeight;
+            const scrollTop = window.pageYOffset + imgRect.top - (windowHeight / 2) + (imgRect.height / 2);
             window.scrollTo(0, scrollTop);
         }
     }

@@ -23,7 +23,8 @@
     --comment-bg-color: #1d221d; /* 评论区背景色 */
     --comment-bg-color-2: #242526; /* 评论区背景色2 */
     --menu-toggle-color: #ddd; /* 菜单按钮颜色 */
-    --menu-bg-color: rgb(69 84 78 / 90%); /* 菜单背景色 不模糊用rgb(69 84 78 / 90%)，模糊用rgba(60 76 75 / 80%) */
+    --menu-text-active: #ae812b; /* 菜单文本激活颜色 */
+    --menu-bg-color: rgb(53 64 60 / 90%); /* 菜单背景色 */
     --header-text-color: rgb(131 142 172); /* 头部文本颜色 */
     --header-text-color-strong: rgb(238 240 248); /* 头部文本颜色2 */
     --img-brightness: brightness(0.8); /*默认图片亮度*/

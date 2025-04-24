@@ -11,9 +11,9 @@
 <meta name="small_img" content="{dede:field.small_img/}">
 <link href="{dede:global.cfg_templets_skin/}/style/Lnta-style.css" rel="stylesheet" media="screen" type="text/css" />
 <link href="{dede:global.cfg_templets_skin/}/style/Lnta-mobile.css" rel="stylesheet" media="screen" type="text/css" />
-<link href="{dede:global.cfg_templets_skin/}/style/image-carousel.css" rel="stylesheet" media="screen" type="text/css" />
 <link href="{dede:global.cfg_templets_skin/}/style/feedback.css" rel="stylesheet" media="screen" type="text/css" />
 <script language="javascript" type="text/javascript" src="{dede:global.cfg_cmsurl/}/include/dedeajax2.js"></script>
+<script src="{dede:global.cfg_templets_skin/}/js/page-loader.js"></script>
 
 <script language="javascript" type="text/javascript">
   /**
@@ -267,10 +267,6 @@
             pagtype.classList.remove('pagtype-img');
             pagtype.classList.add('pagtype-arc');
           }
-          // 添加show类来触发动画
-          setTimeout(() => {
-            pagebody.classList.add('show');
-          }, 0);
         });
       </script>
 
@@ -382,13 +378,11 @@
 	</div>
 </div>
 {dede:include file='code-highlight.htm' /}
-  <link href="{dede:global.cfg_templets_skin/}/style/image-preview.css" rel="stylesheet" media="screen"
-    type="text/css" />
-  <script src="{dede:global.cfg_templets_skin/}/js/image-preview.js"></script><!-- 图片预览 -->
   <script src="{dede:global.cfg_templets_skin/}/js/image-caption.js"></script><!-- 图片标题 -->
   <script src="{dede:global.cfg_templets_skin/}/js/mobile-menu.js"></script><!-- 手机导航栏 -->
   <script src="{dede:global.cfg_templets_skin/}/js/image-carousel.js"></script><!-- 图片轮播 -->
   <script src="{dede:global.cfg_templets_skin/}/js/like-particles.js"></script><!-- 点赞粒子效果 -->
+  <script src="{dede:global.cfg_templets_skin/}/js/image-preview.js"></script><!-- 图片预览 -->
 </body>
 
 </html>

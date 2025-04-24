@@ -8,12 +8,12 @@
 <meta name="description" content="{dede:field.description function='html2text(@me)'/}" />
 <meta http-equiv="mobile-agent" content="format=xhtml;url={dede:global.cfg_mobileurl/}/view.php?aid={dede:field.id/}">
 {dede:include filename="theme.htm"/}
+<meta name="small_img" content="{dede:field.small_img/}">
 <link href="{dede:global.cfg_templets_skin/}/style/Lnta-style.css" rel="stylesheet" media="screen" type="text/css" />
 <link href="{dede:global.cfg_templets_skin/}/style/Lnta-mobile.css" rel="stylesheet" media="screen" type="text/css" />
-<link href="{dede:global.cfg_templets_skin/}/style/image-carousel.css" rel="stylesheet" media="screen" type="text/css" />
 <link href="{dede:global.cfg_templets_skin/}/style/feedback.css" rel="stylesheet" media="screen" type="text/css" />
 <script language="javascript" type="text/javascript" src="{dede:global.cfg_cmsurl/}/include/dedeajax2.js"></script>
-<script src="{dede:global.cfg_templets_skin/}/js/switch-video.js"></script>
+<script src="{dede:global.cfg_templets_skin/}/js/page-loader.js"></script>
 
 <script language="javascript" type="text/javascript">
   /**
@@ -214,7 +214,6 @@
 });
 </script>
 </head>
-
 <body class="articleview">
 
   <!---加载Nav-->
@@ -235,37 +234,39 @@
           {/dede:field}
         </div>
       </div>
-
-      <div id="switch-video" class="default-img"  style="display:none;">
+      <div id="hide_thumb" style="display:none;">{dede:field.hide_thumb/}</div>
+      <div class="default-img" style="display:none;">
         <img class="project-header" alt="{dede:field.title/}" src="{dede:field.litpic/}">
       </div>
       <script>
         //自动切换图集/文章页面显示效果
         // 检查picbox元素中是否存在图片
-        // 如果存在图片，显示picbox并隐藏default-img，同时设置content-area-1
-        // 如果不存在图片，隐藏picbox并显示default-img，同时设置content-area-2
+        // 如果存在图片，显示picbox、隐藏default-img、设置pagtype-img
+        // 如果不存在，判断hide_thumb内的数字是否=0，如果=0，隐藏picbox、显示default-img、设置pagtype-arc，否则隐藏picbox、default-img、设置pagtype-arc
         document.addEventListener('DOMContentLoaded', function () {
           var picbox = document.querySelector('.picbox');
           var defaultImg = document.querySelector('.default-img');
           var pagtype = document.querySelector('.pagtype');
           var pagebody = document.getElementById('pagebody');
+          var hideThumb = document.getElementById('hide_thumb');
 
           if (picbox.querySelector('img')) {
             picbox.style.display = 'block';
             defaultImg.style.display = 'none';
             pagtype.classList.remove('pagtype-arc');
             pagtype.classList.add('pagtype-img');
-          } else {
+          } else if (hideThumb && hideThumb.textContent == '0') {
             picbox.style.display = 'none';
             defaultImg.style.display = 'block';
             pagtype.classList.remove('pagtype-img');
             pagtype.classList.add('pagtype-arc');
+          } else {
+            picbox.style.display = 'none';
+            defaultImg.style.display = 'none';
+            hide_thumb.style.display = 'block';
+            pagtype.classList.remove('pagtype-img');
+            pagtype.classList.add('pagtype-arc');
           }
-
-          // 添加show类来触发动画
-          setTimeout(() => {
-            pagebody.classList.add('show');
-          }, 0);
         });
       </script>
 
@@ -377,13 +378,11 @@
 	</div>
 </div>
 {dede:include file='code-highlight.htm' /}
-  <link href="{dede:global.cfg_templets_skin/}/style/image-preview.css" rel="stylesheet" media="screen"
-    type="text/css" />
-  <script src="{dede:global.cfg_templets_skin/}/js/image-preview.js"></script><!-- 图片预览 -->
   <script src="{dede:global.cfg_templets_skin/}/js/image-caption.js"></script><!-- 图片标题 -->
   <script src="{dede:global.cfg_templets_skin/}/js/mobile-menu.js"></script><!-- 手机导航栏 -->
   <script src="{dede:global.cfg_templets_skin/}/js/image-carousel.js"></script><!-- 图片轮播 -->
   <script src="{dede:global.cfg_templets_skin/}/js/like-particles.js"></script><!-- 点赞粒子效果 -->
+  <script src="{dede:global.cfg_templets_skin/}/js/image-preview.js"></script><!-- 图片预览 -->
 </body>
 
 </html>

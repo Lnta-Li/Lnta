@@ -2,6 +2,9 @@
 RewriteEngine On
 RewriteBase /
 
+# 自定义404错误页面
+ErrorDocument 404 /404.html
+
 # 排除phpMyAdmin目录
 RewriteRule ^phpMyAdmin4.8.5/ - [L]
 
