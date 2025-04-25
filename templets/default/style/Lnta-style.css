@@ -680,7 +680,7 @@ h2 {
     width: 100%;
     height: auto;
     display: block;
-    min-height: 20vh;
+    min-height: 15vh;
     max-height: 60vh; 
     object-fit: cover;
 }
@@ -783,6 +783,8 @@ p {
     width: 100%;
     transition: var(--transition);
     -webkit-transition: var(--transition);
+    display: block;
+    margin: 0 auto;
 }
 
 .project-area img:hover,.Content-Type img:hover {
