@@ -37,14 +37,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // 创建一个遮罩层，用于在菜单打开时屏蔽背景
     var overlay = document.createElement('div');
     overlay.className = 'mobile-menu-overlay';
-    overlay.style.position = 'fixed';
-    overlay.style.top = '0';
-    overlay.style.left = '0';
-    overlay.style.width = '100%';
-    overlay.style.height = '100%';
-    overlay.style.backgroundColor = 'rgba(0,0,0,0.5)';
-    overlay.style.zIndex = '998'; // 确保在页面内容之上，菜单之下
-    overlay.style.display = 'none';
     document.body.appendChild(overlay);
     
     // 切换菜单状态的函数
@@ -55,14 +47,14 @@ document.addEventListener('DOMContentLoaded', function() {
             if (pageBody) {
                 pageBody.classList.toggle('nav');
             }
-            overlay.style.display = mobileNav.classList.contains('active') ? 'block' : 'none';
+            overlay.classList.toggle('active');
         } else if (show) {
             // 显示菜单
             mobileNav.classList.add('active');
             if (pageBody) {
                 pageBody.classList.add('nav');
             }
-            overlay.style.display = 'block';
+            overlay.classList.add('active');
             // 禁止背景滚动
             document.body.style.overflow = 'hidden';
         } else {
@@ -71,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (pageBody) {
                 pageBody.classList.remove('nav');
             }
-            overlay.style.display = 'none';
+            overlay.classList.remove('active');
             // 恢复背景滚动
             document.body.style.overflow = '';
         }

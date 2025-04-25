@@ -9,11 +9,34 @@
 }
 @media screen and (max-width: 768px) {
     :root {
-        --blur-pagebody: 10px; /* 页面隐藏模糊度 10 */
-        --blur-pagebodynav: 1px; /* 页面导航模糊度 1 */
-        --blur-mobnav: 15px; /* 移动端导航模糊度 15 */
-        --blur-imgtitle: 30px; /* 图片预览标题框 30 */
-        --blur-carouseltitle: 50px; /* 轮播图标题框 50 */
+        --blur-pagebody: 0px; /* 页面隐藏模糊度 10 */
+        --blur-pagebodynav: 0px; /* 页面导航模糊度 1 */
+        --blur-mobnav: 0px; /* 移动端导航模糊度 15 */
+        --blur-imgtitle: 0px; /* 图片预览标题框 30 */
+        --blur-carouseltitle: 0px; /* 轮播图标题框 50 */
+        --backdrop-blur: 0px; /* 图片浏览器的标题模糊效果 15*/
+        --body-scale: 1; /* 页面缩放效果 0.9 */
+        --transition: none; /* 动画过渡效果 all .3s ease */
+        --animation-time: 0s ; /* 关键帧动画时长 0.3s */
+    }
+    /* 移动端菜单遮罩层 */
+    .mobile-menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+        z-index: 998;
+        opacity: 0;
+        pointer-events: none;
+        transition: var(--transition);
+        -webkit-transition: var(--transition);
+    }
+    
+    .mobile-menu-overlay.active {
+        opacity: 1;
+        pointer-events: auto;
     }
     /* 通用布局调整 */
     .mobile-full {
@@ -150,7 +173,8 @@
         height: 3px;
         background-color: var(--menu-toggle-color);
         margin-bottom: 5px;
-        transition: all 0.3s;
+        transition: var(--transition);
+        -webkit-transition: var(--transition);
     }
     
     .mobile-nav {
@@ -162,7 +186,8 @@
         background-color: var(--menu-bg-color);
         z-index: 999;
         padding: 0 20px !important;
-        transition: left 0.3s;
+        transition: var(--transition);
+        -webkit-transition: var(--transition);
         backdrop-filter: blur(var(--blur-mobnav));
         -webkit-backdrop-filter: blur(var(--blur-mobnav));
     }
