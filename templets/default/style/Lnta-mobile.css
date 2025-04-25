@@ -9,15 +9,15 @@
 }
 @media screen and (max-width: 768px) {
     :root {
-        --blur-pagebody: 0px; /* 页面隐藏模糊度 10 */
-        --blur-pagebodynav: 0px; /* 页面导航模糊度 1 */
+        --blur-pagebody: 10px; /* 页面隐藏模糊度 10 */
+        --blur-pagebodynav: 1px; /* 页面导航模糊度 1 */
         --blur-mobnav: 0px; /* 移动端导航模糊度 15 */
-        --blur-imgtitle: 0px; /* 图片预览标题框 30 */
-        --blur-carouseltitle: 0px; /* 轮播图标题框 50 */
-        --backdrop-blur: 0px; /* 图片浏览器的标题模糊效果 15*/
-        --body-scale: 1; /* 页面缩放效果 0.9 */
-        --transition: none; /* 动画过渡效果 all .3s ease */
-        --animation-time: 0s ; /* 关键帧动画时长 0.3s */
+        --blur-imgtitle: 30px; /* 图片预览标题框 30 */
+        --blur-carouseltitle: 50px; /* 轮播图标题框 50 */
+        --backdrop-blur: 15px; /* 图片浏览器的标题模糊效果 15*/
+        --body-scale: 0.9; /* 页面缩放效果 0.9 */
+        --transition: all .3s ease; /* 动画过渡效果 all .3s ease */
+        --animation-time: 0.3s ; /* 关键帧动画时长 0.3s */
     }
     /* 移动端菜单遮罩层 */
     .mobile-menu-overlay {

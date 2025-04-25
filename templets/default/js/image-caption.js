@@ -1,9 +1,4 @@
-// 引入CSS样式文件
-const link = document.createElement('link');
-link.rel = 'stylesheet';
-link.href = '/templets/default/style/image-caption.css';
-document.head.appendChild(link);
-
+// 图片相关Dom构造
 document.addEventListener('DOMContentLoaded', function() {    
     // 检查是否为iPhone设备，这里的检查是为了解决\js\image-preview.js里面的一个不知道原因的bug即：iphone上只有小图模式背景网页的位置才能跟随图片浏览器切换，但也有例外，比如在/a/Orther/2025/0417/49.html这个页面，虽然是小图模式，但还是无法正常切换
     let isSmallImg = false;

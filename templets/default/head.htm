@@ -29,3 +29,74 @@
 
   </nav>
 </div>
+
+<!-- 平滑滚动到锚点的JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // 点击事件委托到document上
+  document.addEventListener('click', function(e) {
+    // 检查是否点击的是链接
+    var target = e.target;
+    while (target && target.tagName !== 'A') {
+      target = target.parentNode;
+      if (!target) return;
+    }
+    
+    // 检查链接是否包含hash且是当前页面内的锚点
+    var href = target.getAttribute('href');
+    if (!href) return;
+    
+    // 仅处理当前页面内的锚点链接
+    if (href.charAt(0) === '#') {
+      e.preventDefault();
+      
+      var targetId = href.substring(1);
+      var targetElement = document.getElementById(targetId);
+      
+      if (targetElement) {
+        // 计算目标位置
+        var targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+        
+        // 平滑滚动
+        smoothScroll(targetPosition, 500);
+        
+        // 更新URL
+        if (history.pushState) {
+          history.pushState(null, null, href);
+        } else {
+          // 兼容旧浏览器
+          window.location.hash = href;
+        }
+      }
+    }
+  });
+  
+  // 自定义平滑滚动函数
+  function smoothScroll(to, duration) {
+    var start = window.pageYOffset;
+    var change = to - start;
+    var startTime = performance.now();
+    
+    function animate(currentTime) {
+      var timeElapsed = currentTime - startTime;
+      var progress = Math.min(timeElapsed / duration, 1);
+      
+      // 使用缓动函数使滚动更自然
+      progress = easeInOutQuad(progress);
+      
+      window.scrollTo(0, start + change * progress);
+      
+      if (timeElapsed < duration) {
+        requestAnimationFrame(animate);
+      }
+    }
+    
+    // 缓动函数
+    function easeInOutQuad(t) {
+      return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+    }
+    
+    requestAnimationFrame(animate);
+  }
+});
+</script>
