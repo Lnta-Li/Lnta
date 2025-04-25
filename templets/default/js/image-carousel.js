@@ -160,19 +160,35 @@ class ImageCarousel {
         });
 
         // 触摸事件
+        let startY = 0;
+        let isVerticalScroll = false;
+
         container.addEventListener('touchstart', (e) => {
-            e.preventDefault();
+            startY = e.touches[0].clientY;
             handleStart(e.touches[0].clientX);
         }, { passive: false });
 
         this.container.addEventListener('touchmove', (e) => {
+            const currentY = e.touches[0].clientY;
+            const deltaY = Math.abs(currentY - startY);
+            const deltaX = Math.abs(e.touches[0].clientX - startPos);
+
+            // 如果垂直滑动距离大于水平滑动距离，则认为是垂直滑动
+            if (deltaY > deltaX) {
+                isVerticalScroll = true;
+                return; // 允许垂直滑动
+            }
+
+            isVerticalScroll = false;
             e.preventDefault();
             handleMove(e.touches[0].clientX);
         }, { passive: false });
 
         container.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            handleEnd(e.changedTouches[0].clientX);
+            if (!isVerticalScroll) {
+                e.preventDefault();
+                handleEnd(e.changedTouches[0].clientX);
+            }
         });
 
         // 键盘事件
