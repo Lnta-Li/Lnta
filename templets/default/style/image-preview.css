@@ -3,8 +3,10 @@
     --bottombar-height: 7vh;
     --viewer-height: 91vh;
     --img-space: 1vh;
-    --transition-speed: 0.3s;
+    /* 由于网站区分手机端和PC端，动画效果在对应的css文件里定义：
     --backdrop-blur: 15px;
+    --transition: all .3s ease
+    --animation-zoom-out: zoom-out 0.3s cubic-bezier(0.11, 0.83, 0.39, 1.1) forwards; */
 }
 
 /* 媒体查询：移动设备适配 */
@@ -44,8 +46,8 @@
     background-color: rgb(51, 51, 51);
     overflow: hidden;
     opacity: 0;
-    transition: opacity var(--transition-speed) ease, background-color var(--transition-speed) ease;
-    -webkit-transition: opacity var(--transition-speed) ease, background-color var(--transition-speed) ease;
+    transition: var(--transition);
+    -webkit-transition: var(--transition);
 }
 
 .img-preview-modal.active {
@@ -83,8 +85,8 @@
 }
 
 .img-preview-slides.vertical-dragging {
-    transition: transform 0.2s ease, scale 0.2s ease;
-    -webkit-transition: transform 0.2s ease, scale 0.2s ease;
+    transition: var(--transition);
+    -webkit-transition: var(--transition);
 }
 
 /* 单张幻灯片样式 */
@@ -125,8 +127,8 @@
     font-weight: bold;
     cursor: pointer;
     z-index: 1001;
-    transition: color 0.2s;
-    -webkit-transition: color 0.2s;
+    transition: var(--transition);
+    -webkit-transition: var(--transition);
 }
 
 .img-preview-close:hover {
@@ -146,8 +148,8 @@
     cursor: pointer;
     font-size: 18px;
     z-index: 10000;
-    transition: background-color var(--transition-speed);
-    -webkit-transition: background-color var(--transition-speed);
+    transition: var(--transition);
+    -webkit-transition: var(--transition);
     backdrop-filter: blur(var(--backdrop-blur));
     -webkit-backdrop-filter: blur(var(--backdrop-blur));
     border-radius: 8px;
@@ -183,8 +185,8 @@
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
-    transition: opacity var(--transition-speed) ease;
-    -webkit-transition: opacity var(--transition-speed) ease;
+    transition: var(--transition);
+    -webkit-transition: var(--transition);
     padding: var(--img-space);
     display: flex;
     align-items: center;
@@ -216,8 +218,8 @@
 /* 单个缩略图样式 */
 .img-preview-thumbnail {
     pointer-events: auto;
-    transition: all var(--transition-speed) ease;
-    -webkit-transition: all var(--transition-speed) ease; 
+    transition: var(--transition);
+    -webkit-transition: var(--transition);
     -webkit-user-drag: none;
     -khtml-user-drag: none;
     -moz-user-drag: none;
@@ -273,8 +275,8 @@
     border-radius: 4px;
     backdrop-filter: blur(var(--backdrop-blur));
     -webkit-backdrop-filter: blur(var(--backdrop-blur));
-    transition: opacity var(--transition-speed) ease;
-    -webkit-transition: opacity var(--transition-speed) ease;
+    transition: var(--transition);
+    -webkit-transition: var(--transition);
 }
 
 .img-preview-caption:hover {
@@ -284,8 +286,8 @@
 /* 工具类样式 */
 .img-preview-hidden {
     opacity: 0;
-    transition: opacity var(--transition-speed) ease;
-    -webkit-transition: opacity var(--transition-speed) ease;
+    transition: var(--transition);
+    -webkit-transition: var(--transition);
 }
 
 .img-preview-smooth-scroll {
@@ -323,7 +325,7 @@
 }
 
 .img-preview-zoom-animation {
-    animation: zoom-out 0.3s cubic-bezier(0.11, 0.83, 0.39, 1.1) forwards;
+    animation: zoom-out var(--animation-time) cubic-bezier(0.11, 0.83, 0.39, 1.1) forwards;;
     opacity: 1;
 }
 

@@ -20,7 +20,11 @@
     --blur-pagebodynav: 1px; /* 页面导航模糊度 */
     --blur-mobnav: 15px; /* 移动端导航模糊度 */
     --blur-imgtitle: 30px; /* 图片预览标题框 */
+    --backdrop-blur: 15px; /* 图片浏览器的标题模糊效果 */
     --blur-carouseltitle: 50px; /* 轮播图标题框 */
+    --body-scale: 0.9; /* 页面缩放效果 */
+    --transition: all .3s ease; /* 动画过渡效果 all .3s ease */
+    --animation-time: 0.3s ; /* 关键帧动画时长 0.3s */
 }
 
 body {
@@ -28,8 +32,8 @@ body {
     margin: 0;
     padding: 0;
     font-family: var(--defult-font-family);
-    transition: background-color .3s ease;
-    -webkit-transition: background-color .3s ease;
+    transition: var(--transition);
+    -webkit-transition: var(--transition);
 }
 
 a:focus-visible {
@@ -72,7 +76,8 @@ a.active,h6.active {
 
 img, video {
     filter: var(--img-brightness);
-    transition: all 0.3s ease;
+    transition: var(--transition);
+    -webkit-transition: var(--transition);
 }
 
 /* 页面包装器 */
@@ -209,8 +214,8 @@ h6.active {
     padding-bottom: 90px;
     margin-top: -115px;
     z-index: -1;
-    transition: all .3s linear;
-    -webkit-transition: all 0.3s linear;
+    transition: var(--transition);
+    -webkit-transition: var(--transition);
 }
 
 .projects-container {
@@ -591,8 +596,8 @@ h4 {
     width: 100%;
     object-fit: cover;
     object-position: center;
-    transition: all .3s ease;
-    -webkit-transition: all 0.3s ease;
+    transition: var(--transition);
+    -webkit-transition: var(--transition);
 }
 
 .project-thumb-fixed .project-thumb {
@@ -650,8 +655,8 @@ h2 {
 }
 
 .waterfall-link img, .waterfall-link video {
-    transition: all 0.3s ease;
-    -webkit-transition: all 0.3s ease;
+    transition: var(--transition);
+    -webkit-transition: var(--transition);
 }
 
 .waterfall-link:hover img, .project-link:hover img  {
@@ -776,8 +781,8 @@ p {
     height: auto !important;
     max-width: 100%;
     width: 100%;
-    transition: transform 0.3s ease; /* 添加过渡效果 */
-    -webkit-transition: all 0.3s ease;
+    transition: var(--transition);
+    -webkit-transition: var(--transition);
 }
 
 .project-area img:hover,.Content-Type img:hover {
@@ -860,8 +865,8 @@ h3 strong {
     color: var(--Key-color);
     font-size: var(--fontsize-p);
     display: inline;
-    transition: all 0.3s ease;
-    -webkit-transition: all 0.3s ease;
+    transition: var(--transition);
+    -webkit-transition: var(--transition);
     text-decoration: underline;
     text-underline-offset: 5px;
     padding: 4px;
@@ -943,8 +948,8 @@ iframe {
     font-family: var(--pageinfo-font-family);
     font-size: var(--fontsize-mini);
     text-decoration: none;
-    transition: all 0.3s ease;
-    -webkit-transition: all 0.3s ease;
+    transition: var(--transition);
+    -webkit-transition: var(--transition);
     margin-bottom: 0!important;
 }
 
@@ -998,13 +1003,13 @@ iframe {
     opacity: 0;
     filter: blur(var(--blur-pagebody));
     -webkit-filter: blur(var(--blur-pagebody));
-    transition: all .3s ease;
-    -webkit-transition: all .3s ease;
+    transition: var(--transition);
+    -webkit-transition: var(--transition);
     scale: 1;
 }
 
 #pagebody.nav {
-    transform: scale(0.9);
+    transform: scale(var(--body-scale));
     filter: blur(var(--blur-pagebodynav));
     -webkit-filter: blur(var(--blur-pagebodynav));
     /*transform: translate3d(0, 0, 0); 触发GPU加速（会导致ios屏闪）*/
@@ -1057,7 +1062,8 @@ iframe {
     margin: 3px;
     background-color: var(--background-body);
     border-radius: 50%;
-    transition: 0.3s;
+    transition: var(--transition);
+    -webkit-transition: var(--transition);
     z-index: 1;
 }
 
@@ -1135,7 +1141,8 @@ input[value="1"]:checked ~ .slider {
     border-radius: 4px;
     cursor: pointer;
     font-size: var(--fontsize-a);
-    transition: all 0.3s ease;
+    transition: var(--transition);
+    -webkit-transition: var(--transition);
     background: rgb(255 255 255 / 30%);
     color: var(--faint-color-3);
 }
