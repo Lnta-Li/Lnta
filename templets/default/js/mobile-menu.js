@@ -34,40 +34,88 @@ document.addEventListener('DOMContentLoaded', function() {
     // 使用防抖函数包装updateTransformOrigin，设置200ms的延迟
     window.addEventListener('scroll', debounce(updateTransformOrigin, 200));
     
-    if (menuToggle && mobileNav) {
-        // 点击菜单按钮时切换导航菜单的显示状态
-        menuToggle.addEventListener('click', function() {
+    // 创建一个遮罩层，用于在菜单打开时屏蔽背景
+    var overlay = document.createElement('div');
+    overlay.className = 'mobile-menu-overlay';
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = 'rgba(0,0,0,0.5)';
+    overlay.style.zIndex = '998'; // 确保在页面内容之上，菜单之下
+    overlay.style.display = 'none';
+    document.body.appendChild(overlay);
+    
+    // 切换菜单状态的函数
+    function toggleMenu(show) {
+        if (show === undefined) {
+            // 如果未指定，则切换当前状态
             mobileNav.classList.toggle('active');
             if (pageBody) {
                 pageBody.classList.toggle('nav');
             }
-            
-            // 切换菜单按钮的样式
-            var spans = menuToggle.querySelectorAll('span');
-            if (mobileNav.classList.contains('active')) {
-                spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
-                spans[1].style.opacity = '0';
-                spans[2].style.transform = 'rotate(-45deg) translate(7px, -7px)';
-            } else {
-                spans[0].style.transform = 'none';
-                spans[1].style.opacity = '1';
-                spans[2].style.transform = 'none';
+            overlay.style.display = mobileNav.classList.contains('active') ? 'block' : 'none';
+        } else if (show) {
+            // 显示菜单
+            mobileNav.classList.add('active');
+            if (pageBody) {
+                pageBody.classList.add('nav');
             }
+            overlay.style.display = 'block';
+            // 禁止背景滚动
+            document.body.style.overflow = 'hidden';
+        } else {
+            // 隐藏菜单
+            mobileNav.classList.remove('active');
+            if (pageBody) {
+                pageBody.classList.remove('nav');
+            }
+            overlay.style.display = 'none';
+            // 恢复背景滚动
+            document.body.style.overflow = '';
+        }
+        
+        // 更新菜单按钮样式
+        var spans = menuToggle.querySelectorAll('span');
+        if (mobileNav.classList.contains('active')) {
+            spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+            spans[1].style.opacity = '0';
+            spans[2].style.transform = 'rotate(-45deg) translate(7px, -7px)';
+        } else {
+            spans[0].style.transform = 'none';
+            spans[1].style.opacity = '1';
+            spans[2].style.transform = 'none';
+        }
+    }
+    
+    if (menuToggle && mobileNav) {
+        // 点击菜单按钮时切换导航菜单的显示状态
+        menuToggle.addEventListener('click', function(event) {
+            event.stopPropagation(); // 阻止事件冒泡
+            toggleMenu();
         });
         
-        // 点击页面其他区域关闭菜单
-        document.addEventListener('click', function(event) {
-            if (!mobileNav.contains(event.target) && !menuToggle.contains(event.target) && mobileNav.classList.contains('active')) {
-                mobileNav.classList.remove('active');
-                if (pageBody) {
-                    pageBody.classList.remove('nav');
-                }
-                
-                // 恢复菜单按钮样式
-                var spans = menuToggle.querySelectorAll('span');
-                spans[0].style.transform = 'none';
-                spans[1].style.opacity = '1';
-                spans[2].style.transform = 'none';
+        // 点击遮罩层时关闭菜单
+        overlay.addEventListener('click', function() {
+            toggleMenu(false);
+        });
+        
+        // 点击菜单内部不关闭菜单
+        mobileNav.addEventListener('click', function(event) {
+            event.stopPropagation(); // 阻止事件冒泡
+        });
+        
+        // 添加触摸事件监听
+        overlay.addEventListener('touchstart', function(event) {
+            event.preventDefault(); // 阻止默认行为
+            toggleMenu(false);
+        });
+        
+        // ESC键关闭菜单
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && mobileNav.classList.contains('active')) {
+                toggleMenu(false);
             }
         });
     }
