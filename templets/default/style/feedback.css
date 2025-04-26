@@ -26,8 +26,6 @@
     border-radius: 8px;
     font-size: 12px;
     cursor: pointer;
-    transition: var(--transition);
-    -webkit-transition: var(--transition);
     box-sizing: border-box;
     color: var(--solid-color-2);
     background-color: var(--background-color);
@@ -122,8 +120,10 @@
     color: var(--faint-color-4);
     font-size: 0;
     opacity: 0;
-    transition: var(--transition);
-    -webkit-transition: var(--transition);
+    transition: font-size var(--transition-time) ease,
+                opacity var(--transition-time) ease;
+    -webkit-transition: font-size var(--transition-time) ease,
+                        opacity var(--transition-time) ease;
 }
 
 .decmt-box2 img {
@@ -131,8 +131,12 @@
     width: 0;
     height: 0;
     opacity: 0;
-    transition: var(--transition);
-    -webkit-transition: var(--transition);
+    transition: width var(--transition-time) ease,
+                height var(--transition-time) ease,
+                opacity var(--transition-time) ease;
+    -webkit-transition: width var(--transition-time) ease,
+                        height var(--transition-time) ease,
+                        opacity var(--transition-time) ease;
     margin-right: 8px;
     margin-left: -8px;
     object-fit: cover;
@@ -161,8 +165,8 @@
     font-family: HarmonySans SC;
     font-size: 16px;
     color: var(--comment-color);
-    transition: var(--transition);
-    -webkit-transition: var(--transition);
+    transition: font-size var(--transition-time) ease;
+    -webkit-transition: font-size var(--transition-time) ease;
 }
 
 .tbox {
@@ -204,9 +208,6 @@
 textarea:focus-visible, input:focus-visible {
     outline: none;
     border: 2px solid var(--background-color);
-    transition: var(--transition);
-    -webkit-transition: var(--transition);
-    /*background-color: var(--solid-color-2);*/
 }
 
 /* 作者信息区域样式 */
@@ -281,8 +282,6 @@ textarea:focus-visible, input:focus-visible {
     padding: 0 20px;
     align-items: center;
     cursor: pointer;
-    transition: var(--transition);
-    -webkit-transition: var(--transition);
 }
 
 .stat-item:not(:last-child)::after {
@@ -316,6 +315,8 @@ textarea:focus-visible, input:focus-visible {
     display: flex;
     gap: 6px;
     align-items: center;
+    transition: color var(--transition-time) ease;
+    -webkit-transition: color var(--transition-time) ease;
 }
 
 .stat-value i {
@@ -494,10 +495,16 @@ textarea:focus-visible, input:focus-visible {
     fill: var(--comment-color);
     stroke-width: 80px;
     width: 22px;
+    transition: fill var(--transition-time) ease;
+    -webkit-transition: fill var(--transition-time) ease;
 }
 
 .active .mysvg {
     fill: #ff234c; 
+    -webkit-animation-name: bounce;
+    animation-name: bounce;
+    -webkit-transform-origin: center bottom;
+    transform-origin: center bottom
 }
 
 .active .down {

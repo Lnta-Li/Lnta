@@ -35,15 +35,17 @@
 }
 
 #click-expand i {
-    transition: transform 0.3s ease;
-    -webkit-transition: transform 0.3s ease;
+    transition: transform var(--transition-time) ease;
+    -webkit-transition: transform var(--transition-time) ease;
     display: inline-block;
 }
 
 .image-box {
     width: 100%;
-    transition: all 0.3s ease;
-    -webkit-transition: all 0.3s ease;
+    transition: width var(--transition-time) ease,
+                margin var(--transition-time) ease;
+    -webkit-transition: width var(--transition-time) ease,
+                        margin var(--transition-time) ease;
 }
 
 .small-box {
@@ -66,19 +68,7 @@
     height: 0;
 }
 
-#switch-img-mode {
-    padding: 6px 12px;
-    background: var(--faint-color-1);
-    border-radius: 4px;
-    color: var(--faint-color-3);
-    font-family: var(--pageinfo-font-family);
-    font-size: 14px;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    -webkit-transition: all 0.3s ease;
-    margin-bottom: 0 !important;
-    border: none;
-}
+/*#switch-img-mode {padding: 6px 12px;background: var(--faint-color-1);border-radius: 4px;color: var(--faint-color-3);font-family: var(--pageinfo-font-family);font-size: 14px;text-decoration: none;transition: all 0.3s ease;-webkit-transition: all 0.3s ease;margin-bottom: 0 !important;border: none;}margin-bottom: 0 !important;border: none;}*/
 
 .img-float-bar {
     position: fixed;
@@ -98,10 +88,10 @@
     cursor: pointer;
     padding: 10px;
     border-radius: 50%;
-    transition: all 0.3s ease;
     font-size: 16px;
     color: #666;
 }
+
 .float-btn:hover {
     background: #f0f0f0;
     color: #222;

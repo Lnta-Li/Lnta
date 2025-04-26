@@ -16,8 +16,8 @@
         --blur-carouseltitle: 50px; /* 轮播图标题框 50 */
         --backdrop-blur: 15px; /* 图片浏览器的标题模糊效果 15*/
         --body-scale: 0.9; /* 页面缩放效果 0.9 */
-        --transition: all .3s ease; /* 动画过渡效果 all .3s ease */
         --animation-time: 0.3s ; /* 关键帧动画时长 0.3s */
+        --transition-time: 0.3s; /* 动画过渡时长 */
     }
     /* 移动端菜单遮罩层 */
     .mobile-menu-overlay {
@@ -30,8 +30,8 @@
         z-index: 998;
         opacity: 0;
         pointer-events: none;
-        transition: var(--transition);
-        -webkit-transition: var(--transition);
+        transition: opacity var(--transition-time) ease;
+        -webkit-transition: opacity var(--transition-time) ease;
     }
     
     .mobile-menu-overlay.active {
@@ -173,8 +173,14 @@
         height: 3px;
         background-color: var(--menu-toggle-color);
         margin-bottom: 5px;
-        transition: var(--transition);
-        -webkit-transition: var(--transition);
+        margin-left: auto;
+        margin-right: auto;
+        transition: transform var(--transition-time) ease,
+                    width var(--transition-time) ease,
+                    opacity var(--transition-time) ease;
+        -webkit-transition: transform var(--transition-time) ease,
+                            width var(--transition-time) ease,
+                            opacity var(--transition-time) ease;
     }
     
     .mobile-nav {
@@ -186,8 +192,10 @@
         background-color: var(--menu-bg-color);
         z-index: 999;
         padding: 0 20px !important;
-        transition: var(--transition);
-        -webkit-transition: var(--transition);
+        transition: left var(--transition-time) ease,
+                    background-color var(--transition-time) ease;
+        -webkit-transition: left var(--transition-time) ease,
+                            background-color var(--transition-time) ease;
         backdrop-filter: blur(var(--blur-mobnav));
         -webkit-backdrop-filter: blur(var(--blur-mobnav));
     }
