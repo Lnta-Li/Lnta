@@ -15,7 +15,7 @@
   <script src="{dede:global.cfg_templets_skin/}/js/page-loader.js"></script>
 </head>
 
-<body huaban_pin_injected="true" class="home-active">
+<body huaban_pin_injected="true" class="home-active tra-bg-color">
   {dede:include filename="head.htm"/}
   <div id="pagebody">
   <div class="page-wrapper">
@@ -24,6 +24,9 @@
           <h1 class="header-text col-4">
             <span class="highlighter">{dede:global.cfg_Introduce/}</span>
           </h1>
+          <div class="header-text-link">
+            <a href="/tags/All.html" class="tra-bg-color"><i class="iconfontb">&#xe602;</i> 全部作品</a>
+          </div>
         </section>
         <section class="header-image-wrapper">
           <section class="header-image">
@@ -37,7 +40,7 @@
         </section>
       </header>
   </div>
-  <section class="projects-wrapper" data-role="list">
+  <section class="projects-wrapper tra-bg-color" data-role="list">
     <div class="projects-container">
       <ul class="projects col-10 offset-2 nested mobile-reset">
         {dede:arclist typeid='2' titlelen='60' row='1' flag='h'}

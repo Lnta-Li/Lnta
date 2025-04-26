@@ -25,9 +25,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // 更新transform-origin的函数
     function updateTransformOrigin() {
         if (pageBody) {
-            var x = window.pageXOffset + window.innerWidth / 2;
-            var y = window.pageYOffset + window.innerHeight / 2;
-            pageBody.style.transformOrigin = x + 'px ' + y + 'px';
+            // Y轴根据滚动位置和视口中心计算
+            var y = window.scrollY + window.innerHeight / 2;
+            // X轴始终为右侧，Y轴动态更新
+            pageBody.style.transformOrigin = 'center ' + y + 'px';
         }
     }
     
@@ -72,10 +73,12 @@ document.addEventListener('DOMContentLoaded', function() {
         var spans = menuToggle.querySelectorAll('span');
         if (mobileNav.classList.contains('active')) {
             spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+            spans[1].style.width = '0';
             spans[1].style.opacity = '0';
             spans[2].style.transform = 'rotate(-45deg) translate(7px, -7px)';
         } else {
             spans[0].style.transform = 'none';
+            spans[1].style.width = '100%';
             spans[1].style.opacity = '1';
             spans[2].style.transform = 'none';
         }
