@@ -195,17 +195,24 @@ h6.active {
     width: fit-content;
     padding: 0 16px;
     box-sizing: border-box;
+    text-align: center;
+    margin: 0 auto;
 }
 
 .header-text-link a {
     background: var(--background-color);
     border-radius: 4px;
-    padding: 4px 10px;
+    padding: 8px 10px;
     color: var(--solid-color-2);
+    font-family: var(--nav-font-family);
+    transition: font-size var(--transition-time) ease, background-color var(--transition-time) ease;
+    -webkit-transition: font-size var(--transition-time) ease, background-color var(--transition-time) ease;
+
 }
 
 .header-text-link a:hover {
     background: var(--Key-color);
+    font-size: var(--fontsize-p);
 }
 
 /* 文本选中样式 */
