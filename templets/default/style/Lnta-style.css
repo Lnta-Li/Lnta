@@ -200,18 +200,15 @@ h6.active {
 }
 
 .header-text-link a {
-    background: var(--background-color);
-    border-radius: 4px;
-    padding: 8px 10px;
-    color: var(--solid-color-2);
+    color: var(--solid-color);
     font-family: var(--nav-font-family);
-    transition: font-size var(--transition-time) ease, background-color var(--transition-time) ease;
-    -webkit-transition: font-size var(--transition-time) ease, background-color var(--transition-time) ease;
+    transition: font-size var(--transition-time) ease;
+    -webkit-transition: font-size var(--transition-time) ease;
 
 }
 
 .header-text-link a:hover {
-    background: var(--Key-color);
+    /*background: var(--Key-color);*/
     font-size: var(--fontsize-p);
 }
 

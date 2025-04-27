@@ -150,6 +150,8 @@ window.addEventListener('load', function() {
     
     // 当前图片索引
     let currentImageIndex = 0;
+    // ★★★ 添加标志：是否为首次加载 ★★★
+    let isInitialLoad = true;
     
     // 创建图片滑动容器
     const slidesContainer = document.createElement('div');
@@ -220,11 +222,31 @@ window.addEventListener('load', function() {
         // 先激活模态框再获取宽度
         modal.classList.add('active');
         
-        // 异步获取准确宽度
+        // ★★★ 决定是否应用过渡 ★★★
+        const applyTransition = !isInitialLoad;
+        
+        // 异步获取准确宽度并应用变换
         requestAnimationFrame(() => {
             const slideWidth = modalContent.offsetWidth;
+
+            if (applyTransition) {
+                // 后续切换：应用过渡
+                slidesContainer.style.transition = 'transform 0.3s ease';
+            } else {
+                // 首次加载：禁用过渡，并更新标志
+                slidesContainer.style.transition = 'none';
+                isInitialLoad = false;
+            }
+
             // 计算位移时考虑每个slide的右侧间距50px
             slidesContainer.style.transform = `translateX(${-index * (slideWidth + 50)}px)`;
+
+            if (applyTransition) {
+                // ★★★ 动画结束后移除过渡，避免干扰拖动 ★★★
+                setTimeout(() => {
+                    slidesContainer.style.transition = '';
+                }, 300); // 匹配过渡时间
+            }
         });
         
         // 重置垂直位移和缩放
@@ -444,12 +466,14 @@ window.addEventListener('load', function() {
                 const scale = Math.max(0.2, 1 - verticalDistance / 1000);
                 const blurValue = Math.max(0, 20 - (verticalDistance / 500) * 20);
                 verticalTranslate = verticalDistance;
-                
+                const horizontalTranslate = diffX; // 水平方向跟随鼠标移动
+
                 // 应用变换
                 const activeImg = slidesContainer.querySelector(`.img-preview-slide[data-index="${currentImageIndex}"] .img-preview-img`);
-                activeImg.style.transform = `translateY(${verticalTranslate}px) scale(${scale})`;
+                // 同时应用水平和垂直位移以及缩放
+                activeImg.style.transform = `translate(${horizontalTranslate}px, ${verticalTranslate}px) scale(${scale})`;
                 activeImg.style.transformOrigin = 'center';
-                
+
                 // 调整模态框透明度和模糊效果
                 const opacity = Math.max(0.3, 1 - verticalDistance / 300);
                 modal.style.backgroundColor = `rgba(51, 51, 51, ${opacity})`;
@@ -470,16 +494,36 @@ window.addEventListener('load', function() {
                 // 如果拖动距离超过150px，关闭预览
                 closeModal();
             } else {
-                // 否则回到原位
+                // 否则回到原位，添加平滑过渡
+                const activeImg = slidesContainer.querySelector(`.img-preview-slide[data-index="${currentImageIndex}"] .img-preview-img`);
+
+                // 为图片和模态框背景添加过渡效果
+                activeImg.style.transition = 'transform 0.3s ease';
+                modal.style.transition = 'background-color 0.3s ease, backdrop-filter 0.3s ease, -webkit-backdrop-filter 0.3s ease';
+
+                // 重置图片位置和缩放
+                activeImg.style.transform = '';
+                // 重置模态框背景和模糊效果
+                modal.style.backgroundColor = '';
+                modal.style.backdropFilter = ''; // 重置模糊
+                modal.style.webkitBackdropFilter = ''; // 重置模糊 (Safari)
+
+                // 水平容器回到正确位置（这个已有过渡）
                 slidesContainer.style.transition = 'transform 0.3s ease';
                 slidesContainer.style.transform = `translateX(${-currentImageIndex * (modalContent.offsetWidth + 50)}px)`;
-                const activeSlide = slidesContainer.querySelector(`.img-preview-slide[data-index="${currentImageIndex}"]`);
-                activeSlide.querySelector('.img-preview-img').style.transform = '';
+
+                // 移除样式类和恢复元素显示
                 slidesContainer.classList.remove('vertical-dragging');
                 thumbnailsContainer.classList.remove('img-preview-hidden');
-                // 恢复标题栏显示
                 captionContainer.classList.remove('img-preview-hidden');
-                modal.style.backgroundColor = '';
+
+                // 动画结束后移除过渡，避免影响后续拖动
+                setTimeout(() => {
+                    if (activeImg) {
+                      activeImg.style.transition = '';
+                    }
+                    modal.style.transition = '';
+                }, 300); // 匹配过渡时间
             }
         } else {
             // 处理水平拖动结束
@@ -565,12 +609,14 @@ window.addEventListener('load', function() {
                 const scale = Math.max(0.5, 1 - verticalDistance / 500);
                 const blurValue = Math.max(0, 20 - (verticalDistance / 300) * 20);
                 verticalTranslate = verticalDistance;
-                
+                const horizontalTranslate = diffX; // 水平方向跟随手指移动
+
                 // 应用变换
                 const activeImg = slidesContainer.querySelector(`.img-preview-slide[data-index="${currentImageIndex}"] .img-preview-img`);
-                activeImg.style.transform = `translateY(${verticalTranslate}px) scale(${scale})`;
+                // 同时应用水平和垂直位移以及缩放
+                activeImg.style.transform = `translate(${horizontalTranslate}px, ${verticalTranslate}px) scale(${scale})`;
                 activeImg.style.transformOrigin = 'center';
-                
+
                 // 调整模态框透明度和模糊效果
                 const opacity = Math.max(0.3, 1 - verticalDistance / 300);
                 modal.style.backgroundColor = `rgba(51, 51, 51, ${opacity})`;
@@ -663,6 +709,9 @@ window.addEventListener('load', function() {
             isDragging = false;
             isVerticalDragging = false;
             isModalContentDragging = false;
+
+            // ★★★ 重置首次加载标志 ★★★
+            isInitialLoad = true;
         }, 300);
     }
 });
