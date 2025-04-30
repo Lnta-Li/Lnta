@@ -142,7 +142,7 @@ window.addEventListener('load', function() {
         imageAspectRatios[imgIndex] = {
             original: `${imgWidth} / ${imgHeight}`,
             isPortrait: imgWidth / imgHeight < 1,
-            preset: imgWidth / imgHeight < 1 ? '9 / 16' : '1 / 1'
+            preset: imgWidth / imgHeight < 1 ? '1/1' : '4/3'
         };
         
         return imageAspectRatios[imgIndex];
