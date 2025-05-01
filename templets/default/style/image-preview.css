@@ -137,6 +137,8 @@
 .img-preview-thumbnails {
     z-index: 1001;
     background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(var(--blur-imgtitle));
+    -webkit-backdrop-filter: blur(var(--blur-imgtitle));
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
@@ -145,7 +147,7 @@
     height: var(--bottombar-height);
     position: fixed;
     bottom: 0;
-    cursor: grab;
+    cursor: pointer;
     user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;

@@ -247,14 +247,37 @@ window.addEventListener('load', function() {
     let zoomCurrentTranslateX = 0;
     let zoomCurrentTranslateY = 0;
 
+    // ★★★ 新增惯性滚动相关变量 ★★★
+    let lastMoveTime = 0;
+    let lastPosX = 0;
+    let lastPosY = 0;
+    let velocityX = 0;
+    let velocityY = 0;
+    let inertiaFrameId = null;
+    const dampingFactor = 0.92; // 阻尼系数，越小惯性越短
+    const minVelocity = 0.1;   // 最小速度阈值，低于此值停止惯性动画
+
     slidesContainer.addEventListener('mousedown', (e) => {
         if (!modal.classList.contains('active')) return;
         
         // ★★★ 放大模式下的拖动图片逻辑 ★★★
         if (isZoomMode) {
+            // ★★★ 停止正在进行的惯性动画 ★★★
+            if (inertiaFrameId) {
+                cancelAnimationFrame(inertiaFrameId);
+                inertiaFrameId = null;
+            }
+            
             zoomDragging = true;
             zoomStartX = e.clientX;
             zoomStartY = e.clientY;
+            
+            // ★★★ 初始化速度和时间戳 ★★★
+            velocityX = 0;
+            velocityY = 0;
+            lastPosX = zoomStartX;
+            lastPosY = zoomStartY;
+            lastMoveTime = performance.now();
             
             // 获取当前显示的图片
             const activeImg = slidesContainer.querySelector(`.img-preview-slide[data-index="${currentImageIndex}"] .img-preview-img`);
@@ -298,25 +321,61 @@ window.addEventListener('load', function() {
         if (zoomDragging && isZoomMode) {
             e.preventDefault();
             
+            const currentTime = performance.now();
+            const deltaTime = currentTime - lastMoveTime;
+            const currentX = e.clientX;
+            const currentY = e.clientY;
+
             // 计算移动距离
-            const diffX = e.clientX - zoomStartX;
-            const diffY = e.clientY - zoomStartY;
+            const diffX = currentX - zoomStartX;
+            const diffY = currentY - zoomStartY;
+            
+            // ★★★ 计算速度 ★★★
+            if (deltaTime > 0) { // 避免除以零
+                velocityX = (currentX - lastPosX) / deltaTime;
+                velocityY = (currentY - lastPosY) / deltaTime;
+            } else {
+                velocityX = 0;
+                velocityY = 0;
+            }
+            
+            // ★★★ 更新最后位置和时间 ★★★
+            lastPosX = currentX;
+            lastPosY = currentY;
+            lastMoveTime = currentTime;
             
             // 获取当前显示的图片
             const activeImg = slidesContainer.querySelector(`.img-preview-slide[data-index="${currentImageIndex}"] .img-preview-img`);
+            if (!activeImg) return;
+            
+            // 获取可移动边界信息
+            const boundaries = calculateImageBoundaries(activeImg, currentZoomLevel);
             
             // 新的平移位置 = 当前平移位置 + 移动距离
-            const newTranslateX = zoomCurrentTranslateX + diffX;
-            const newTranslateY = zoomCurrentTranslateY + diffY;
+            let newTranslateX = zoomCurrentTranslateX + diffX;
+            let newTranslateY = zoomCurrentTranslateY + diffY;
             
-            // 应用平移和当前缩放
+            // 智能边界限制
+            if (boundaries.allowHorizontal) {
+                newTranslateX = Math.max(-boundaries.bounds.x, Math.min(boundaries.bounds.x, newTranslateX));
+            } else {
+                newTranslateX = 0;  // 如果图片宽度小于容器，强制水平居中
+            }
+            
+            if (boundaries.allowVertical) {
+                newTranslateY = Math.max(-boundaries.bounds.y, Math.min(boundaries.bounds.y, newTranslateY));
+            } else {
+                newTranslateY = 0;  // 如果图片高度小于容器，强制垂直居中
+            }
+            
+            // 应用平移 (不需要过渡效果)
             activeImg.style.transform = `translate(${newTranslateX}px, ${newTranslateY}px) scale(${currentZoomLevel})`;
             
-            // 更新起始位置
-            zoomStartX = e.clientX;
-            zoomStartY = e.clientY;
+            // 更新拖拽起始位置 (重要：不是更新 lastPosX/Y)
+            zoomStartX = currentX;
+            zoomStartY = currentY;
             
-            // 更新当前平移位置
+            // 更新当前平移值
             zoomCurrentTranslateX = newTranslateX;
             zoomCurrentTranslateY = newTranslateY;
             
@@ -399,20 +458,37 @@ window.addEventListener('load', function() {
         // ★★★ 处理放大模式下的拖拽结束 ★★★
         if (zoomDragging) {
             zoomDragging = false;
-            // 恢复手势为抓手状态
-            modalContent.style.cursor = 'grab';
-            return;
+            
+            // ★★★ 启动惯性动画 ★★★
+            if (Math.abs(velocityX) > minVelocity || Math.abs(velocityY) > minVelocity) {
+                startInertiaAnimation();
+            } else {
+                // 如果速度不够，确保光标恢复
+                if (isZoomMode) {
+                    modalContent.style.cursor = 'grab';
+                }
+            }
+            // 注意：此处不直接 return，允许后续非缩放拖拽逻辑执行（如果需要的话）
         }
 
         if (!isDragging) return;
         handleDragEnd(verticalDistance, isVerticalDragging);
     });
     
-    // ★★★ 确保鼠标离开窗口时也能结束拖拽 ★★★
+    // ★★★ 确保鼠标离开窗口时也能结束拖拽并触发惯性 ★★★
     document.addEventListener('mouseleave', () => {
         if (zoomDragging) {
             zoomDragging = false;
-            modalContent.style.cursor = 'grab';
+            
+            // ★★★ 启动惯性动画 ★★★
+            if (Math.abs(velocityX) > minVelocity || Math.abs(velocityY) > minVelocity) {
+                startInertiaAnimation();
+            } else {
+                // 如果速度不够，确保光标恢复
+                if (isZoomMode) {
+                    modalContent.style.cursor = 'grab';
+                }
+            }
         }
     });
     
@@ -424,6 +500,15 @@ window.addEventListener('load', function() {
     let pinchStartTranslateY = 0;
     let initialTouchMidpoint = { x: 0, y: 0 };  // 记录初始双指中点在屏幕上的位置
     let initialImagePosition = { x: 0, y: 0 };  // 记录初始图片位置
+
+    // ★★★ 新增平滑处理变量 ★★★
+    let lastTouchMidpoint = { x: 0, y: 0 };
+    let lastPinchRatio = 1;
+    let smoothingFactor = 0.3; // 平滑系数，数值越小越平滑，但响应越慢
+    const MIN_PINCH_CHANGE = 0.005; // 最小缩放变化阈值
+    const MIN_POSITION_CHANGE = 0.5; // 最小位置变化阈值(像素)
+    let animationFrameId = null;
+    let pendingTransform = null;
 
     // 触摸滑动支持
     slidesContainer.addEventListener('touchstart', (e) => {
@@ -458,6 +543,10 @@ window.addEventListener('load', function() {
                 x: (touch1.clientX + touch2.clientX) / 2,
                 y: (touch1.clientY + touch2.clientY) / 2
             };
+            
+            // ★★★ 重置平滑处理变量 ★★★
+            lastTouchMidpoint = { ...initialTouchMidpoint };
+            lastPinchRatio = 1;
 
             // 记录图片初始位置（中心点坐标）
             initialImagePosition = {
@@ -471,9 +560,22 @@ window.addEventListener('load', function() {
         // ★★★ 放大模式下的触摸拖拽开始 ★★★
         if (isZoomMode) {
             if (e.touches.length === 1) {
+                // ★★★ 停止正在进行的惯性动画 ★★★
+                if (inertiaFrameId) {
+                    cancelAnimationFrame(inertiaFrameId);
+                    inertiaFrameId = null;
+                }
+                
                 zoomDragging = true;
                 zoomStartX = e.touches[0].clientX;
                 zoomStartY = e.touches[0].clientY;
+                
+                // ★★★ 初始化速度和时间戳 ★★★
+                velocityX = 0;
+                velocityY = 0;
+                lastPosX = zoomStartX;
+                lastPosY = zoomStartY;
+                lastMoveTime = performance.now();
                 
                 // 获取当前显示的图片
                 const activeImg = slidesContainer.querySelector(`.img-preview-slide[data-index="${currentImageIndex}"] .img-preview-img`);
@@ -533,20 +635,39 @@ window.addEventListener('load', function() {
             // 计算缩放比例变化
             const pinchRatio = currentDistance / initialPinchDistance;
             
+            // ★★★ 平滑处理缩放比例 ★★★
+            const smoothedPinchRatio = lastPinchRatio + (pinchRatio - lastPinchRatio) * smoothingFactor;
+            
+            // 如果变化太小，保持上次的比例
+            const isPinchChangeSufficient = Math.abs(smoothedPinchRatio - lastPinchRatio) >= MIN_PINCH_CHANGE;
+            const effectivePinchRatio = isPinchChangeSufficient ? smoothedPinchRatio : lastPinchRatio;
+            
+            // 更新上次缩放比例
+            lastPinchRatio = isPinchChangeSufficient ? smoothedPinchRatio : lastPinchRatio;
+            
             // 新的缩放级别 = 开始缩放时的级别 * 手指距离比例
             // 允许临时缩放至小于100%，但最小不低于50%
-            let newZoom = pinchStartZoom * pinchRatio;
+            let newZoom = pinchStartZoom * effectivePinchRatio;
             newZoom = Math.max(0.5, Math.min(newZoom, 5));
             
             // 获取当前图片元素
             const activeImg = slidesContainer.querySelector(`.img-preview-slide[data-index="${currentImageIndex}"] .img-preview-img`);
             if (!activeImg) return;
             
-            // 计算当前双指中点
-            const currentTouchMidpoint = {
+            // ★★★ 原始双指中点计算 ★★★
+            const rawTouchMidpoint = {
                 x: (touch1.clientX + touch2.clientX) / 2,
                 y: (touch1.clientY + touch2.clientY) / 2
             };
+            
+            // ★★★ 平滑处理触摸中点 ★★★
+            const currentTouchMidpoint = {
+                x: lastTouchMidpoint.x + (rawTouchMidpoint.x - lastTouchMidpoint.x) * smoothingFactor,
+                y: lastTouchMidpoint.y + (rawTouchMidpoint.y - lastTouchMidpoint.y) * smoothingFactor
+            };
+            
+            // 更新上次触摸中点
+            lastTouchMidpoint = { ...currentTouchMidpoint };
             
             // 获取图片原始尺寸和当前渲染尺寸
             const imgNaturalWidth = activeImg.naturalWidth;
@@ -613,38 +734,77 @@ window.addEventListener('load', function() {
                 }
             }
             
-            // 更新缩放状态 - 即使缩放小于1也临时允许
-            currentZoomLevel = newZoom;
-            // 只有实际大于1时才标记为缩放模式
-            const actualZoomMode = newZoom > 1;
-            // 但我们不更新isZoomMode，仅在touchend时更新
-
-            // 应用变换，不添加过渡效果以保持流畅感
-            if (activeImg) {
-                    activeImg.style.transform = `translate(${newTranslateX}px, ${newTranslateY}px) scale(${newZoom})`;
+            // ★★★ 判断位置是否有明显变化 ★★★
+            let needsUpdate = false;
+            
+            // 检查缩放值是否有明显变化
+            if (Math.abs(newZoom - currentZoomLevel) >= MIN_PINCH_CHANGE) {
+                currentZoomLevel = newZoom;
+                needsUpdate = true;
             }
-
-            // 记录位置信息供结束时使用
-            zoomCurrentTranslateX = newTranslateX;
-            zoomCurrentTranslateY = newTranslateY;
+            
+            // 检查位置是否有明显变化
+            if (Math.abs(newTranslateX - zoomCurrentTranslateX) >= MIN_POSITION_CHANGE ||
+                Math.abs(newTranslateY - zoomCurrentTranslateY) >= MIN_POSITION_CHANGE) {
+                zoomCurrentTranslateX = newTranslateX;
+                zoomCurrentTranslateY = newTranslateY;
+                needsUpdate = true;
+            }
+            
+            // ★★★ 使用requestAnimationFrame优化渲染 ★★★
+            if (needsUpdate && activeImg) {
+                // 取消之前的动画帧请求
+                if (animationFrameId) {
+                    cancelAnimationFrame(animationFrameId);
+                }
+                
+                // 存储变换信息以在下一帧应用
+                pendingTransform = {
+                    translateX: zoomCurrentTranslateX,
+                    translateY: zoomCurrentTranslateY,
+                    zoom: currentZoomLevel
+                };
+                
+                // 请求新的动画帧
+                animationFrameId = requestAnimationFrame(() => {
+                    if (pendingTransform && activeImg) {
+                        activeImg.style.transform = `translate(${pendingTransform.translateX}px, ${pendingTransform.translateY}px) scale(${pendingTransform.zoom})`;
+                        // 启用硬件加速
+                        activeImg.style.willChange = 'transform';
+                        pendingTransform = null;
+                    }
+                });
+            }
 
             return;
         }
         
         // ★★★ 处理放大模式下的触摸拖拽移动 ★★★
-        if (!isDragging || e.touches.length !== 1) return;
-        
-        // 放大模式下不允许拖动切换/关闭
-        if (isZoomMode) {
-            // ★★★ 添加单指拖拽平移逻辑 ★★★
+        if (zoomDragging && isZoomMode && e.touches.length === 1) {
             e.preventDefault(); // 阻止页面滚动
 
+            const currentTime = performance.now();
+            const deltaTime = currentTime - lastMoveTime;
             const currentX = e.touches[0].clientX;
             const currentY = e.touches[0].clientY;
 
             // 计算移动距离
             const diffX = currentX - zoomStartX;
             const diffY = currentY - zoomStartY;
+            
+            // ★★★ 计算速度 ★★★
+            if (deltaTime > 0) {
+                velocityX = (currentX - lastPosX) / deltaTime;
+                velocityY = (currentY - lastPosY) / deltaTime;
+            } else {
+                velocityX = 0;
+                velocityY = 0;
+            }
+            
+            // ★★★ 更新最后位置和时间 ★★★
+            lastPosX = currentX;
+            lastPosY = currentY;
+            lastMoveTime = currentTime;
 
             // 获取当前显示的图片
             const activeImg = slidesContainer.querySelector(`.img-preview-slide[data-index="${currentImageIndex}"] .img-preview-img`);
@@ -673,7 +833,7 @@ window.addEventListener('load', function() {
             // 应用平移和当前缩放 (无过渡效果)
             activeImg.style.transform = `translate(${newTranslateX}px, ${newTranslateY}px) scale(${currentZoomLevel})`;
 
-            // 更新起始位置以进行下一次移动计算
+            // 更新拖拽起始位置 (重要：不是更新 lastPosX/Y)
             zoomStartX = currentX;
             zoomStartY = currentY;
 
@@ -770,6 +930,14 @@ window.addEventListener('load', function() {
                 return;
             }
             
+            // ★★★ 清理动画帧和硬件加速 ★★★
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
+            pendingTransform = null;
+            activeImg.style.willChange = 'auto'; // 缩放结束后重置硬件加速
+            
             // 检查当前实际缩放级别
             if (currentZoomLevel < 1) {
                 // 如果低于100%，添加平滑过渡回弹到100%并居中
@@ -835,12 +1003,17 @@ window.addEventListener('load', function() {
         // 处理放大模式下的触摸拖拽结束
         if (zoomDragging) {
             zoomDragging = false;
-            // 拖拽结束，保持最终的 zoomCurrentTranslateX/Y
-            // 如果仍在 Zoom 模式，设置光标为 grab
-            if (isZoomMode) {
-                 modalContent.style.cursor = 'grab';
+            
+            // ★★★ 启动惯性动画 ★★★
+            if (Math.abs(velocityX) > minVelocity || Math.abs(velocityY) > minVelocity) {
+                startInertiaAnimation();
+            } else {
+                // 如果速度不够，确保光标恢复
+                if (isZoomMode) {
+                    modalContent.style.cursor = 'grab';
+                }
             }
-            return;
+            return; // 触摸事件这里通常需要返回，避免后续逻辑冲突
         }
 
         // 处理非 Pinch、非 Zoom Drag 的普通拖拽结束
@@ -1555,5 +1728,102 @@ window.addEventListener('load', function() {
             allowVertical,
             bounds: { x: maxX, y: maxY }
         };
+    }
+
+    // ★★★ 新增惯性动画函数 ★★★
+    function startInertiaAnimation() {
+        // 确保有图片且处于缩放模式
+        const activeImg = slidesContainer.querySelector(`.img-preview-slide[data-index="${currentImageIndex}"] .img-preview-img`);
+        if (!activeImg || !isZoomMode) {
+            velocityX = 0;
+            velocityY = 0;
+            if (inertiaFrameId) cancelAnimationFrame(inertiaFrameId);
+            inertiaFrameId = null;
+            return;
+        }
+        
+        // 停止之前的动画（如果有）
+        if (inertiaFrameId) {
+            cancelAnimationFrame(inertiaFrameId);
+        }
+        
+        let lastTime = performance.now();
+        
+        function inertiaStep(currentTime) {
+            const deltaTime = currentTime - lastTime;
+            lastTime = currentTime;
+            
+            // 计算当前帧的位移
+            const deltaX = velocityX * deltaTime;
+            const deltaY = velocityY * deltaTime;
+            
+            // 计算新的目标位置
+            let newTranslateX = zoomCurrentTranslateX + deltaX;
+            let newTranslateY = zoomCurrentTranslateY + deltaY;
+            
+            // 获取边界
+            const boundaries = calculateImageBoundaries(activeImg, currentZoomLevel);
+            
+            // 应用边界限制
+            let stoppedX = false, stoppedY = false;
+            if (boundaries.allowHorizontal) {
+                if (newTranslateX < -boundaries.bounds.x) {
+                    newTranslateX = -boundaries.bounds.x;
+                    velocityX = 0; // 碰到边界停止X方向惯性
+                    stoppedX = true;
+                } else if (newTranslateX > boundaries.bounds.x) {
+                    newTranslateX = boundaries.bounds.x;
+                    velocityX = 0;
+                    stoppedX = true;
+                }
+            } else {
+                newTranslateX = 0;
+                velocityX = 0;
+                stoppedX = true;
+            }
+            
+            if (boundaries.allowVertical) {
+                if (newTranslateY < -boundaries.bounds.y) {
+                    newTranslateY = -boundaries.bounds.y;
+                    velocityY = 0; // 碰到边界停止Y方向惯性
+                    stoppedY = true;
+                } else if (newTranslateY > boundaries.bounds.y) {
+                    newTranslateY = boundaries.bounds.y;
+                    velocityY = 0;
+                    stoppedY = true;
+                }
+            } else {
+                newTranslateY = 0;
+                velocityY = 0;
+                stoppedY = true;
+            }
+            
+            // 更新当前位置
+            zoomCurrentTranslateX = newTranslateX;
+            zoomCurrentTranslateY = newTranslateY;
+            
+            // 应用变换
+            activeImg.style.transform = `translate(${newTranslateX}px, ${newTranslateY}px) scale(${currentZoomLevel})`;
+            
+            // 应用阻尼
+            velocityX *= dampingFactor;
+            velocityY *= dampingFactor;
+            
+            // 检查是否停止动画
+            if (Math.abs(velocityX) < minVelocity && Math.abs(velocityY) < minVelocity) {
+                cancelAnimationFrame(inertiaFrameId);
+                inertiaFrameId = null;
+                // 确保光标恢复
+                if (isZoomMode) {
+                    modalContent.style.cursor = 'grab';
+                }
+            } else {
+                // 继续下一帧
+                inertiaFrameId = requestAnimationFrame(inertiaStep);
+            }
+        }
+        
+        // 开始第一帧
+        inertiaFrameId = requestAnimationFrame(inertiaStep);
     }
 });
