@@ -3,6 +3,13 @@
 .header-image:hover {
     cursor: url({dede:global.cfg_cursor/}), pointer;
 }
+/* PT Mono本地字体正常加载，因为nav使用了这个字体且字体包文件仅17kb需要保证外观不产生变化，阿里妈妈方圆体字体文件较大，使用异步加载字体 */
+@font-face {
+  font-family: 'PT Mono';
+  src: url('{dede:global.cfg_templets_skin/}/fonts/PTMono-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 /* 为了方便更新，将本站字体及iconfont在线链接作为后台自定义变量进行调用 */
 {dede:global.cfg_font_icon/}
 </style>
@@ -32,6 +39,28 @@
 
 <!-- 平滑滚动到锚点的JavaScript -->
 <script>
+// 阿里妈妈方圆体字体文件较大，使用异步加载字体
+function loadFonts() {
+    const fonts = [
+        {
+            family: 'AlimamaFangYuanTiVF',
+            url: '{dede:global.cfg_templets_skin/}/fonts/AlimamaFangYuanTiVF-Thin.ttf',
+            weight: '100',
+            style: 'normal'
+        }
+    ];
+
+    fonts.forEach(font => {
+        const fontFace = new FontFace(font.family, `url(${font.url})`, {
+            weight: font.weight,
+            style: font.style
+        });
+        fontFace.load().then(loadedFace => document.fonts.add(loadedFace));
+    });
+}
+
+document.addEventListener('DOMContentLoaded', loadFonts);
+
 document.addEventListener('DOMContentLoaded', function() {
   // 点击事件委托到document上
   document.addEventListener('click', function(e) {

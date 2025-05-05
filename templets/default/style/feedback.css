@@ -32,7 +32,7 @@
     margin-right: 0px;
     font-size: 16px;
     float: right;
-    font-family: 'AlimamaFangYuanTiVF';
+    font-family: var(--content-font-family);
     font-variation-settings: 'wght' 380, 'ROND' 0;
 }
 
@@ -44,7 +44,7 @@
     font-size: 16px;
     border: 2px dashed var(--background-color);
     border-radius: 8px;
-    font-family: PT Mono, HarmonySans SC;
+    font-family: var(--defult-font-family);
     background-color: var(--comment-bg-color);
     color: var(--faint-color-3);
     box-sizing: border-box;
@@ -59,7 +59,7 @@
     background-color: var(--comment-bg-color-2);
     border-radius: 8px;
     resize: none;
-    font-family: PT Mono, HarmonySans SC;
+    font-family: var(--defult-font-family);
     color: var(--faint-color-3);
     box-sizing: border-box;
     padding: 12px;
@@ -162,7 +162,7 @@
 }
 
 .text {
-    font-family: HarmonySans SC;
+    font-family: var(--defult-font-family);
     font-size: 16px;
     color: var(--comment-color);
     transition: font-size var(--transition-time) ease;
@@ -191,14 +191,14 @@
     display: flex;
     color: var(--faint-color-0);
     font-size: 14px;
-    font-family: PT Mono, HarmonySans SC;
+    font-family: var(--pageinfo-font-family);
     margin: 20px 0;
 }
 
 #commetpages a {
     color: #2c2e2f;
     font-size: 14px;
-    font-family: PT Mono, HarmonySans SC;
+    font-family: var(--pageinfo-font-family);
 }
 
 #commetpages span,.author-info strong,.author-info a {
@@ -226,7 +226,7 @@ textarea:focus-visible, input:focus-visible {
     gap: 10px;
     font-size: 18px;
     color: rgb(135 136 146);
-    font-family: HarmonySans SC;
+    font-family: var(--defult-font-family);
     justify-content: center;
 }
 

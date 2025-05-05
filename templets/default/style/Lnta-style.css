@@ -1,14 +1,14 @@
 /* 全局字体样式 */
 :root {
-    --nav-font-family: PT Mono, HarmonySans SC; /* 导航栏字体 */
-    --index-h6-font-family: PT Mono, HarmonySans SC;    /* 首页列表栏目字体 */
-    --index-h3-font-family: PT Mono, HarmonySans SC; /* 首页列表序号字体 */
-    --h2-font-family: PT Mono, HarmonySans SC; /* 首页列表标题字体 */
+    --nav-font-family: PT Mono, system-ui; /* 导航栏字体 */
+    --index-h6-font-family: PT Mono, system-ui;    /* 首页列表栏目字体 */
+    --index-h3-font-family: PT Mono, system-ui; /* 首页列表序号字体 */
+    --h2-font-family: PT Mono, system-ui; /* 首页列表标题字体 */
+    --pageinfo-font-family: PT Mono, system-ui; /* 页面信息字体 */
+    --h1-font-family: system-ui; /* 正文标题字体 */
+    --headtext-font-family: Arial; /* 首页头部字体 */
+    --defult-font-family: system-ui; /* 默认字体 */
     --content-h3-font-family: PT Mono, 'AlimamaFangYuanTiVF'; /* 正文标题字体 */
-    --pageinfo-font-family: PT Mono, HarmonySans SC; /* 页面信息字体 */
-    --h1-font-family: "PT Sans", Helvetica, Arial, sans-serif; /* 正文标题字体 */
-    --headtext-font-family: "PT Sans", Helvetica, Arial, sans-serif; /* 首页头部字体 */
-    --defult-font-family: "PT Sans", Helvetica, Arial, sans-serif; /* 默认字体 */
     --content-font-family: AlimamaFangYuanTiVF; /* 正文字体 */
     --tt-font-family: PT Mono, var(--content-font-family); /* <tt>字体 */
     --line-height-content: 1.8em; /* 文章页正文行高 */
@@ -637,8 +637,8 @@ h4 {
 
 .project-description {
     color: var(--faint-color-4);
-    font-weight: 300;
-    font-family: 'HarmonySans SC';
+    font-weight: 400;
+    font-family: var(--defult-font-family);
 }
 
 .next-shelf {
@@ -740,9 +740,12 @@ h2 {
 /* 段落样式 */
 p {
     font-size: var(--fontsize-p);
-    line-height: var(--line-height-content);
     color: var(--faint-color-4);
     font-family: var(--defult-font-family);
+}
+
+.Content-Type p, .project-area p {
+    line-height: var(--line-height-content);
 }
 
 /* 特定项目布局样式 */

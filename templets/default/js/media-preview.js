@@ -106,28 +106,33 @@
             return matrix.m41;
         },
 
-        // 计算图片比例并缓存
+        // 计算图片比例并缓存 (也处理异步加载情况)
         getImageAspectRatio(img, imageAspectRatios, images) {
             const imgIndex = images.indexOf(img);
             
-            // 如果已经计算过，直接返回缓存的结果
+            // 1. 检查缓存
             if (imageAspectRatios[imgIndex]) {
                 return imageAspectRatios[imgIndex];
             }
             
-            // 计算图片的宽高比并缓存结果
-            const imgWidth = img.naturalWidth || img.width;
-            const imgHeight = img.naturalHeight || img.height;
-            const isPortrait = imgWidth / imgHeight < 1;
-            
-            // 保存原始宽高比和预设比例 (使用CONFIG中的预设)
-            imageAspectRatios[imgIndex] = {
-                original: `${imgWidth} / ${imgHeight}`,
-                isPortrait: isPortrait,
-                preset: isPortrait ? CONFIG.ASPECT_RATIO_PRESETS.portrait : CONFIG.ASPECT_RATIO_PRESETS.landscape
-            };
-            
-            return imageAspectRatios[imgIndex];
+            // 2. 检查图片是否已加载完成
+            if (img.complete && img.naturalWidth > 0 && img.naturalHeight > 0) {
+                // 图片已加载完成，计算并缓存
+                const imgWidth = img.naturalWidth;
+                const imgHeight = img.naturalHeight;
+                const isPortrait = imgWidth / imgHeight < 1;
+                
+                imageAspectRatios[imgIndex] = {
+                    original: `${imgWidth} / ${imgHeight}`,
+                    isPortrait: isPortrait,
+                    preset: isPortrait ? CONFIG.ASPECT_RATIO_PRESETS.portrait : CONFIG.ASPECT_RATIO_PRESETS.landscape
+                };
+                return imageAspectRatios[imgIndex];
+            } else {
+                 // 3. 图片未加载完成或尺寸无效
+                 // 返回 null 或 undefined，调用者需要处理这种情况 (例如通过 img.onload)
+                 return null; 
+            }
         },
 
         // 计算图片边界限制
@@ -219,28 +224,59 @@
                 DOM.slides.push(slide);
             });
         },
-        // 创建缩略图
+        // 创建缩略图 (包含异步宽高比处理)
         createThumbnails() {
             const images = DOM.images;
             const thumbnailsContainer = DOM.thumbnailsContainer;
-            const imageAspectRatios = ImagePreview.imageAspectRatios;
+            const imageAspectRatios = ImagePreview.imageAspectRatios; // 使用缓存对象
+            
             // 创建缩略图容器
             const thumbnailsWrapper = document.createElement('div');
             thumbnailsWrapper.className = 'img-preview-thumbnails-wrapper';
-            DOM.thumbnailsWrapper = thumbnailsWrapper;
+            DOM.thumbnailsWrapper = thumbnailsWrapper; // 缓存容器
+
             images.forEach((img, index) => {
                 const thumbnail = document.createElement('img');
                 thumbnail.src = img.src;
                 thumbnail.className = 'img-preview-thumbnail';
                 thumbnail.dataset.index = index;
-                // 获取图片的比例信息
-                const aspectRatio = Utils.getImageAspectRatio(img, imageAspectRatios, images);
-                // 设置缩略图比例为预设值
-                thumbnail.style.aspectRatio = aspectRatio.preset;
-                // 禁用缩略图的默认拖拽行为
-                thumbnail.draggable = false;
+                thumbnail.draggable = false; // 禁用默认拖拽
+
+                // --- 异步处理宽高比 ---
+                const setAspectRatio = (aspectRatioData) => {
+                    if (aspectRatioData && aspectRatioData.preset) {
+                        thumbnail.style.aspectRatio = aspectRatioData.preset;
+                    } else {
+                        // 如果数据无效，使用默认值
+                        thumbnail.style.aspectRatio = CONFIG.ASPECT_RATIO_PRESETS.landscape; 
+                    }
+                };
+
+                // 尝试直接获取宽高比 (处理已缓存或已加载完成的图片)
+                const initialAspectRatio = Utils.getImageAspectRatio(img, imageAspectRatios, images);
+                if (initialAspectRatio) {
+                    setAspectRatio(initialAspectRatio); // 如果已有数据，立即设置
+                } else {
+                    // 如果图片未加载完成 (Utils.getImageAspectRatio 返回 undefined 或 null)
+                    // 设置一个临时/默认宽高比
+                     thumbnail.style.aspectRatio = CONFIG.ASPECT_RATIO_PRESETS.landscape; // 或 '1/1'
+
+                    // 添加 onload 事件监听器，在图片加载完成后更新宽高比
+                    img.onload = () => {
+                        const loadedAspectRatio = Utils.getImageAspectRatio(img, imageAspectRatios, images);
+                        setAspectRatio(loadedAspectRatio);
+                        img.onload = null; // 清理监听器，避免内存泄漏
+                    };
+                    // 可选：添加onerror处理，以防图片加载失败
+                    img.onerror = () => {
+                         setAspectRatio(null); // 使用默认值
+                         img.onerror = null;
+                    }
+                }
+                // --- 结束异步处理 ---
+
                 thumbnailsWrapper.appendChild(thumbnail);
-                DOM.thumbnails.push(thumbnail);
+                DOM.thumbnails.push(thumbnail); // 缓存缩略图DOM元素
             });
             thumbnailsContainer.appendChild(thumbnailsWrapper);
         }
@@ -291,11 +327,27 @@
         // 初始化
         init() {
             this.loadCSS();
-            this.scanImages();
+            this.scanImages(); // 扫描获取图片列表
+
+            // 提前创建基础UI结构
             UIBuilder.createModal();
             UIBuilder.createSlides();
-            UIBuilder.createThumbnails();
-            this.bindEvents();
+
+            // **重要：提前绑定图片点击事件，实现早期可交互**
+            this.bindImageClickEvents(); 
+
+            // 创建缩略图（包含异步处理宽高比）
+            UIBuilder.createThumbnails(); 
+
+            // 绑定其他核心事件
+            this.bindModalEvents();
+            this.bindThumbnailEvents(); // 缩略图交互事件（点击、拖动）
+            this.bindDragEvents();      // 主要预览区域拖动事件
+            this.bindZoomEvents();      // 缩放相关事件
+            this.bindKeyboardEvents();  // 键盘导航
+            this.bindResizeEvents();    // 窗口大小调整
+
+            // 初始化双击处理
             DoubleClickZoomHandler.init(); 
         },
         // 加载CSS样式
@@ -319,16 +371,6 @@
                     DOM.imageSources.push(config);
                 });
             });
-        },
-        // 绑定事件
-        bindEvents() {
-            this.bindModalEvents();
-            this.bindThumbnailEvents();
-            this.bindDragEvents();
-            this.bindZoomEvents();
-            this.bindKeyboardEvents();
-            this.bindResizeEvents();
-            this.bindImageClickEvents();
         },
 
         // 绑定模态框事件
@@ -398,7 +440,7 @@
             });
         },
 
-        // 绑定缩略图事件
+        // 绑定缩略图事件 (主要是容器拖动和缩略图点击切换)
         bindThumbnailEvents() {
             const thumbnailsContainer = DOM.thumbnailsContainer;
             const thumbnails = DOM.thumbnails;
@@ -442,7 +484,7 @@
             });
         },
 
-        // 绑定拖拽事件
+        // 绑定拖拽事件 (主预览区域)
         bindDragEvents() {
             const slidesContainer = DOM.slidesContainer;
             const modal = DOM.modal;
@@ -1163,7 +1205,7 @@
             });
         },
 
-        // 绑定图片点击事件
+        // 绑定图片点击事件 (用于打开预览)
         bindImageClickEvents() {
             DOM.images.forEach((img, index) => {
                 // 跟踪触摸/点击起始位置和是否发生拖动
@@ -1302,21 +1344,29 @@
             
             document.body.style.overflow = 'hidden'; // 禁用背景页面滚动
             
-            // 更新缩略图状态
+            // 更新缩略图状态和宽高比
             const thumbnails = DOM.thumbnails;
             thumbnails.forEach((thumb, i) => {
                 thumb.classList.toggle('active', i === index);
                 
-                // 获取图片的比例信息
-                const aspectRatio = Utils.getImageAspectRatio(DOM.images[i], this.imageAspectRatios, DOM.images);
+                // 确保获取到宽高比信息（可能是同步或异步获取）
+                const aspectRatioData = Utils.getImageAspectRatio(DOM.images[i], this.imageAspectRatios, DOM.images);
                 
-                // 设置正确的aspect-ratio
-                if (i === index) {
-                    // 激活状态的缩略图使用原图的宽高比
-                    thumb.style.aspectRatio = aspectRatio.original;
+                // 如果aspectRatioData还未就绪 (图片还在加载中)，Utils.getImageAspectRatio内部会处理
+                // 这里我们直接使用缓存或已计算好的结果
+                if (aspectRatioData) {
+                    // 设置正确的aspect-ratio
+                    if (i === index) {
+                        // 激活状态的缩略图使用原图的宽高比
+                        thumb.style.aspectRatio = aspectRatioData.original || CONFIG.ASPECT_RATIO_PRESETS.landscape; // Fallback
+                    } else {
+                        // 非激活状态的缩略图使用预设比例
+                        thumb.style.aspectRatio = aspectRatioData.preset;
+                    }
                 } else {
-                    // 非激活状态的缩略图使用预设比例
-                    thumb.style.aspectRatio = aspectRatio.preset;
+                     // 如果宽高比数据还不可用（理论上不应发生，因为Utils.getImageAspectRatio会处理加载）
+                     // 可以设置一个默认值或等待
+                     thumb.style.aspectRatio = CONFIG.ASPECT_RATIO_PRESETS.landscape; // Fallback
                 }
             });
             
@@ -2115,8 +2165,8 @@
         }
     };
 
-    // 初始化程序
-    window.addEventListener('load', function() {
+    // 初始化程序 - **改为DOMContentLoaded**
+    document.addEventListener('DOMContentLoaded', function() {
         ImagePreview.init();
     });
 })();

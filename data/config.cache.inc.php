@@ -168,25 +168,7 @@ $cfg_readmore_speed = 180;
 $cfg_head_image = '/uploads/250413/1-2504131240391A.jpg';
 $cfg_readmore_quantit = 15;
 $cfg_Default_theme = 0;
-$cfg_font_icon = '@font-face {
-    font-family: \'PT Mono\';
-    src: url(\'/templets/default/fonts/PTMono-Regular.ttf\') format(\'truetype\');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: \'AlimamaFangYuanTiVF\';
-    src: url(\'/templets/default/fonts/AlimamaFangYuanTiVF-Thin.ttf\') format(\'truetype\');
-    font-weight: 100;
-    font-style: normal;
-}
-@font-face {
-    font-family: \'HarmonySans SC\';
-    src: url(\'/templets/default/fonts/HarmonyOS_Sans_SC_Regular.ttf\') format(\'truetype\');
-    font-weight: 100;
-    font-style: normal;
-}
-/* 在线链接服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
+$cfg_font_icon = '/* 在线链接服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
 @font-face {
   font-family: \'iconfontb\';  /* Project id 4883100 */
   src: url(\'//at.alicdn.com/t/c/font_4883100_x4xw47vv32n.woff2?t=1745658560345\') format(\'woff2\'),
