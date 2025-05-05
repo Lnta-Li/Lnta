@@ -47,8 +47,7 @@
             BLUR_DISTANCE_FACTOR: 300,  // 计算模糊效果的距离除数 (越大变化越慢)
             BACKGROUND_RGB: '51, 51, 51', // 模态框背景RGB颜色
             BACKDROP_BLUR_BASE: 20      // 模态框背景基础模糊值 (px)
-        },
-        TAP_DELAY: 200 // ms - 判定双击的延迟
+        }
     };
 
     // 状态管理器
@@ -167,28 +166,22 @@
             // 创建模态框元素
             const modal = document.createElement('div');
             modal.className = 'img-preview-modal';
-            
             const modalContent = document.createElement('div');
             modalContent.className = 'img-preview-content';
-            
             // 添加缩略图容器
             const thumbnailsContainer = document.createElement('div');
             thumbnailsContainer.className = 'img-preview-thumbnails';
-            
             // 添加标题栏容器
             const captionContainer = document.createElement('div');
             captionContainer.className = 'img-preview-caption-container';
-            
             // 创建图片滑动容器
             const slidesContainer = document.createElement('div');
             slidesContainer.className = 'img-preview-slides';
             modalContent.appendChild(slidesContainer);
-            
             modal.appendChild(captionContainer);
             modal.appendChild(modalContent);
             modal.appendChild(thumbnailsContainer);
             document.body.appendChild(modal);
-            
             // 缓存DOM元素
             DOM.modal = modal;
             DOM.modalContent = modalContent;
@@ -196,24 +189,20 @@
             DOM.thumbnailsContainer = thumbnailsContainer;
             DOM.captionContainer = captionContainer;
         },
-
         // 创建预览幻灯片
         createSlides() {
             const images = DOM.images;
             const slidesContainer = DOM.slidesContainer;
-            
             // 为每张图片创建独立的slide元素
             images.forEach((img, index) => {
                 const slide = document.createElement('div');
                 slide.className = 'img-preview-slide';
                 slide.dataset.index = index;
                 slide.style.marginRight = CONFIG.THUMBNAILS.MARGIN + 'px';
-                
                 const previewImg = document.createElement('img');
                 previewImg.className = 'img-preview-img';
                 previewImg.src = img.src;
                 previewImg.draggable = false;
-                
                 // 保存描述文本到dataset
                 let descriptionText = '';
                 // 从 imageSources 获取对应的配置
@@ -221,46 +210,38 @@
                 if (sourceConfig && sourceConfig.captionAttr) {
                     descriptionText = img.getAttribute(sourceConfig.captionAttr);
                 }
-                
                 // 将描述文本保存到slide的dataset中
                 if (descriptionText && descriptionText.trim() !== '') {
                     slide.dataset.caption = descriptionText;
                 }
-                
                 slide.appendChild(previewImg);
                 slidesContainer.appendChild(slide);
                 DOM.slides.push(slide);
             });
         },
-
         // 创建缩略图
         createThumbnails() {
             const images = DOM.images;
             const thumbnailsContainer = DOM.thumbnailsContainer;
             const imageAspectRatios = ImagePreview.imageAspectRatios;
-            
             // 创建缩略图容器
             const thumbnailsWrapper = document.createElement('div');
             thumbnailsWrapper.className = 'img-preview-thumbnails-wrapper';
             DOM.thumbnailsWrapper = thumbnailsWrapper;
-            
             images.forEach((img, index) => {
                 const thumbnail = document.createElement('img');
                 thumbnail.src = img.src;
                 thumbnail.className = 'img-preview-thumbnail';
                 thumbnail.dataset.index = index;
-                
                 // 获取图片的比例信息
                 const aspectRatio = Utils.getImageAspectRatio(img, imageAspectRatios, images);
                 // 设置缩略图比例为预设值
                 thumbnail.style.aspectRatio = aspectRatio.preset;
-                
                 // 禁用缩略图的默认拖拽行为
                 thumbnail.draggable = false;
                 thumbnailsWrapper.appendChild(thumbnail);
                 DOM.thumbnails.push(thumbnail);
             });
-            
             thumbnailsContainer.appendChild(thumbnailsWrapper);
         }
     };
@@ -269,7 +250,6 @@
     const ImagePreview = {
         // 存储图片比例信息的缓存对象
         imageAspectRatios: {},
-
         // 状态追踪变量
         drag: {
             startX: 0,
@@ -284,7 +264,6 @@
             isThumbDragging: false,
             scrollLeft: 0
         },
-
         zoom: {
             zoomDragging: false,
             zoomStartX: 0,
@@ -301,7 +280,6 @@
             animationFrameId: null,
             pendingTransform: null
         },
-
         inertia: {
             lastMoveTime: 0,
             lastPosX: 0,
@@ -310,7 +288,6 @@
             velocityY: 0,
             inertiaFrameId: null
         },
-
         // 初始化
         init() {
             this.loadCSS();
@@ -321,7 +298,6 @@
             this.bindEvents();
             DoubleClickZoomHandler.init(); 
         },
-
         // 加载CSS样式
         loadCSS() {
             const cssLink = document.createElement('link');
@@ -331,7 +307,6 @@
             cssLink.type = 'text/css';
             document.head.appendChild(cssLink);
         },
-
         // 扫描页面图片
         scanImages() {
             DOM.images = [];
@@ -339,14 +314,12 @@
             CONFIG.IMAGE_SELECTORS.forEach((config) => {
                 const images = Array.from(document.querySelectorAll(config.selector));
                 DOM.images = DOM.images.concat(images);
-
                 // 为每个找到的图片存储其来源配置
                 images.forEach(() => {
                     DOM.imageSources.push(config);
                 });
             });
         },
-
         // 绑定事件
         bindEvents() {
             this.bindModalEvents();
@@ -361,117 +334,67 @@
         // 绑定模态框事件
         bindModalEvents() {
             const modalContent = DOM.modalContent;
-            let clickTimeout = null; // 用于单击延迟判断
-            let lastClickTime = 0;
-            let touchTimeout = null; // 用于触摸单击延迟判断
-            let lastTouchEndTime = 0;
-            
             // 点击模态框内容区域关闭预览
             modalContent.addEventListener('mousedown', (e) => {
                 this.drag.modalContentStartX = e.clientX;
                 this.drag.modalContentStartY = e.clientY;
                 this.drag.isModalContentDragging = false;
             });
-            
             modalContent.addEventListener('mousemove', (e) => {
                 if (Math.abs(e.clientX - this.drag.modalContentStartX) > CONFIG.DRAG.THRESHOLD || 
                     Math.abs(e.clientY - this.drag.modalContentStartY) > CONFIG.DRAG.THRESHOLD) {
                     this.drag.isModalContentDragging = true;
                 }
             });
-            
             modalContent.addEventListener('click', (e) => {
-                // 如果正在拖拽，则不执行任何操作
-                if (this.drag.isModalContentDragging) {
+                // 如果点击目标是图片本身（由DoubleClickZoomHandler处理）或正在拖拽，则不关闭
+                if (e.target.classList.contains('img-preview-img') || this.drag.isModalContentDragging) {
                     return;
                 }
-
-                const currentTime = new Date().getTime();
-                const timeSinceLastClick = currentTime - lastClickTime;
-
-                clearTimeout(clickTimeout); // 清除上一次的延迟计时器
-
-                if (timeSinceLastClick < CONFIG.TAP_DELAY && timeSinceLastClick > 0) {
-                    // 如果两次点击间隔小于 TAP_DELAY，则认为是双击不执行关闭操作，将双击处理交给 DoubleClickZoomHandler（如果目标是图片）
-                    lastClickTime = 0; // 重置时间，避免三击等情况
-                } else {
-                    // 否则，可能是单击，设置延迟计时器，延迟时间到后，执行关闭操作
-                    clickTimeout = setTimeout(() => {
-                        this.closeModal();
-                    }, CONFIG.TAP_DELAY);
-                    lastClickTime = currentTime; // 记录本次点击时间
+                const state = store.getState();
+                // 如果未处于放大模式且未拖拽，则关闭模态框
+                if (!state.isZoomMode) {
+                    this.closeModal();
                 }
             });
-            
-            // --- 触摸事件部分 --- 
+            // 触摸事件支持
             modalContent.addEventListener('touchstart', (e) => {
                 // 阻止默认行为（如页面滚动），但不执行其他操作
                 // 注意：如果目标是图片，触摸事件也可能由 DoubleClickZoomHandler 处理
-                e.preventDefault(); 
-                
+                e.preventDefault();
                 if (e.touches.length === 1) {
                     this.drag.modalContentStartX = e.touches[0].clientX;
                     this.drag.modalContentStartY = e.touches[0].clientY;
                     this.drag.isModalContentDragging = false;
-                    // 清除可能存在的单击计时器，因为触摸开始了
-                    clearTimeout(touchTimeout); 
                 }
             }, { passive: false });
-            
             modalContent.addEventListener('touchmove', (e) => {
                 if (e.touches.length === 1) {
                     if (Math.abs(e.touches[0].clientX - this.drag.modalContentStartX) > CONFIG.DRAG.THRESHOLD || 
                         Math.abs(e.touches[0].clientY - this.drag.modalContentStartY) > CONFIG.DRAG.THRESHOLD) {
                         this.drag.isModalContentDragging = true;
-                        // 如果开始拖拽，也清除单击计时器
-                        clearTimeout(touchTimeout); 
                     }
                 }
             }, { passive: true });
-            
             modalContent.addEventListener('touchend', (e) => {
-                // 阻止 touchend 后可能触发的 click 事件，避免干扰
-                e.preventDefault(); 
-
-                // 如果还有其他手指在屏幕上，或者正在拖拽，则不处理单击关闭
-                if (e.touches.length > 0 || this.drag.isModalContentDragging) {
-                    // 重置拖拽标志，以防万一
-                    if (e.touches.length === 0) { 
-                        this.drag.isModalContentDragging = false; 
+                 // 如果触摸结束的目标是图片本身（由DoubleClickZoomHandler处理），则不关闭
+                if (e.target.classList.contains('img-preview-img')) {
+                    // 如果所有手指都离开屏幕，确保重置多点触摸标志
+                    if (e.touches.length === 0) {
+                         store.setState({ wasTouchingWithMultipleFingers: false });
                     }
                     return;
                 }
-
-                const currentTime = new Date().getTime();
-                const timeSinceLastTouchEnd = currentTime - lastTouchEndTime;
-
-                clearTimeout(touchTimeout); // 清除上一次的延迟计时器
-
-                if (timeSinceLastTouchEnd < CONFIG.TAP_DELAY && timeSinceLastTouchEnd > 0) {
-                    // 如果两次触摸结束间隔小于 TAP_DELAY，则认为是双击（或快速连击）
-                    // 不执行关闭操作，将双击处理交给 DoubleClickZoomHandler（如果目标是图片）
-                    lastTouchEndTime = 0; // 重置时间
-                } else {
-                    // 否则，可能是单击，设置延迟计时器
-                    touchTimeout = setTimeout(() => {
-                        // 延迟时间到后，执行关闭操作
-                        this.closeModal();
-                    }, CONFIG.TAP_DELAY);
-                    lastTouchEndTime = currentTime; // 记录本次触摸结束时间
+                const state = store.getState();
+                // 如果未处于放大模式，未拖拽，是单点触摸结束，且之前不是多点触摸，则关闭模态框
+                if (!state.isZoomMode && !this.drag.isModalContentDragging &&
+                    e.touches.length === 0 && !state.wasTouchingWithMultipleFingers) {
+                    this.closeModal();
                 }
-
-                // 确保在所有手指离开时重置拖拽状态（以防万一）
-                if (e.touches.length === 0) { 
-                     this.drag.isModalContentDragging = false; 
+                // 只有当所有手指都离开屏幕时，才重置多点触摸标志
+                if (e.touches.length === 0) {
+                    store.setState({ wasTouchingWithMultipleFingers: false });
                 }
-
-                // 多点触摸标志的处理可以移到 touchend 的结尾或者 touchcancel
-                 if (e.touches.length === 0) {
-                     // 使用 timeout 确保状态在事件处理后更新
-                     setTimeout(() => {
-                          store.setState({ wasTouchingWithMultipleFingers: false });
-                     }, 0); 
-                 }
             });
         },
 
@@ -480,7 +403,6 @@
             const thumbnailsContainer = DOM.thumbnailsContainer;
             const thumbnails = DOM.thumbnails;
             const thumbnailsWrapper = DOM.thumbnailsWrapper;
-            
             // 添加缩略图拖动功能
             thumbnailsContainer.addEventListener('mousedown', (e) => {
                 this.drag.isThumbDragging = true;
@@ -490,7 +412,6 @@
                 this.drag.startX = e.clientX;
                 this.drag.scrollLeft = thumbnailsContainer.scrollLeft;
             });
-            
             document.addEventListener('mousemove', (e) => {
                 if (!this.drag.isThumbDragging) return;
                 e.preventDefault();
@@ -501,18 +422,15 @@
                 }
                 thumbnailsContainer.scrollLeft = this.drag.scrollLeft - walk;
             });
-            
             document.addEventListener('mouseup', () => {
                 this.drag.isThumbDragging = false;
                 thumbnailsContainer.classList.remove('grabbing');
                 thumbnailsContainer.style.scrollBehavior = 'smooth'; // 拖拽结束后恢复平滑滚动
             });
-            
             document.addEventListener('mouseleave', () => {
                 this.drag.isThumbDragging = false;
                 thumbnailsContainer.classList.remove('grabbing');
             });
-            
             // 添加缩略图点击切换功能
             thumbnails.forEach(thumbnail => {
                 thumbnail.addEventListener('click', (e) => {
@@ -1519,17 +1437,14 @@
             const modal = DOM.modal;
             const slidesContainer = DOM.slidesContainer;
             const activeImg = slidesContainer.querySelector(`.img-preview-slide[data-index="${state.currentImageIndex}"] .img-preview-img`);
-            
             // 先更新状态，停止拖拽
             store.setState({ 
                 isDragging: false, 
                 isVerticalDragging: false 
             });
-            
             if (isVerticalDragging) {
                 // 垂直拖动结束
                 slidesContainer.classList.remove('vertical-dragging');
-                
                 // 向下拖动且距离超过关闭阈值，则关闭模态框
                 if (verticalDistance > CONFIG.DRAG.CLOSE_THRESHOLD) {
                     ImagePreview.closeModal();
@@ -1538,19 +1453,16 @@
                     if (activeImg) {
                         activeImg.style.transition = `transform ${CONFIG.ANIMATION.DURATION}ms ${CONFIG.ANIMATION.TIMING}`;
                         activeImg.style.transform = '';
-                        
                         // 恢复模态框样式
                         modal.style.backgroundColor = `rgba(${CONFIG.DRAG_EFFECTS.BACKGROUND_RGB}, 1)`;
                         const baseBlurStyle = `blur(${CONFIG.DRAG_EFFECTS.BACKDROP_BLUR_BASE}px)`;
                         modal.style.backdropFilter = baseBlurStyle;
                         modal.style.webkitBackdropFilter = baseBlurStyle;
-                        
                         // 移除过渡效果
                         setTimeout(() => {
                             activeImg.style.transition = '';
                         }, CONFIG.ANIMATION.DURATION);
                     }
-                    
                     // 恢复缩略图和标题
                     DOM.thumbnailsContainer.classList.remove('img-preview-hidden');
                     DOM.captionContainer.classList.remove('img-preview-hidden');
@@ -1561,15 +1473,12 @@
                 const slideWidth = parseFloat(DOM.modalContent.getBoundingClientRect().width);
                 const currentTranslate = Utils.getTranslateX(slidesContainer);
                 const targetIndex = state.currentImageIndex;
-                
                 // 计算当前滑动位置与目标位置的差距，使用精确浮点数计算
                 const targetOffset = -targetIndex * (slideWidth + CONFIG.THUMBNAILS.MARGIN);
                 const diffX = currentTranslate - targetOffset;
-                
                 if (Math.abs(diffX) > CONFIG.DRAG.HORIZONTAL_SWIPE_THRESHOLD) {
                     // 如果拖动超过阈值，则切换图片
                     let newIndex = targetIndex;
-                    
                     if (diffX > 0) {
                         // 向右拖动，显示上一张
                         newIndex = Math.max(0, targetIndex - 1);
@@ -1577,14 +1486,12 @@
                         // 向左拖动，显示下一张
                         newIndex = Math.min(DOM.images.length - 1, targetIndex + 1);
                     }
-                    
                     if (newIndex !== targetIndex) {
                         ImagePreview.showImage(newIndex);
                     } else {
                         // 如果到达边界，复位当前图片
                         slidesContainer.style.transition = `transform ${CONFIG.ANIMATION.DURATION}ms ${CONFIG.ANIMATION.TIMING}`;
                         slidesContainer.style.transform = `translateX(${-targetIndex * (slideWidth + CONFIG.THUMBNAILS.MARGIN)}px)`;
-                        
                         // 移除过渡效果
                         setTimeout(() => {
                             slidesContainer.style.transition = '';
@@ -1594,7 +1501,6 @@
                     // 拖动距离不够，复位当前图片
                     slidesContainer.style.transition = `transform ${CONFIG.ANIMATION.DURATION}ms ${CONFIG.ANIMATION.TIMING}`;
                     slidesContainer.style.transform = `translateX(${targetOffset}px)`;
-                    
                     // 移除过渡效果
                     setTimeout(() => {
                         slidesContainer.style.transition = '';
@@ -1612,65 +1518,48 @@
             const modal = DOM.modal;
             const slidesContainer = DOM.slidesContainer;
             const modalContent = DOM.modalContent;
-            
             if (!modal.classList.contains('active')) return;
-
             e.preventDefault(); // 阻止页面滚动
-
             const activeImg = slidesContainer.querySelector(`.img-preview-slide[data-index="${state.currentImageIndex}"] .img-preview-img`);
             if (!activeImg) return;
-
             // 获取图片原始尺寸和当前渲染尺寸
             const rect = activeImg.getBoundingClientRect();
-            
             // 计算缩放前图片的实际渲染尺寸（移除当前缩放影响）
             const preScaledWidth = rect.width / state.currentZoomLevel;
             const preScaledHeight = rect.height / state.currentZoomLevel;
-
             // 获取鼠标在屏幕上的绝对位置
             const mouseX = e.clientX;
             const mouseY = e.clientY;
-            
             // 计算鼠标相对于图片中心的位置
             const imgCenterX = rect.left + rect.width / 2;
             const imgCenterY = rect.top + rect.height / 2;
-            
             // 计算鼠标相对于图片中心的向量
             const vectorX = mouseX - imgCenterX;
             const vectorY = mouseY - imgCenterY;
-            
             // 计算这个向量相对于图片宽高的比例
             const relativeX = vectorX / (rect.width / 2);
             const relativeY = vectorY / (rect.height / 2);
-
             const delta = -e.deltaY; // 获取滚轮方向和幅度
             const zoomFactor = delta > 0 ? CONFIG.ZOOM.STEP : CONFIG.ZOOM.STEP; // 缩放因子
-
             // 计算新的缩放级别，允许临时缩放低于100%
             let newZoom = state.currentZoomLevel + (delta > 0 ? zoomFactor : -zoomFactor);
             // 限制缩放范围
             newZoom = Math.max(CONFIG.ZOOM.MIN, Math.min(newZoom, CONFIG.ZOOM.MAX));
-
             // 如果缩放级别没有变化，则不执行后续操作
             if (newZoom === state.currentZoomLevel) return;
-            
             // 计算缩放前后的图片物理尺寸变化
             const newScaledWidth = preScaledWidth * newZoom;
             const newScaledHeight = preScaledHeight * newZoom;
             const deltaWidth = newScaledWidth - rect.width;
             const deltaHeight = newScaledHeight - rect.height;
-            
             // 计算缩放补偿
             const scaleCompensationX = -deltaWidth * relativeX * 0.5;
             const scaleCompensationY = -deltaHeight * relativeY * 0.5;
-            
             // 计算最终位置
             let newTranslateX = state.zoomCurrentTranslateX + scaleCompensationX;
             let newTranslateY = state.zoomCurrentTranslateY + scaleCompensationY;
-            
             // 获取可移动边界信息
             const boundaries = Utils.calculateImageBoundaries(activeImg, newZoom, state.currentZoomLevel, modalContent);
-            
             // 智能边界限制
             if (newZoom > 1) {
                 // 只有当允许水平移动时才限制X轴
@@ -1680,7 +1569,6 @@
                     // 不允许水平移动时强制居中
                     newTranslateX = 0;
                 }
-                
                 // 只有当允许垂直移动时才限制Y轴
                 if (boundaries.allowVertical) {
                     newTranslateY = Math.max(-boundaries.bounds.y, Math.min(boundaries.bounds.y, newTranslateY));
@@ -1689,21 +1577,17 @@
                     newTranslateY = 0;
                 }
             }
-            
             // 更新状态
             store.setState({ 
                 currentZoomLevel: newZoom,
                 zoomCurrentTranslateX: newTranslateX,
                 zoomCurrentTranslateY: newTranslateY
             });
-            
             // 应用变换，添加过渡效果使缩放更平滑
             activeImg.style.transition = 'transform 0.3s ease';
-            
             if (newZoom < 1) {
                 // 如果缩放小于100%，应用缩放但不更新isZoomMode状态
                 activeImg.style.transform = `translate(${newTranslateX}px, ${newTranslateY}px) scale(${newZoom})`;
-                
                 // 设置一个定时器，在缩放停止后检查是否需要弹回
                 clearTimeout(activeImg._zoomTimer);
                 activeImg._zoomTimer = setTimeout(() => {
@@ -1712,7 +1596,6 @@
                     if (currentState.currentZoomLevel < 1) {
                         activeImg.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
                         activeImg.style.transform = '';
-                        
                         // 重置缩放信息
                         store.setState({
                             currentZoomLevel: 1,
@@ -1720,10 +1603,8 @@
                             zoomCurrentTranslateX: 0,
                             zoomCurrentTranslateY: 0
                         });
-                        
                         // 恢复默认鼠标样式
                         modalContent.style.cursor = '';
-                        
                         // 移除过渡效果
                         setTimeout(() => {
                             activeImg.style.transition = '';
@@ -1734,7 +1615,6 @@
                 // 如果缩放大于100%，则进入缩放模式
                 store.setState({ isZoomMode: true });
                 activeImg.style.transform = `translate(${newTranslateX}px, ${newTranslateY}px) scale(${newZoom})`;
-                
                 // 进入放大模式，设置鼠标样式为抓手
                 modalContent.style.cursor = 'grab';
             } else {
@@ -1745,11 +1625,9 @@
                     zoomCurrentTranslateX: 0,
                     zoomCurrentTranslateY: 0
                 });
-                
                 // 恢复默认鼠标样式
                 modalContent.style.cursor = '';
             }
-            
             // 移除过渡效果，避免干扰后续操作
             setTimeout(() => {
                 if (store.getState().currentZoomLevel >= 1) {  // 只在不需要弹回动画时清除过渡
@@ -1757,73 +1635,57 @@
                 }
             }, 100);
         },
-
         // 处理缩放状态拖拽
         handleZoomDrag(e, isTouch) {
             const state = store.getState();
             const slidesContainer = DOM.slidesContainer;
             const modalContent = DOM.modalContent;
-            
             if (!state.isZoomMode) return;
-            
             e.preventDefault();
-            
             const pos = isTouch ? e.touches[0] : e;
             const diffX = pos.clientX - ImagePreview.zoom.zoomStartX;
             const diffY = pos.clientY - ImagePreview.zoom.zoomStartY;
-            
             // 获取当前显示的图片
             const activeImg = slidesContainer.querySelector(`.img-preview-slide[data-index="${state.currentImageIndex}"] .img-preview-img`);
             if (!activeImg) return;
-            
             // 获取可移动边界信息
             const boundaries = Utils.calculateImageBoundaries(activeImg, state.currentZoomLevel, state.currentZoomLevel, modalContent);
-            
             // 新的平移位置
             let newTranslateX = state.zoomCurrentTranslateX + diffX;
             let newTranslateY = state.zoomCurrentTranslateY + diffY;
-            
             // 智能边界限制
             if (boundaries.allowHorizontal) {
                 newTranslateX = Math.max(-boundaries.bounds.x, Math.min(boundaries.bounds.x, newTranslateX));
             } else {
                 newTranslateX = 0;  // 如果图片宽度小于容器，强制水平居中
             }
-            
             if (boundaries.allowVertical) {
                 newTranslateY = Math.max(-boundaries.bounds.y, Math.min(boundaries.bounds.y, newTranslateY));
             } else {
                 newTranslateY = 0;  // 如果图片高度小于容器，强制垂直居中
             }
-            
             // 应用平移
             activeImg.style.transform = `translate(${newTranslateX}px, ${newTranslateY}px) scale(${state.currentZoomLevel})`;
-            
             // 更新状态
             store.setState({
                 zoomCurrentTranslateX: newTranslateX,
                 zoomCurrentTranslateY: newTranslateY
             });
-            
             // 更新惯性追踪变量
             const currentTime = performance.now();
             const deltaTime = currentTime - ImagePreview.inertia.lastMoveTime;
-            
             // 计算速度
             if (deltaTime > 0) {
                 ImagePreview.inertia.velocityX = (pos.clientX - ImagePreview.inertia.lastPosX) / deltaTime;
                 ImagePreview.inertia.velocityY = (pos.clientY - ImagePreview.inertia.lastPosY) / deltaTime;
             }
-            
             ImagePreview.inertia.lastPosX = pos.clientX;
             ImagePreview.inertia.lastPosY = pos.clientY;
             ImagePreview.inertia.lastMoveTime = currentTime;
-            
             // 更新起始位置以进行下一次移动计算
             ImagePreview.zoom.zoomStartX = pos.clientX;
             ImagePreview.zoom.zoomStartY = pos.clientY;
         },
-        
         // 处理双指缩放
         handlePinchZoom(e, touch1, touch2, zoomData) {
             const state = store.getState();
@@ -2076,29 +1938,76 @@
     const DoubleClickZoomHandler = {
         lastTapTime: 0,
         tapTimeout: null,
+        TAP_DELAY: 300, // ms - 判定双击的延迟
+        // 添加拖拽检测变量
+        startPosX: 0,
+        startPosY: 0,
+        hasMoved: false,
 
         init() {
             this.bindDoubleClickEvents();
         },
 
         bindDoubleClickEvents() {
-            // 事件绑定在 slidesContainer 上，通过事件委托判断目标是否为图片
-            DOM.slidesContainer.addEventListener('click', this.handleClick.bind(this));
-            DOM.slidesContainer.addEventListener('touchend', this.handleTouchEnd.bind(this), { passive: false }); 
+            const slidesContainer = DOM.slidesContainer;
+            
+            // 监听下按事件，用于记录起始位置
+            slidesContainer.addEventListener('mousedown', (e) => {
+                if (!e.target.classList.contains('img-preview-img')) return;
+                this.startPosX = e.clientX;
+                this.startPosY = e.clientY;
+                this.hasMoved = false;
+            });
+            
+            slidesContainer.addEventListener('touchstart', (e) => {
+                if (!e.target.classList.contains('img-preview-img')) return;
+                if (e.touches.length === 1) {
+                    this.startPosX = e.touches[0].clientX;
+                    this.startPosY = e.touches[0].clientY;
+                    this.hasMoved = false;
+                }
+            }, { passive: true });
+            
+            // 监听移动事件，判断是否有拖拽
+            slidesContainer.addEventListener('mousemove', (e) => {
+                if (!e.target.classList.contains('img-preview-img')) return;
+                if (Math.abs(e.clientX - this.startPosX) > CONFIG.DRAG.THRESHOLD || 
+                    Math.abs(e.clientY - this.startPosY) > CONFIG.DRAG.THRESHOLD) {
+                    this.hasMoved = true;
+                }
+            });
+            
+            slidesContainer.addEventListener('touchmove', (e) => {
+                if (!e.target.classList.contains('img-preview-img')) return;
+                if (e.touches.length === 1) {
+                    if (Math.abs(e.touches[0].clientX - this.startPosX) > CONFIG.DRAG.THRESHOLD || 
+                        Math.abs(e.touches[0].clientY - this.startPosY) > CONFIG.DRAG.THRESHOLD) {
+                        this.hasMoved = true;
+                    }
+                }
+            }, { passive: true });
+            
+            // 原有的点击和触摸结束事件
+            slidesContainer.addEventListener('click', this.handleClick.bind(this));
+            slidesContainer.addEventListener('touchend', this.handleTouchEnd.bind(this), { passive: false }); 
         },
 
         handleClick(e) {
             // 仅当目标是图片本身时触发
             if (!e.target.classList.contains('img-preview-img')) return;
-
             e.preventDefault(); // 阻止可能的默认行为（如图片链接）
-
+            
+            // 如果检测到拖拽，不触发双击
+            if (this.hasMoved) {
+                this.hasMoved = false; // 重置拖拽状态
+                return;
+            }
+            
             const currentTime = new Date().getTime();
             const timeSinceLastTap = currentTime - this.lastTapTime;
-
             clearTimeout(this.tapTimeout); // 清除可能存在的单击计时器
-
-            if (timeSinceLastTap < CONFIG.TAP_DELAY && timeSinceLastTap > 0) {
+            
+            if (timeSinceLastTap < this.TAP_DELAY && timeSinceLastTap > 0) {
                 // 检测到双击
                 this.handleDoubleClick(e);
                 this.lastTapTime = 0; // 重置时间，避免连续触发
@@ -2106,7 +2015,7 @@
                 // 可能是单击，设置计时器等待看是否有第二次点击
                 this.tapTimeout = setTimeout(() => {
                     // 单击超时，可以在这里执行单击逻辑（如果需要）
-                }, CONFIG.TAP_DELAY);
+                }, this.TAP_DELAY);
                 this.lastTapTime = currentTime;
             }
         },
@@ -2114,27 +2023,30 @@
         handleTouchEnd(e) {
             // 仅当目标是图片本身时触发
             if (!e.target.classList.contains('img-preview-img')) return;
-
             // 如果还有其他手指在屏幕上，则不处理双击
             if (e.touches.length > 0) return;
-
             // 阻止 touchend 后触发 click 事件，避免重复处理
             e.preventDefault();
-
+            
+            // 如果检测到拖拽，不触发双击
+            if (this.hasMoved) {
+                this.hasMoved = false; // 重置拖拽状态
+                return;
+            }
+            
             const currentTime = new Date().getTime();
             const timeSinceLastTap = currentTime - this.lastTapTime;
-
             clearTimeout(this.tapTimeout); // 清除单击计时器
-
-            if (timeSinceLastTap < CONFIG.TAP_DELAY && timeSinceLastTap > 0) {
+            
+            if (timeSinceLastTap < this.TAP_DELAY && timeSinceLastTap > 0) {
                 // 检测到双击 (Double Tap)
-                 this.handleDoubleClick(e);
+                this.handleDoubleClick(e);
                 this.lastTapTime = 0; // 重置时间
             } else {
                 // 可能是单击 (Single Tap)
-                 this.tapTimeout = setTimeout(() => {
-                     // 单击超时逻辑（如果需要）注意：关闭模态框的单击逻辑在 modalContent 的监听器中
-                }, CONFIG.TAP_DELAY);
+                this.tapTimeout = setTimeout(() => {
+                    // 单击超时逻辑（如果需要）注意：关闭模态框的单击逻辑在 modalContent 的监听器中
+                }, this.TAP_DELAY);
                 this.lastTapTime = currentTime;
             }
         },
@@ -2143,9 +2055,7 @@
             const state = store.getState();
             const activeImg = e.target;
             const modalContent = DOM.modalContent;
-
             if (!activeImg) return;
-
             // 停止所有正在进行的动画
             if (ImagePreview.inertia.inertiaFrameId) {
                 cancelAnimationFrame(ImagePreview.inertia.inertiaFrameId);
@@ -2153,20 +2063,16 @@
                 ImagePreview.inertia.velocityX = 0;
                 ImagePreview.inertia.velocityY = 0;
             }
-
             if (ImagePreview.zoom.animationFrameId) {
                 cancelAnimationFrame(ImagePreview.zoom.animationFrameId);
                 ImagePreview.zoom.animationFrameId = null;
             }
-
             // 添加平滑过渡效果
             activeImg.style.transition = `transform ${CONFIG.ANIMATION.DURATION}ms ${CONFIG.ANIMATION.TIMING}`;
-
             // 简化判断逻辑：只根据当前缩放级别判断，不再检查isZoomMode状态
             if (state.currentZoomLevel > 1) {
                 // 如果当前已经放大，直接重置到原始大小
                 activeImg.style.transform = '';
-                
                 // 更新状态
                 store.setState({
                     currentZoomLevel: 1,
@@ -2176,13 +2082,11 @@
                     isPinching: false,
                     isDragging: false
                 });
-                
                 modalContent.style.cursor = '';
             } else {
                 // 如果当前未放大，则放大
                 const renderedRect = activeImg.getBoundingClientRect();
                 const containerRect = modalContent.getBoundingClientRect();
-                
                 // 计算缩放比例
                 const scaleX = containerRect.width / renderedRect.width;
                 const scaleY = containerRect.height / renderedRect.height;
