@@ -67,6 +67,8 @@ class ImageCarousel {
     updateCarousel() {
         // 更新容器位置
         const container = this.container.querySelector('.carousel-container');
+        // 添加过渡动画属性
+        container.style.transition = 'transform 0.3s';
         container.style.transform = `translateX(-${this.currentIndex * 100}%)`;
 
         // 更新指示器圆点
