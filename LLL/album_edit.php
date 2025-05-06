@@ -388,6 +388,12 @@ else if($dopost=='save')
 
     $imgurls = addslashes($imgurls);
 
+    // 检查图集是否存在图片
+    $has_pics = 0;
+    if(preg_match('/\{dede:img/i', $imgurls)) {
+        $has_pics = 1;
+    }
+
     //分析处理附加表数据
     $inadd_f = '';
     $inadd_v = '';
@@ -439,6 +445,7 @@ else if($dopost=='save')
             `isrm` = '{$isrm}' {$inadd_f},
             `redirecturl` = '{$redirecturl}',
             `userip` = '{$useip}',
+            `has_pics` = '{$has_pics}',
             `subpic` = '{$subpic}'
             WHERE `aid` = '{$id}';";
         if(!$dsql->ExecuteNoneQuery($query))
