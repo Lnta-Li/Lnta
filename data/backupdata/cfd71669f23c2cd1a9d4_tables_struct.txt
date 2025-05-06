@@ -26,6 +26,7 @@ CREATE TABLE `dede_addonimages` (
   `redirecturl` varchar(255) NOT NULL DEFAULT '',
   `body` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `subpic` varchar(100) NOT NULL DEFAULT '',
+  `has_pics` tinyint(1) NOT NULL DEFAULT '0' COMMENT '图集为空',
   PRIMARY KEY (`aid`),
   KEY `imagesMain` (`typeid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

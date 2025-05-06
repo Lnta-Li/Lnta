@@ -6,25 +6,20 @@ class ImageCarousel {
         this.currentIndex = 0;
         this.totalItems = this.items.length;
 
-        // 等待所有图片加载完成后初始化
-        this.waitForImages().then(() => {
-            // 计算图片比例并添加标签
-            this.calculateAspectRatios();
-
-            // 创建导航按钮
-            this.createNavigationButtons();
-
-            // 创建指示器圆点
-            this.createDots();
-
-            // 初始化轮播
-            this.updateCarousel();
-
-            // 添加事件监听
-            this.addEventListeners();
+        // 立即初始化UI，不等待图片加载
+        this.createNavigationButtons();
+        this.createDots();
+        this.updateCarousel();
+        this.addEventListeners();
             
-            // 存储实例引用到DOM元素上，以便外部访问
-            container._carouselInstance = this;
+        // 存储实例引用到DOM元素上，以便外部访问
+        container._carouselInstance = this;
+            
+        // 等待图片加载完成后再计算图片比例
+        this.waitForImages().then(() => {
+            this.calculateAspectRatios();
+            // 重新更新一次轮播以应用计算后的样式
+            this.updateCarousel();
         });
     }
 
@@ -232,14 +227,18 @@ class ImageCarousel {
         this.updateCarousel();
     }
 
-    // 等待所有图片加载完成
+    // 等待所有图片加载完成，增加超时处理
     async waitForImages() {
         const images = Array.from(this.items).map(item => item.querySelector('img'));
         const promises = images.map(img => {
             if (img.complete) return Promise.resolve();
             return new Promise(resolve => {
+                // 图片加载成功或失败都会触发resolve
                 img.onload = resolve;
                 img.onerror = resolve;
+                
+                // 添加超时处理，0.1秒后自动resolve
+                setTimeout(resolve, 100);
             });
         });
         await Promise.all(promises);

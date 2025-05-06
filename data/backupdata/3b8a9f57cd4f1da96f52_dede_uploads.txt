@@ -197,3 +197,15 @@ INSERT INTO `dede_uploads` VALUES('315','31','小尺寸缩略图(subpic_31)','/u
 INSERT INTO `dede_uploads` VALUES('316','29','小尺寸缩略图(subpic_29)','/uploads/subpic/subpic_29.gif','1','80','80','0','4838','1745388988','1');
 INSERT INTO `dede_uploads` VALUES('317','28','小尺寸缩略图(subpic_28)','/uploads/subpic/subpic_28.jpg','1','80','80','0','1798','1745388993','1');
 INSERT INTO `dede_uploads` VALUES('318','27','小尺寸缩略图(subpic_27)','/uploads/subpic/subpic_27.jpg','1','80','80','0','2150','1745388997','1');
+INSERT INTO `dede_uploads` VALUES('319','54','?功能说明：图片浏览器','/uploads/allimg/250424/1-2504241J0460-L.png','1','0','0','0','390015','1745487646','1');
+INSERT INTO `dede_uploads` VALUES('320','54','?功能说明：图片浏览器','/uploads/allimg/250424/1-2504241J9400-L.jpg','1','0','0','0','37783','1745488180','1');
+INSERT INTO `dede_uploads` VALUES('321','54','小尺寸缩略图(subpic_54)','/uploads/subpic/subpic_54.jpg','1','80','80','0','1637','1745488237','1');
+INSERT INTO `dede_uploads` VALUES('322','54','?功能说明：图片浏览器','/uploads/allimg/250424/1-2504241P355a0.jpg','1','1015','605','0','53853','1745489035','1');
+INSERT INTO `dede_uploads` VALUES('323','37','?开发日志2025.04','/uploads/media/250424/1-2504241PS1.mp4','3','0','0','0','10864554','1745489311','1');
+INSERT INTO `dede_uploads` VALUES('324','54','?功能说明：图片浏览器','/uploads/allimg/250425/1-2504251F64KG.jpg','1','1024','650','0','105412','1745572007','1');
+INSERT INTO `dede_uploads` VALUES('325','49','?功能说明：小图模式','/uploads/allimg/250425/1-2504251G10U47.jpg','1','1024','650','0','106561','1745572268','1');
+INSERT INTO `dede_uploads` VALUES('326','49','小尺寸缩略图(subpic_49)','/uploads/subpic/subpic_49.jpg','1','80','80','0','2267','1745572274','1');
+INSERT INTO `dede_uploads` VALUES('327','48','?功能说明：图标和字体库代码后台自定义变量','/uploads/allimg/250425/1-2504251G320564.jpg','1','1024','650','0','108019','1745572400','1');
+INSERT INTO `dede_uploads` VALUES('328','48','小尺寸缩略图(subpic_48)','/uploads/subpic/subpic_48.jpg','1','80','80','0','2254','1745572404','1');
+INSERT INTO `dede_uploads` VALUES('329','50','?功能说明：文章编辑器自定义样式','/uploads/allimg/250425/1-2504251G33HS.jpg','1','1024','650','0','107812','1745572417','1');
+INSERT INTO `dede_uploads` VALUES('330','54','?功能说明：图片浏览器','/uploads/allimg/250425/1-2504251H1431b.png','1','2499','1449','0','334833','1745572903','1');
