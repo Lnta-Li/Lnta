@@ -743,8 +743,8 @@ p {
     color: var(--faint-color-4);
     font-family: var(--defult-font-family);
 }
-
-.Content-Type p, .project-area p {
+/* 文章页、栏目封面页、后台编辑器 */
+.Content-Type p, .project-area p, .cke_show_borders p {
     line-height: var(--line-height-content);
 }
 
