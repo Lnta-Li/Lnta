@@ -295,6 +295,12 @@ else if($dopost=='save')
     //处理body字段自动摘要、自动提取缩略图等
     $body = AnalyseHtmlBody($body,$description,$litpic,$keywords,'htmltext');
 
+    //检查图集是否存在图片
+    $has_pics = 0;
+    if(!empty($imgurls) && preg_match('/\{dede:img/i', $imgurls)) {
+        $has_pics = 1;
+    }
+
     //分析处理附加表数据
     $inadd_f = '';
     $inadd_v = '';
@@ -357,14 +363,14 @@ else if($dopost=='save')
     $okdd = 0;
     $litpic = $picname;
     $inQuery = "INSERT INTO `#@__archives`(id,typeid,sortrank,flag,ismake,channel,arcrank,click,money,title,shorttitle,
-      color,writer,source,litpic,subpic,pubdate,senddate,mid,voteid,notpost,description,keywords,filename,dutyadmin,weight)
+      color,writer,source,litpic,subpic,pubdate,senddate,mid,voteid,notpost,description,keywords,filename,dutyadmin,weight,hide_thumb,small_img)
     VALUES ('$arcID','$typeid','$sortrank','$flag','$ismake','$channelid','$arcrank','$click','$money','$title',
       '$shorttitle','$color','$writer','$source','$litpic','$subpic','$pubdate','$senddate','$adminid','$voteid',
-      '$notpost','$description','$keywords','$filename','$adminid','$weight');";
+      '$notpost','$description','$keywords','$filename','$adminid','$weight','$hide_thumb','$small_img');";
     if(!$dsql->ExecuteNoneQuery($inQuery))
     {
         $dsql->ExecuteNoneQuery("Delete From `#@__arctiny` where id='$arcID'");
-        ShowMsg("把数据保存到数据库主表 `#@__archives` 时出错，请检查你的参数是否存在问题！","javascript:;");
+        ShowMsg("把数据保存到数据库主表 `#@__archives` 时出错，请联系管理员。", "javascript:;");
         exit();
     }
 
@@ -379,8 +385,8 @@ else if($dopost=='save')
         exit();
     }
     $useip = GetIP();
-    $query = "INSERT INTO `$addtable` (`aid`, `typeid`, `redirecturl`, `userip`, `pagestyle`, `maxwidth`, `imgurls`, `row`, `col`, `isrm`, `ddmaxwidth`, `pagepicnum`, `body` {$inadd_f})
-        VALUES ('{$arcID}', '{$typeid}', '{$redirecturl}', '{$useip}', '{$pagestyle}', '{$maxwidth}', '{$imgurls}', '{$row}', '{$col}', '{$isrm}', '{$ddmaxwidth}', '{$pagepicnum}', '{$body}' {$inadd_v});";
+    $query = "INSERT INTO `$addtable` (`aid`, `typeid`, `redirecturl`, `userip`, `pagestyle`, `maxwidth`, `imgurls`, `row`, `col`, `isrm`, `ddmaxwidth`, `pagepicnum`, `body`, `has_pics` {$inadd_f})
+        VALUES ('{$arcID}', '{$typeid}', '{$redirecturl}', '{$useip}', '{$pagestyle}', '{$maxwidth}', '{$imgurls}', '{$row}', '{$col}', '{$isrm}', '{$ddmaxwidth}', '{$pagepicnum}', '{$body}', '{$has_pics}' {$inadd_v});";
     if(!$dsql->ExecuteNoneQuery($query))
     {
         $gerr = $dsql->GetError();
@@ -445,12 +451,12 @@ else if($dopost=='save')
 
     if(empty($rowfiles->picnames))
     {
-        $inQuery = "INSERT INTO `#@__addonimages`(aid,typeid,pagestyle,maxwidth,imgurls,row,col,isrm,ddmaxwidth,ddmaxheight,body,redirecturl,templet,userip,subpic)
-          VALUES ('$arcID','$typeid','$pagestyle','$maxwidth','$imgurls','$row','$col','$isrm','$ddmaxwidth','$ddmaxheight','$body','','','$userip','$subpic');";
+        $inQuery = "INSERT INTO `#@__addonimages`(aid,typeid,pagestyle,maxwidth,imgurls,row,col,isrm,ddmaxwidth,ddmaxheight,body,redirecturl,templet,userip,subpic,has_pics)
+          VALUES ('$arcID','$typeid','$pagestyle','$maxwidth','$imgurls','$row','$col','$isrm','$ddmaxwidth','$ddmaxheight','$body','','','$userip','$subpic','$has_pics');";
     }
     else
     {
-        $inQuery = "INSERT INTO `#@__addonimages`(aid,typeid,pagestyle,maxwidth,imgurls,row,col,isrm,ddmaxwidth,ddmaxheight,body,redirecturl,templet,userip,subpic)
-          VALUES ('$arcID','$typeid','$pagestyle','$maxwidth','$imgurls','$row','$col','$isrm','$ddmaxwidth','$ddmaxheight','$body','','','$userip','$subpic');";
+        $inQuery = "INSERT INTO `#@__addonimages`(aid,typeid,pagestyle,maxwidth,imgurls,row,col,isrm,ddmaxwidth,ddmaxheight,body,redirecturl,templet,userip,subpic,has_pics)
+          VALUES ('$arcID','$typeid','$pagestyle','$maxwidth','$imgurls','$row','$col','$isrm','$ddmaxwidth','$ddmaxheight','$body','','','$userip','$subpic','$has_pics');";
     }
 }
