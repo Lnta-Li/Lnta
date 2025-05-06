@@ -282,3 +282,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+// 添加页面完全加载事件，确保在所有资源加载完成后再次初始化轮播图
+window.addEventListener('load', () => {
+    // 重新初始化所有轮播图
+    const carouselContainers = document.querySelectorAll('.image-carousel');
+    carouselContainers.forEach(container => {
+        if (container.style.display !== 'none' && !container._carouselInstance) {
+            new ImageCarousel(container);
+        }
+    });
+});
