@@ -1,257 +1,388 @@
-// 图片相关Dom构造
-document.addEventListener('DOMContentLoaded', function() {    
-    // 检查是否为iPhone设备，这里的检查是为了解决\js\image-preview.js里面的一个不知道原因的bug即：iphone上只有小图模式背景网页的位置才能跟随图片浏览器切换，但也有例外，比如在/a/Orther/2025/0417/49.html这个页面，虽然是小图模式，但还是无法正常切换
-    let isSmallImg = false;
-    const userAgent = navigator.userAgent.toLowerCase();
-    if (userAgent.indexOf('iphone') > -1) {
-        // 如果是iPhone设备，直接启用小图模式
-        isSmallImg = true;
-    } else {
-        // 不是iPhone设备，再检查是否为小图模式
-        // 方法1：通过meta标签获取
-        const smallImgMeta = document.querySelector('meta[name="small_img"]');
-        if (smallImgMeta) {
-            isSmallImg = smallImgMeta.getAttribute('content') === '1';
+/**
+ * 图片处理模块
+ * 处理文章中的图片显示、长图展开收起、小图模式提示等功能
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    // 配置常量
+    const CONFIG = {
+        transition: { // 过渡时间配置
+            base: 2000, // 过渡时间计算基数（2000px/1s）
+            fadeInOut: '0.3s', // 淡入淡出过渡时间
+            hide: '0.5s' // 隐藏元素过渡时间
+        },
+        
+        timeout: { // 延时配置
+            domComplete: 500, // DOM结构创建完成后的检查延时
+            noticeShow: 5000, // 提示条显示延时
+            noticeAutoHide: 10, // 提示条自动消失倒计时
+            noticeRemove: 1000 // 提示条消失后的延时
+        },
+        
+        selector: { // 选择器配置
+            contentImages: '.Content-Type img', // 内容区域图片选择器
+            longImg: 'img[id="long-img"]', // 长图选择器
+            excludeImgId: 'no-title', // 不处理的图片ID
+        },
+        
+        longImg: { // 长图配置
+            expandIcon: '&#xe615;', // 展开按钮图标编码
+            expandText: '展开长图', // 展开按钮文本
+            collapseText: '收起长图' // 收起按钮文本
+        },
+        
+        smallImgUI: { // 小图模式UI配置
+            noticeIcon: '&#xe651;', // 提示图标编码
+            noticeText: '  当前文章作者设置了小图预览模式', // 提示文本
+            keepIcon: '&#xe6d2;', // 保持预览按钮图标编码
+            keepText: '  保持预览模式', // 保持预览按钮文本
+            switchIcon: '&#xe628;', // 切换大图按钮图标编码
+            switchText: '  切换大图浏览', // 切换大图按钮文本
+            floatKeepTitle: '保持预览模式', // 悬浮栏保持预览按钮标题
+            floatSwitchTitle: '切换大图浏览' // 悬浮栏切换大图按钮标题
         }
-    }
-    // 获取文章内容区域中的所有图片，并排除id为no-title的图片
-    const images = Array.from(document.querySelectorAll('.Content-Type img')).filter(img => img.id !== 'no-title');
-    // 存储small-img的高度，用于后续点击事件使用
-    let smallImgHeight = 0;
-    // 计算过渡时间的函数（1000px/1s）
-    const calculateTransitionDuration = (height) => {
-        return (height / 2000).toFixed(2) + 's';
     };
-    // 处理普通图片
-    images.forEach((img, index) => {
-        // 创建外层包裹div
-        const wrapper = document.createElement('div');
-        wrapper.className = 'image-box';
-        // 将图片包裹在新div中
-        img.parentNode.insertBefore(wrapper, img);
-        wrapper.appendChild(img);
-        // 获取图片的 title 属性内容并创建标题（如果存在）
-        const titleText = img.getAttribute('title');
-        if (titleText) {
-            // 创建注释文本元素
-            const caption = document.createElement('div');
-            caption.className = 'image-caption';
-            caption.textContent = titleText;
-            wrapper.appendChild(caption);
+    
+    // 工具函数模块
+    const utils = {
+        calculateTransitionDuration(height) { // 计算过渡时间
+            return (height / CONFIG.transition.base).toFixed(2) + 's';
+        },
+        
+        waitForImagesLoaded(imgs) { // 等待所有图片加载完成
+            return Promise.all(imgs.map(img => {
+                if (img.complete && img.naturalHeight !== 0) {
+                    return Promise.resolve();
+                } else {
+                    return new Promise(resolve => {
+                        img.onload = () => resolve();
+                        img.onerror = () => resolve();
+                    });
+                }
+            }));
+        },
+        
+        createElement(tag, attrs = {}, children = []) { // 创建DOM元素并设置属性
+            const element = document.createElement(tag);
+            
+            Object.entries(attrs).forEach(([key, value]) => { // 设置属性
+                if (key === 'className') {
+                    element.className = value;
+                } else if (key === 'style') {
+                    Object.entries(value).forEach(([prop, val]) => {
+                        element.style[prop] = val;
+                    });
+                } else if (key === 'innerHTML') {
+                    element.innerHTML = value;
+                } else if (key === 'textContent') {
+                    element.textContent = value;
+                } else {
+                    element.setAttribute(key, value);
+                }
+            });
+            
+            if (children) { // 添加子元素
+                if (Array.isArray(children)) {
+                    children.forEach(child => {
+                        if (child) element.appendChild(child);
+                    });
+                } else {
+                    element.appendChild(children);
+                }
+            }
+            
+            return element;
         }
-        // 如果是小图模式，添加small-box类
-        if (isSmallImg) {
-            wrapper.classList.add('small-box');
-        }
-    });
-    // 延迟执行，确保所有DOM结构都已创建完成
-    setTimeout(() => {
-        // 再次检查并确保所有image-box在小图模式下都添加了small-box类
-        if (isSmallImg) {
-            document.querySelectorAll('.image-box').forEach((box) => {
-                if (!box.classList.contains('small-box')) {
+    };
+    
+    // 小图模式检测模块
+    const smallImgMode = {
+        detect() { // 检测是否为小图模式
+            const userAgent = navigator.userAgent.toLowerCase(); // 检查是否为iPhone设备
+            if (userAgent.indexOf('iphone') > -1) {
+                return true;
+            }
+            
+            const smallImgMeta = document.querySelector('meta[name="small_img"]'); // 通过meta标签检查是否为小图模式
+            return smallImgMeta ? smallImgMeta.getAttribute('content') === '1' : false;
+        },
+        
+        applyToContainers(isSmallImg) { // 应用小图模式到图片容器
+            if (!isSmallImg) return;
+            
+            setTimeout(() => { // 延迟执行，确保所有DOM结构都已创建完成
+                document.querySelectorAll('.image-box').forEach((box) => {
+                    if (!box.classList.contains('small-box')) {
+                        box.classList.add('small-box');
+                    }
+                });
+            }, CONFIG.timeout.domComplete);
+        },
+        
+        toggleMode(toSmallMode) { // 切换图片显示模式
+            document.querySelectorAll('.image-box').forEach(box => {
+                if (toSmallMode) {
                     box.classList.add('small-box');
+                } else {
+                    box.classList.remove('small-box');
                 }
             });
         }
-    }, 500);
-    // 处理所有small-img的图片，并排除id为no-title的图片
-    const smallImgs = Array.from(document.querySelectorAll('img[id="small-img"]')).filter(img => img.id !== 'no-title');
-    // 优化：等待所有small-img图片加载完成后再处理
-    const waitForImagesLoaded = (imgs) => {
-        return Promise.all(imgs.map(img => {
-            if (img.complete && img.naturalHeight !== 0) {
-                return Promise.resolve();
-            } else {
-                return new Promise(resolve => {
-                    img.onload = () => resolve();
-                    img.onerror = () => resolve();
-                });
-            }
-        }));
     };
-    waitForImagesLoaded(smallImgs).then(() => {
-        smallImgs.forEach(smallImg => {
-            // 获取图片高度并计算过渡时间
-            let smallImgHeight = smallImg.offsetHeight;
-            const transitionDuration = calculateTransitionDuration(smallImgHeight);
-            // 创建small-img-box容器
-            const smallImgBox = document.createElement('div');
-            smallImgBox.className = 'small-img-box';
-            smallImgBox.style.transition = `all ${transitionDuration} ease`;
-            smallImgBox.style.WebkitTransition = `all ${transitionDuration} ease`;
-            // 创建title-bar容器
-            const titleBar = document.createElement('div');
-            titleBar.className = 'title-bar';
-            // 创建展开长图按钮
-            const expandButton = document.createElement('div');
-            expandButton.id = 'click-expand';
-            // 创建图标元素
-            const icon = document.createElement('i');
-            icon.className = 'iconfontb';
-            icon.innerHTML = '&#xe615;';
-            // 创建文本节点
-            const textNode = document.createTextNode('展开长图');
-            // 将图标和文本添加到按钮中
-            expandButton.appendChild(icon);
-            expandButton.appendChild(textNode);
-            // 重组DOM结构
-            const wrapper = smallImg.parentNode;
-            wrapper.insertBefore(smallImgBox, smallImg);
-            wrapper.insertBefore(titleBar, smallImg);
-            smallImgBox.appendChild(smallImg);
-            // 获取已存在的image-caption并移动到title-bar中
-            const existingCaption = wrapper.querySelector('.image-caption');
+    
+    // 普通图片处理模块
+    const normalImageProcessor = {
+        process(isSmallImg) { // 处理普通图片
+            const images = Array.from(document.querySelectorAll(CONFIG.selector.contentImages)) // 获取文章内容区域中的所有图片，并排除特定ID的图片
+                .filter(img => img.id !== CONFIG.selector.excludeImgId && img.id !== 'long-img');
+                
+            images.forEach(img => {
+                const wrapperClass = isSmallImg ? // 创建外层包裹div
+                    'image-box small-box' : 
+                    'image-box';
+                    
+                const wrapper = utils.createElement('div', {
+                    className: wrapperClass
+                });
+                
+                img.parentNode.insertBefore(wrapper, img); // 将图片包裹在新div中
+                wrapper.appendChild(img);
+                
+                const titleText = img.getAttribute('title'); // 获取图片的title属性内容并创建标题（如果存在）
+                if (titleText) {
+                    const caption = utils.createElement('div', {
+                        className: 'image-caption',
+                        textContent: titleText
+                    });
+                    wrapper.appendChild(caption);
+                }
+            });
+        }
+    };
+    
+    // 长图处理模块
+    const longImageProcessor = {
+         processLongImage(longImg, isSmallImg) { // 处理单个长图
+            const imgHeight = longImg.offsetHeight; // 获取图片高度并计算过渡时间
+            const transitionDuration = utils.calculateTransitionDuration(imgHeight);
+            
+            const longImgBox = utils.createElement('div', { // 创建长图容器
+                className: 'long-img-box',
+                style: {
+                    transition: `all ${transitionDuration} ease`,
+                    WebkitTransition: `all ${transitionDuration} ease`
+                }
+            });
+            
+            const titleBar = utils.createElement('div', { // 创建标题栏
+                className: 'title-bar',
+                style: {
+                    cursor: 'pointer'
+                }
+            });
+            
+            const icon = utils.createElement('i', { // 创建展开按钮
+                className: 'iconfontb',
+                innerHTML: CONFIG.longImg.expandIcon
+            });
+            
+            const expandButton = utils.createElement('div', {
+                id: 'click-expand'
+            }, [
+                icon,
+                document.createTextNode(CONFIG.longImg.expandText)
+            ]);
+            
+            const wrapper = longImg.parentNode; // 重组DOM结构
+            wrapper.insertBefore(longImgBox, longImg);
+            wrapper.insertBefore(titleBar, longImg);
+            longImgBox.appendChild(longImg);
+            
+            const existingCaption = wrapper.querySelector('.image-caption'); // 获取已存在的image-caption并移动到title-bar中
             if (existingCaption) {
                 titleBar.appendChild(existingCaption);
             }
+            
             titleBar.appendChild(expandButton);
-            // 添加点击展开功能
-            expandButton.addEventListener('click', function() {
-                if (smallImgBox.classList.contains('caption-img')) {
-                    smallImgBox.classList.remove('caption-img');
-                    smallImgBox.style.removeProperty('max-height');
+            
+            titleBar.addEventListener('click', () => { // 添加点击展开功能
+                if (longImgBox.classList.contains('caption-img')) {
+                    longImgBox.classList.remove('caption-img');
+                    longImgBox.style.removeProperty('max-height');
                     icon.style.transform = 'rotate(0deg)';
-                    expandButton.lastChild.textContent = '展开长图';
+                    expandButton.lastChild.textContent = CONFIG.longImg.expandText;
                 } else {
-                    smallImgBox.style.maxHeight = smallImgHeight + 'px';
-                    smallImgBox.classList.add('caption-img');
+                    longImgBox.style.maxHeight = imgHeight + 'px';
+                    longImgBox.classList.add('caption-img');
                     icon.style.transform = 'rotate(180deg)';
-                    expandButton.lastChild.textContent = '收起长图';
+                    expandButton.lastChild.textContent = CONFIG.longImg.collapseText;
                 }
             });
-        });
-    });
-
-    // 如果是小图模式，添加提示条
-    if (isSmallImg) {
-        // 创建右下角悬浮窗的函数
-        function createFloatBar() {
-            if (!document.querySelector('.img-float-bar')) {
-                const floatBar = document.createElement('div');
-                floatBar.className = 'img-float-bar';
-                // 保持预览按钮
-                const floatKeepBtn = document.createElement('button');
-                floatKeepBtn.className = 'float-btn keep-preview';
-                floatKeepBtn.title = '保持预览模式';
-                const floatKeepIcon = document.createElement('i');
-                floatKeepIcon.className = 'iconfontb';
-                floatKeepIcon.innerHTML = '&#xe6d2;';
-                floatKeepBtn.appendChild(floatKeepIcon);
-                // 切换大图按钮
-                const floatSwitchBtn = document.createElement('button');
-                floatSwitchBtn.className = 'float-btn switch-large';
-                floatSwitchBtn.title = '切换大图浏览';
-                const floatSwitchIcon = document.createElement('i');
-                floatSwitchIcon.className = 'iconfontb';
-                floatSwitchIcon.innerHTML = '&#xe628;';
-                floatSwitchBtn.appendChild(floatSwitchIcon);
-                // 绑定事件
-                floatKeepBtn.addEventListener('click', () => {
-                    document.querySelectorAll('.image-box').forEach(box => {
-                        box.classList.add('small-box');
-                    });
-                });
-                floatSwitchBtn.addEventListener('click', () => {
-                    document.querySelectorAll('.image-box').forEach(box => {
-                        box.classList.remove('small-box');
-                    });
-                });
-                floatBar.appendChild(floatKeepBtn);
-                floatBar.appendChild(floatSwitchBtn);
-                document.body.appendChild(floatBar);
+            
+            if (isSmallImg && wrapper.classList.contains('image-box')) { // 如果是小图模式，添加small-box类
+                wrapper.classList.add('small-box');
             }
         }
-        // 创建提示条容器
-        const noticeBar = document.createElement('div');
-        noticeBar.className = 'small-img-notice';
+    };
+    
+    // 小图模式UI模块
+    const smallImgUI = {
+        create(isSmallImg) { // 创建小图模式UI
+            if (!isSmallImg) return;
+            this.createNoticeBar();
+        },
         
-        // 创建左侧文本
-        const noticeText = document.createElement('div');
-        noticeText.className = 'notice-text';
-        const noticeIcon = document.createElement('i');
-        noticeIcon.className = 'iconfontb';
-        noticeIcon.innerHTML = '&#xe651;';
-        noticeText.appendChild(noticeIcon);
-        noticeText.appendChild(document.createTextNode('  当前文章作者设置了小图预览模式'));
-        
-        // 创建按钮容器
-        const buttonContainer = document.createElement('div');
-        buttonContainer.className = 'notice-buttons';
-        
-        // 创建保持预览按钮
-        const keepPreviewBtn = document.createElement('button');
-        keepPreviewBtn.className = 'notice-btn keep-preview';
-        const keepPreviewIcon = document.createElement('i');
-        keepPreviewIcon.className = 'iconfontb';
-        keepPreviewIcon.innerHTML = '&#xe6d2;';
-        keepPreviewBtn.appendChild(keepPreviewIcon);
-        keepPreviewBtn.appendChild(document.createTextNode('  保持预览模式'));
-        
-        // 创建切换大图按钮
-        const switchLargeBtn = document.createElement('button');
-        switchLargeBtn.className = 'notice-btn switch-large';
-        const switchLargeIcon = document.createElement('i');
-        switchLargeIcon.className = 'iconfontb';
-        switchLargeIcon.innerHTML = '&#xe628;';
-        switchLargeBtn.appendChild(switchLargeIcon);
-        switchLargeBtn.appendChild(document.createTextNode('  切换大图浏览'));
-        
-        // 组装提示条
-        buttonContainer.appendChild(keepPreviewBtn);
-        buttonContainer.appendChild(switchLargeBtn);
-        noticeBar.appendChild(noticeText);
-        noticeBar.appendChild(buttonContainer);
-        
-        // 添加到页面
-        document.body.appendChild(noticeBar);
-        // 初始状态设置为透明
-        noticeBar.style.opacity = '0';
-        noticeBar.style.transition = 'opacity 0.3s ease';
-        
-        // 延迟5秒后显示
-        setTimeout(() => {
-            noticeBar.style.opacity = '1';
-            // 设置10秒倒计时（不显示倒计时文本）
-            let countdown = 10;
-            const countdownInterval = setInterval(() => {
-                countdown--;
-                if (countdown <= 0) {
-                    clearInterval(countdownInterval);
-                    // 执行保持预览模式的操作
-                    noticeBar.style.opacity = '0';
-                    noticeBar.style.transition = 'opacity 0.5s ease';
-                    setTimeout(() => {
-                        noticeBar.remove();
-                        createFloatBar();
-                    }, 1000);
+        createNoticeBar() { // 创建提示条
+            const noticeBar = utils.createElement('div', { // 创建提示条容器
+                className: 'small-img-notice',
+                style: {
+                    opacity: '0',
+                    transition: `opacity ${CONFIG.transition.fadeInOut} ease`
                 }
-            }, 1000);
-            // 添加按钮事件监听
-            const handleButtonClick = () => {
-                clearInterval(countdownInterval);
-            };
-            keepPreviewBtn.addEventListener('click', () => {
-                handleButtonClick();
-                noticeBar.style.opacity = '0';
-                noticeBar.style.transition = 'opacity 0.5s ease';
-                setTimeout(() => {
-                    noticeBar.remove();
-                    createFloatBar();
-                }, 1000);
             });
-            switchLargeBtn.addEventListener('click', () => {
-                handleButtonClick();
-                document.querySelectorAll('.small-box').forEach(box => {
-                    box.classList.remove('small-box');
+            
+            const noticeIcon = utils.createElement('i', { // 创建左侧文本
+                className: 'iconfontb',
+                innerHTML: CONFIG.smallImgUI.noticeIcon
+            });
+            
+            const noticeText = utils.createElement('div', {
+                className: 'notice-text'
+            }, [
+                noticeIcon,
+                document.createTextNode(CONFIG.smallImgUI.noticeText)
+            ]);
+            
+            const buttonContainer = utils.createElement('div', { // 创建按钮容器
+                className: 'notice-buttons'
+            });
+            
+            const keepPreviewIcon = utils.createElement('i', { // 创建保持预览按钮
+                className: 'iconfontb',
+                innerHTML: CONFIG.smallImgUI.keepIcon
+            });
+            
+            const keepPreviewBtn = utils.createElement('button', {
+                className: 'notice-btn keep-preview'
+            }, [
+                keepPreviewIcon,
+                document.createTextNode(CONFIG.smallImgUI.keepText)
+            ]);
+            
+            const switchLargeIcon = utils.createElement('i', { // 创建切换大图按钮
+                className: 'iconfontb',
+                innerHTML: CONFIG.smallImgUI.switchIcon
+            });
+            
+            const switchLargeBtn = utils.createElement('button', {
+                className: 'notice-btn switch-large'
+            }, [
+                switchLargeIcon,
+                document.createTextNode(CONFIG.smallImgUI.switchText)
+            ]);
+            
+            buttonContainer.appendChild(keepPreviewBtn); // 组装提示条
+            buttonContainer.appendChild(switchLargeBtn);
+            noticeBar.appendChild(noticeText);
+            noticeBar.appendChild(buttonContainer);
+            
+            document.body.appendChild(noticeBar); // 添加到页面
+            
+            setTimeout(() => { // 延迟显示
+                noticeBar.style.opacity = '1';
+                
+                let countdown = CONFIG.timeout.noticeAutoHide; // 设置倒计时
+                const countdownInterval = setInterval(() => {
+                    countdown--;
+                    if (countdown <= 0) {
+                        clearInterval(countdownInterval);
+                        this.hideNoticeBar(noticeBar, true);
+                    }
+                }, 1000);
+                
+                const handleButtonClick = () => clearInterval(countdownInterval); // 添加按钮事件
+                
+                keepPreviewBtn.addEventListener('click', () => {
+                    handleButtonClick();
+                    this.hideNoticeBar(noticeBar, true);
                 });
-                noticeBar.style.opacity = '0';
-                noticeBar.style.transition = 'opacity 0.5s ease';
-                setTimeout(() => {
-                    noticeBar.remove();
-                    createFloatBar();
-                }, 1000);
+                
+                switchLargeBtn.addEventListener('click', () => {
+                    handleButtonClick();
+                    smallImgMode.toggleMode(false);
+                    this.hideNoticeBar(noticeBar, true);
+                });
+            }, CONFIG.timeout.noticeShow);
+        },
+        
+        hideNoticeBar(noticeBar, createFloat = false) { // 隐藏提示条并创建悬浮栏
+            noticeBar.style.opacity = '0';
+            noticeBar.style.transition = `opacity ${CONFIG.transition.hide} ease`;
+            
+            setTimeout(() => {
+                noticeBar.remove();
+                if (createFloat) this.createFloatBar();
+            }, CONFIG.timeout.noticeRemove);
+        },
+        
+        createFloatBar() { // 创建悬浮栏
+            if (document.querySelector('.img-float-bar')) return;
+            
+            const floatBar = utils.createElement('div', { // 创建悬浮栏
+                className: 'img-float-bar'
             });
-        }, 5000);
-    }
+            
+            const floatKeepIcon = utils.createElement('i', { // 创建保持预览按钮
+                className: 'iconfontb',
+                innerHTML: CONFIG.smallImgUI.keepIcon
+            });
+            
+            const floatKeepBtn = utils.createElement('button', {
+                className: 'float-btn keep-preview',
+                title: CONFIG.smallImgUI.floatKeepTitle
+            }, floatKeepIcon);
+            
+            const floatSwitchIcon = utils.createElement('i', { // 创建切换大图按钮
+                className: 'iconfontb',
+                innerHTML: CONFIG.smallImgUI.switchIcon
+            });
+            
+            const floatSwitchBtn = utils.createElement('button', {
+                className: 'float-btn switch-large',
+                title: CONFIG.smallImgUI.floatSwitchTitle
+            }, floatSwitchIcon);
+            
+            floatKeepBtn.addEventListener('click', () => smallImgMode.toggleMode(true)); // 绑定事件
+            floatSwitchBtn.addEventListener('click', () => smallImgMode.toggleMode(false));
+            
+            floatBar.appendChild(floatKeepBtn); // 组装悬浮栏
+            floatBar.appendChild(floatSwitchBtn);
+            document.body.appendChild(floatBar);
+        }
+    };
+    
+    // 主程序初始化
+    const init = () => {
+        const isSmallImg = smallImgMode.detect(); // 检测是否为小图模式
+        
+        normalImageProcessor.process(isSmallImg); // 处理普通图片
+        
+        smallImgMode.applyToContainers(isSmallImg); // 应用小图模式到容器
+        
+        smallImgUI.create(isSmallImg); // 创建小图模式UI
+    };
+    
+    init(); // 启动程序
+
+    // 使用window.onload确保在所有图片和资源加载完成后再处理长图
+    window.addEventListener('load', () => {
+        const isSmallImg = smallImgMode.detect();
+        
+        // 处理长图
+        const longImgs = Array.from(document.querySelectorAll(CONFIG.selector.longImg))
+            .filter(img => img.id !== CONFIG.selector.excludeImgId);
+            
+        if (longImgs.length > 0) {
+            longImgs.forEach(longImg => longImageProcessor.processLongImage(longImg, isSmallImg));
+        }
+    });
 });
