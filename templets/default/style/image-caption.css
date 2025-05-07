@@ -1,4 +1,4 @@
-.small-img-box {
+.long-img-box {
     max-height: 600px;
     overflow: hidden;
     margin-bottom: -10px;
@@ -9,7 +9,7 @@
     
 }
 
-.small-img-box img {
+.long-img-box img {
     z-index: 1;
 }
 
@@ -24,10 +24,17 @@
     border-radius: 0 0 8px 8px;
     line-height: 1.2em;
     height: 32px;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color var(--transition-time) ease;
+    -webkit-transition: background-color var(--transition-time) ease;
+}
+
+.title-bar:hover {
+    background: var(--comment-bg-color);
 }
 
 #click-expand {
-    cursor: pointer;
     display: flex;
     align-items: center;
     gap: 8px;
