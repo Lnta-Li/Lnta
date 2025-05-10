@@ -18,6 +18,11 @@
         --body-scale: 0.9; /* 页面缩放效果 0.9 */
         --animation-time: 0.3s ; /* 关键帧动画时长 0.3s */
         --transition-time: 0.3s; /* 动画过渡时长 */
+        --line-height-content: 1.8em; /* 文章页正文行高 */
+        --line-height-after: 1em; /* 文章页段间距 */
+        --fontsize-p: 17px; /* 正文字体大小 */
+        --fontsize-a: 16px; /* a,h6等小号字体大小 */
+        --fontsize-mini: 14px; /* 小字号 */
     }
     /* 移动端菜单遮罩层 */
     .mobile-menu-overlay {
@@ -294,7 +299,7 @@
     }
 
     p {
-        font-size: 17px !important;
+        /* font-size: 17px !important; */
     }
     
     /* 页脚调整 */

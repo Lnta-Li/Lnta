@@ -15,7 +15,7 @@
     --line-height-after: 1em; /* 文章页段间距 */
     --fontsize-p: 18px; /* 正文字体大小 */
     --fontsize-a: 17px; /* a,h6等小号字体大小 */
-    --fontsize-mini: 14px; /* 最小字号 */
+    --fontsize-mini: 14px; /* 小字号 */
     --blur-pagebody: 10px; /* 页面隐藏模糊度 */
     --blur-pagebodynav: 1px; /* 页面导航模糊度 */
     --blur-mobnav: 15px; /* 移动端导航模糊度 */
@@ -1123,6 +1123,12 @@ input[value="1"]:checked ~ .slider {
 .diy-2 .image-box:last-child {
   padding-right: 0;
 }
+
+.diy-2 .image-box img {
+    max-height: 800px;
+}
+
+
 
 /* 小图模式提示条样式 */
 .small-img-notice {

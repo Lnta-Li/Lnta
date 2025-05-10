@@ -161,16 +161,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 长图处理模块
     const longImageProcessor = {
-         processLongImage(longImg, isSmallImg) { // 处理单个长图
-            const imgHeight = longImg.offsetHeight; // 获取图片高度并计算过渡时间
-            const transitionDuration = utils.calculateTransitionDuration(imgHeight);
-            
+        // 预先创建DOM结构
+        prepareLongImage(longImg, isSmallImg) {
             const longImgBox = utils.createElement('div', { // 创建长图容器
-                className: 'long-img-box',
-                style: {
-                    transition: `all ${transitionDuration} ease`,
-                    WebkitTransition: `all ${transitionDuration} ease`
-                }
+                className: 'long-img-box'
             });
             
             const titleBar = utils.createElement('div', { // 创建标题栏
@@ -204,13 +198,19 @@ document.addEventListener('DOMContentLoaded', () => {
             
             titleBar.appendChild(expandButton);
             
+            // 存储图片引用以便后续处理
+            longImg.setAttribute('data-processed', 'false');
+            
             titleBar.addEventListener('click', () => { // 添加点击展开功能
+                if (longImg.getAttribute('data-processed') !== 'true') return;
+                
                 if (longImgBox.classList.contains('caption-img')) {
                     longImgBox.classList.remove('caption-img');
                     longImgBox.style.removeProperty('max-height');
                     icon.style.transform = 'rotate(0deg)';
                     expandButton.lastChild.textContent = CONFIG.longImg.expandText;
                 } else {
+                    const imgHeight = longImg.getAttribute('data-height');
                     longImgBox.style.maxHeight = imgHeight + 'px';
                     longImgBox.classList.add('caption-img');
                     icon.style.transform = 'rotate(180deg)';
@@ -220,6 +220,21 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (isSmallImg && wrapper.classList.contains('image-box')) { // 如果是小图模式，添加small-box类
                 wrapper.classList.add('small-box');
+            }
+        },
+        
+        // 计算尺寸并设置过渡效果
+        setDimensions(longImg) {
+            const imgHeight = longImg.offsetHeight;
+            longImg.setAttribute('data-height', imgHeight);
+            longImg.setAttribute('data-processed', 'true');
+            
+            const transitionDuration = utils.calculateTransitionDuration(imgHeight);
+            const longImgBox = longImg.closest('.long-img-box');
+            
+            if (longImgBox) {
+                longImgBox.style.transition = `all ${transitionDuration} ease`;
+                longImgBox.style.WebkitTransition = `all ${transitionDuration} ease`;
             }
         }
     };
@@ -366,6 +381,14 @@ document.addEventListener('DOMContentLoaded', () => {
         
         normalImageProcessor.process(isSmallImg); // 处理普通图片
         
+        // 预先处理长图DOM结构
+        const longImgs = Array.from(document.querySelectorAll(CONFIG.selector.longImg))
+            .filter(img => img.id !== CONFIG.selector.excludeImgId);
+            
+        if (longImgs.length > 0) {
+            longImgs.forEach(longImg => longImageProcessor.prepareLongImage(longImg, isSmallImg));
+        }
+        
         smallImgMode.applyToContainers(isSmallImg); // 应用小图模式到容器
         
         smallImgUI.create(isSmallImg); // 创建小图模式UI
@@ -373,16 +396,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
     init(); // 启动程序
 
-    // 使用window.onload确保在所有图片和资源加载完成后再处理长图
+    // 使用window.onload确保在所有图片和资源加载完成后再处理长图尺寸
     window.addEventListener('load', () => {
-        const isSmallImg = smallImgMode.detect();
-        
-        // 处理长图
         const longImgs = Array.from(document.querySelectorAll(CONFIG.selector.longImg))
             .filter(img => img.id !== CONFIG.selector.excludeImgId);
             
         if (longImgs.length > 0) {
-            longImgs.forEach(longImg => longImageProcessor.processLongImage(longImg, isSmallImg));
+            longImgs.forEach(longImg => longImageProcessor.setDimensions(longImg));
         }
     });
 });
