@@ -153,7 +153,7 @@ $cfg_memcache_mc_oth = '';
 $cfg_cross_sectypeid = 'N';
 $cfg_digg_update = 0;
 $cfg_feedback_guest = 'Y';
-$cfg_timeout_exit = 1800;
+$cfg_timeout_exit = 0;
 $cfg_archives_log = 'N';
 $cfg_fail_limit = 5;
 $cfg_lock_time = 3600;
@@ -175,7 +175,8 @@ $cfg_font_icon = '/* 在线链接服务仅供平台体验和调试使用，平�
        url(\'//at.alicdn.com/t/c/font_4883100_x4xw47vv32n.woff?t=1745658560345\') format(\'woff\'),
        url(\'//at.alicdn.com/t/c/font_4883100_x4xw47vv32n.ttf?t=1745658560345\') format(\'truetype\'),
        url(\'//at.alicdn.com/t/c/font_4883100_x4xw47vv32n.svg?t=1745658560345#iconfontb\') format(\'svg\');
-}/* 在线链接服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
+}
+/* 在线链接服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
 @font-face {
   font-family: \'iconfont\';  /* Project id 4858194 */
   src: 
