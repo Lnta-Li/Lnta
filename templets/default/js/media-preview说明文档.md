@@ -22,14 +22,15 @@
 
 ```javascript
 IMAGE_SELECTORS: [ // 图片选择器及对应的描述属性
-    { selector: '.image-carousel img', captionAttr: 'alt' }, // 轮播图图片，使用alt属性作为描述
-    { selector: '.Content-Type img', captionAttr: 'title' }  // 内容区域图片，使用title属性作为描述
+    { selector: '.image-carousel img', captionAttr: 'alt', excludeSelector: '#no-preview' }, // 轮播图图片，使用alt属性作为描述
+    { selector: '.Content-Type img', captionAttr: 'title', excludeSelector: '#no-preview' }  // 内容区域图片，使用title属性作为描述
 ],
 ```
 
 您可以添加更多的选择器配置，或修改现有的配置，图片浏览器会按照配置器的顺序进行组合。每个配置项包含：
 - `selector`：CSS选择器，用于选择需要支持预览的图片
 - `captionAttr`：用于获取图片描述文本的HTML属性名
+- `excludeSelector`：（可选）排除选择器，符合此选择器的图片将不会被添加到预览列表中
 
 #### 第3步：其他配置调整（可选）
 
@@ -63,11 +64,17 @@ ANIMATION: { // 动画相关配置
 <div class="image-carousel">
     <img src="image1.jpg" alt="图片1描述" />
     <img src="image2.jpg" alt="图片2描述" />
+    <!-- 以下图片将被排除不进入预览 -->
+    <img id="no-preview" src="image3.jpg" alt="该图片不会被预览" />
 </div>
 
 <!-- 内容区域图片示例 -->
 <div class="Content-Type">
     <img src="image3.jpg" title="图片3描述" />
+    <!-- 排除图片的另一种方式：放在带有id="no-preview"的容器中 -->
+    <div id="no-preview">
+        <img src="image4.jpg" title="该图片不会被预览" />
+    </div>
 </div>
 ```
 

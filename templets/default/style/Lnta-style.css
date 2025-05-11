@@ -1104,7 +1104,7 @@ input[value="1"]:checked ~ .slider {
    margin-bottom: var(--line-height-content);
 }
 .diy-1 img, .diy-1 video {
-    width: 35%;
+    width: 35% !important;
     border-radius: 8px;
     object-fit: cover;
     height: 100% !important;
@@ -1127,8 +1127,6 @@ input[value="1"]:checked ~ .slider {
 .diy-2 .image-box img {
     max-height: 800px;
 }
-
-
 
 /* 小图模式提示条样式 */
 .small-img-notice {
@@ -1175,4 +1173,152 @@ input[value="1"]:checked ~ .slider {
 .notice-btn:hover {
     background: var(--Key-color);
     color: #fff;
+}
+
+/*文章自定义模板样式*/
+.diy-container h1,.diy-container h2,.diy-container p {
+    color: #fff;
+}
+.diy-container {
+    width: 100%;
+    max-width: 900px;
+    padding: 65px;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+}
+.diy-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    position: relative;
+}
+.diy-title-main h1 {
+    font-size: 28px;
+    margin: 0 0 5px 0;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+.diy-title-main p {
+    font-size: 14px;
+    margin: 0;
+    color: #fff;
+}
+.diy-credits {
+    padding-top: 5px;
+    border-top: solid;
+    border-top-width: medium;
+    border-color: #fff;
+}
+.diy-credits p {
+    margin: 0;
+    text-align: right;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #fff;
+}
+.diy-main-visual {
+    width: 100%;
+    margin-bottom: 30px;
+}
+.diy-main-visual img {
+    width: 100%!important;
+    height: auto!important;
+    display: block;
+    border: 2px solid rgb(125 125 125 / 50%);
+    border-radius: 18px;
+}
+.diy-project-intro {
+    margin-bottom: 60px;
+    padding-left: 10px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+.diy-project-intro h2 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    display: inline-block;
+    position: relative;
+    padding-bottom: 8px;
+}
+.diy-project-intro h2::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #FFFFFF;
+}
+.diy-project-intro p {
+    font-size: 16px;
+    line-height: 1.9;
+    color: #D0D0D0;
+    margin-bottom: 25px;
+}
+.diy-color-palette {
+    display: flex;
+    gap: 12px;
+    margin-top: 15px;
+    align-items: center;
+}
+.diy-color-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1.5px solid #FFFFFF;
+}
+.diy-footer-logo-container {
+    margin-bottom: 40px;
+    text-align: center;
+}
+.diy-footer-logo-container img {
+    max-width: 60%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+.diy-footer-tagline {
+    font-size: 11px;
+    border: 1px solid rgb(125 125 125 / 50%);
+    padding: 6px 12px;
+    border-radius: 50px;
+    display: inline-block;
+}
+.diy-footer-logo-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.diy-visual-background {
+    transform: scale(1.1);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+.diy-visual-background img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    filter: blur(8px);
+}
+.diy-container .image-box {
+    height: 100%;
+}
+.diy-visual-background::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, #000000a8, #000);
 }
