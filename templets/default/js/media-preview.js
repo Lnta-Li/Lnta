@@ -31,8 +31,8 @@
             MIN_POSITION_CHANGE: 0.5 // 判定为有效位置变化的最小像素差
         },
         IMAGE_SELECTORS: [ // 图片选择器及对应的描述属性
-            { selector: '.image-carousel img', captionAttr: 'alt' }, // 选择器及其描述来源属性，按先后顺序组合
-            { selector: '.Content-Type img', captionAttr: 'title' }
+            { selector: '.image-carousel img', captionAttr: 'alt', excludeSelector: '#no-preview' }, // 选择器及其描述来源属性，按先后顺序组合
+            { selector: '.Content-Type img', captionAttr: 'title', excludeSelector: '#no-preview' }
         ],
         ASPECT_RATIO_PRESETS: { // 缩略图宽高比预设
             portrait: '1/1',   // 竖向图片的预设比例
@@ -364,10 +364,25 @@
             DOM.images = [];
             DOM.imageSources = []; 
             CONFIG.IMAGE_SELECTORS.forEach((config) => {
-                const images = Array.from(document.querySelectorAll(config.selector));
-                DOM.images = DOM.images.concat(images);
+                // 获取匹配选择器的所有图片
+                const allImages = Array.from(document.querySelectorAll(config.selector));
+                // 如果有排除选择器，需要过滤掉匹配排除选择器的图片
+                let filteredImages;
+                if (config.excludeSelector) {
+                    const excludedElements = document.querySelectorAll(config.excludeSelector);
+                    // 排除在排除列表中的图片
+                    filteredImages = allImages.filter(img => {
+                        return !Array.from(excludedElements).includes(img) && 
+                               !img.closest(config.excludeSelector);
+                    });
+                } else {
+                    filteredImages = allImages;
+                }
+                // 将过滤后的图片添加到图片集合中
+                DOM.images = DOM.images.concat(filteredImages);
+                
                 // 为每个找到的图片存储其来源配置
-                images.forEach(() => {
+                filteredImages.forEach(() => {
                     DOM.imageSources.push(config);
                 });
             });

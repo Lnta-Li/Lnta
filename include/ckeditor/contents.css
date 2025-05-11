@@ -95,14 +95,22 @@ code {
     color: #fff;
 }
 
-
+.diy-2 img {
+    object-fit: cover;
+    border-radius: 8px;
+    margin: 5px;
+    height: 200px !important;
+    width: 200px !important;
+}
 img {
     margin: 3px 0;
     object-fit: cover;
     border-radius: 8px;
     margin: 5px;
-    height: 200px!important;
-    width: 200px!important;
+    height: 100% !important;
+    width: 100% !important;
+    /*height: 200px!important;
+    width: 200px!important;*/
     cursor: pointer;
 }
 
