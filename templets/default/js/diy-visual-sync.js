@@ -3,39 +3,61 @@
  * 功能：检测页面中的diy-container元素，并将diy-main-visual中的图片链接同步到diy-visual-background
  * 同时提取图片主要颜色并应用到颜色面板
  */
+
+/**
+ * 配置参数
+ */
+const DIY_CONFIG = {
+  // 颜色量化精度: 值越小，颜色精度越高，区分度越大
+  // 可选值范围: 4-64，推荐值: 8, 16, 32
+  // 8: 高精度，可识别更多细微差别的颜色
+  // 16: 中等精度(默认)
+  // 32: 低精度，颜色分组更广泛
+  COLOR_QUANTIZATION_LEVEL: 32,
+  
+  // 颜色差异阈值: 值越大，允许的颜色相似度越高
+  // 可选值范围: 10-100，推荐值: 30-60
+  // 较小的值(如30)会过滤掉更多相似颜色
+  // 较大的值(如60)会允许更多相似的颜色出现
+  COLOR_DIFFERENCE_THRESHOLD: 45
+};
+
 document.addEventListener('DOMContentLoaded', function() {
-  // 1. 检查页面是否存在diy-container元素
-  const diyContainer = document.querySelector('.diy-container');
+  // 1. 查找页面中所有的diy-container元素
+  const diyContainers = document.querySelectorAll('.diy-container');
   
   // 如果不存在diy-container，则不执行后续操作
-  if (!diyContainer) return;
+  if (!diyContainers.length) return;
   
-  // 2. 查找diy-main-visual和diy-visual-background中的图片元素
-  const mainVisualImg = diyContainer.querySelector('.diy-main-visual img');
-  const backgroundImg = diyContainer.querySelector('.diy-visual-background img');
-  
-  // 3. 如果两个元素都存在，则将主视觉图片的src同步到背景图片
-  if (mainVisualImg && backgroundImg) {
-    // 获取主视觉图片的src
-    const imgSrc = mainVisualImg.getAttribute('src');
+  // 2. 遍历所有diy-container元素并处理
+  diyContainers.forEach(function(diyContainer) {
+    // 查找diy-main-visual和diy-visual-background中的图片元素
+    const mainVisualImg = diyContainer.querySelector('.diy-main-visual img');
+    const backgroundImg = diyContainer.querySelector('.diy-visual-background img');
     
-    // 设置背景图片的src
-    backgroundImg.setAttribute('src', imgSrc);
-    
-    console.log('DIY视觉背景已同步更新');
-    
-    // 4. 在图片加载完成后提取主要颜色
-    mainVisualImg.onload = function() {
-      const colors = extractDominantColors(mainVisualImg, 6);
-      applyColorsToPanel(diyContainer, colors);
-    };
-    
-    // 如果图片已经加载完成，直接执行颜色提取
-    if (mainVisualImg.complete) {
-      const colors = extractDominantColors(mainVisualImg, 6);
-      applyColorsToPanel(diyContainer, colors);
+    // 如果两个元素都存在，则将主视觉图片的src同步到背景图片
+    if (mainVisualImg && backgroundImg) {
+      // 获取主视觉图片的src
+      const imgSrc = mainVisualImg.getAttribute('src');
+      
+      // 设置背景图片的src
+      backgroundImg.setAttribute('src', imgSrc);
+      
+      console.log('DIY视觉背景已同步更新');
+      
+      // 在图片加载完成后提取主要颜色
+      mainVisualImg.onload = function() {
+        const colors = extractDominantColors(mainVisualImg, 6);
+        applyColorsToPanel(diyContainer, colors);
+      };
+      
+      // 如果图片已经加载完成，直接执行颜色提取
+      if (mainVisualImg.complete) {
+        const colors = extractDominantColors(mainVisualImg, 6);
+        applyColorsToPanel(diyContainer, colors);
+      }
     }
-  }
+  });
 });
 
 /**
@@ -79,6 +101,9 @@ function extractDominantColors(img, colorCount) {
     // 收集颜色
     const colorMap = {};
     
+    // 获取配置的颜色量化精度
+    const quantizationLevel = DIY_CONFIG.COLOR_QUANTIZATION_LEVEL;
+    
     // 遍历像素数据，每四个值表示一个像素(RGBA)
     for (let i = 0; i < imageData.length; i += 4) {
       const r = imageData[i];
@@ -89,10 +114,10 @@ function extractDominantColors(img, colorCount) {
       // 跳过透明像素
       if (a < 128) continue;
       
-      // 简化颜色值以减少唯一颜色数量（每个通道精度降低到16个值）
-      const quantizedR = Math.round(r / 16) * 16;
-      const quantizedG = Math.round(g / 16) * 16;
-      const quantizedB = Math.round(b / 16) * 16;
+      // 使用配置的量化精度简化颜色值
+      const quantizedR = Math.round(r / quantizationLevel) * quantizationLevel;
+      const quantizedG = Math.round(g / quantizationLevel) * quantizationLevel;
+      const quantizedB = Math.round(b / quantizationLevel) * quantizationLevel;
       
       // 转换为十六进制颜色代码
       const hexColor = rgbToHex(quantizedR, quantizedG, quantizedB);
@@ -124,7 +149,8 @@ function extractDominantColors(img, colorCount) {
  */
 function filterSimilarColors(colors, count) {
   const result = [];
-  const threshold = 30; // 颜色差异阈值
+  // 使用配置的颜色差异阈值
+  const threshold = DIY_CONFIG.COLOR_DIFFERENCE_THRESHOLD;
   
   for (let i = 0; i < colors.length && result.length < count; i++) {
     const currentColor = hexToRgb(colors[i]);

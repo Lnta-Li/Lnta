@@ -357,6 +357,10 @@
     .fillwidth-1 {
        height: 0px; 
     }
+
+    .fillwidth-4 {
+        height: 50px;
+    }
     
     .fillwidth-archeader {
         height: 0;
@@ -389,7 +393,7 @@
     }
 
     .next-title {
-        padding: 0;       
+        padding: 0;
     }
 
     .carousel-item {
@@ -404,6 +408,31 @@
         width: 100%;
         border-radius: 8px;
         margin-bottom: var(--line-height-after);
+    }
+
+    .diy-container {
+        padding: 0;
+        position: static;
+        overflow: visible
+    }
+
+    .diy-project-intro {
+        flex-direction: column;
+    }
+
+    .diy-intro-content {
+        max-width: 100%;
+    }
+
+    .diy-color-palette {
+        flex-direction: row-reverse;
+    }
+
+    .diy-footer-logo-container img {
+        max-width: 75%;
+    }
+    .diy-visual-background {
+        height: 100vh;
     }
 
 }

@@ -156,6 +156,9 @@ else if($dopost=='save')
         $subpic = createSubPic($picname, 0, 0, $arcID);
     }
 
+    // 处理主题模式
+    $theme_mode = isset($theme_mode) ? intval($theme_mode) : '';
+
     $imgurls = "{dede:pagestyle maxwidth='$maxwidth' pagepicnum='$pagepicnum' ddmaxwidth='$ddmaxwidth' row='$row' col='$col' value='$pagestyle'/}\r\n";
     $hasone = FALSE;
 
@@ -362,15 +365,16 @@ else if($dopost=='save')
     //加入主档案表
     $okdd = 0;
     $litpic = $picname;
-    $inQuery = "INSERT INTO `#@__archives`(id,typeid,sortrank,flag,ismake,channel,arcrank,click,money,title,shorttitle,
-      color,writer,source,litpic,subpic,pubdate,senddate,mid,voteid,notpost,description,keywords,filename,dutyadmin,weight,hide_thumb,small_img)
-    VALUES ('$arcID','$typeid','$sortrank','$flag','$ismake','$channelid','$arcrank','$click','$money','$title',
-      '$shorttitle','$color','$writer','$source','$litpic','$subpic','$pubdate','$senddate','$adminid','$voteid',
-      '$notpost','$description','$keywords','$filename','$adminid','$weight','$hide_thumb','$small_img');";
+    $inQuery = "INSERT INTO `#@__archives`(id,typeid,typeid2,sortrank,flag,ismake,channel,arcrank,click,money,title,shorttitle,
+    color,writer,source,litpic,subpic,pubdate,senddate,mid,notpost,description,keywords,filename,dutyadmin,weight,hide_thumb,small_img)
+    VALUES ('$arcID','$typeid','$typeid2','$sortrank','$flag','$ismake','$channelid','$arcrank','$click','$money',
+    '$title','$shorttitle','$color','$writer','$source','$litpic','$subpic','$pubdate','$senddate',
+    '$adminid','$notpost','$description','$keywords','$filename','$adminid','$weight','$hide_thumb','$small_img');";
     if(!$dsql->ExecuteNoneQuery($inQuery))
     {
-        $dsql->ExecuteNoneQuery("Delete From `#@__arctiny` where id='$arcID'");
-        ShowMsg("把数据保存到数据库主表 `#@__archives` 时出错，请联系管理员。", "javascript:;");
+        $gerr = $dsql->GetError();
+        $dsql->ExecuteNoneQuery("DELETE FROM `#@__arctiny` WHERE id='$arcID'");
+        ShowMsg("把数据保存到数据库主表 `#@__archives` 时出错，请联系管理员。","javascript:;");
         exit();
     }
 
@@ -384,10 +388,12 @@ else if($dopost=='save')
         ShowMsg("没找到当前模型[{$channelid}]的主表信息，无法完成操作！。","javascript:;");
         exit();
     }
+    $daccess = isset($daccess) && is_numeric($daccess) ? $daccess : 0;
     $useip = GetIP();
-    $query = "INSERT INTO `$addtable` (`aid`, `typeid`, `redirecturl`, `userip`, `pagestyle`, `maxwidth`, `imgurls`, `row`, `col`, `isrm`, `ddmaxwidth`, `pagepicnum`, `body`, `has_pics` {$inadd_f})
-        VALUES ('{$arcID}', '{$typeid}', '{$redirecturl}', '{$useip}', '{$pagestyle}', '{$maxwidth}', '{$imgurls}', '{$row}', '{$col}', '{$isrm}', '{$ddmaxwidth}', '{$pagepicnum}', '{$body}', '{$has_pics}' {$inadd_v});";
-    if(!$dsql->ExecuteNoneQuery($query))
+    
+    $inQuery = "INSERT INTO `{$addtable}`(aid,typeid,redirecturl,userip,pagestyle,maxwidth,imgurls,row,col,isrm,ddmaxwidth,pagepicnum,body,theme)
+          VALUES ('$arcID','$typeid','','$useip','$pagestyle','$maxwidth','$imgurls','$row','$col','$isrm','$ddmaxwidth','$pagepicnum','$body','$theme_mode');";
+    if(!$dsql->ExecuteNoneQuery($inQuery))
     {
         $gerr = $dsql->GetError();
         $dsql->ExecuteNoneQuery("DELETE FROM `#@__archives` WHERE id='$arcID'");

@@ -193,10 +193,13 @@ h6.active {
 
 .header-text-link {
     width: fit-content;
-    padding: 0 16px;
+    padding: 10px 16px;
+    border-radius: 20px;
     box-sizing: border-box;
     text-align: center;
     margin: 0 auto;
+    position: relative;
+    overflow: hidden;
 }
 
 .header-text-link a {
@@ -390,6 +393,10 @@ h6 strong {
 }
 
 .fillwidth-3 {
+    height: 30px;
+}
+
+.fillwidth-4 { /*区分手机端*/
     height: 30px;
 }
 
@@ -1048,6 +1055,7 @@ iframe {
     background-color: var(--faint-color-1);
     border-radius: 50px;
     cursor: pointer;
+    overflow: hidden;
 }
 
 .switch-wrapper input {
@@ -1064,7 +1072,7 @@ iframe {
     line-height: 30px;
     text-align: center;
     font-size: 16px;
-    z-index: 2;
+    z-index: 3;
     cursor: pointer;
     color: var(--faint-color-4);
 }
@@ -1085,7 +1093,7 @@ iframe {
                 transform var(--transition-time) ease;
     -webkit-transition: background-color var(--transition-time) ease,
                         transform var(--transition-time) ease;
-    z-index: 1;
+    z-index: 2;
 }
 
 input[value="1"]:checked ~ .slider {
@@ -1095,6 +1103,69 @@ input[value="1"]:checked ~ .slider {
 #hide_thumb {
     opacity: 0;
     height: 25px;
+}
+
+/* 彩色多边形背景 */
+.polygon-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    filter: blur(15px) saturate(150%);
+    opacity: 0.5;
+    z-index: -1;
+    background: var(--background-body);
+}
+
+.polygon-bg::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100' fill='none'%3E%3Cpolygon points='15,5 55,10 50,45 10,40' fill='%234CAF50' opacity='0.85' /%3E%3Cpolygon points='40,15 85,25 90,60 70,80 30,65' fill='%23FF9800' opacity='0.85' /%3E%3Cpolygon points='70,0 110,15 125,50 100,75 60,55' fill='%23E91E63' opacity='0.85' /%3E%3Cpolygon points='20,35 60,30 80,55 70,90 30,85 10,60' fill='%23FFC107' opacity='0.85' /%3E%3Cpolygon points='60,50 100,40 120,65 110,95 70,100 50,75' fill='%239C27B0' opacity='0.85' /%3E%3Cpolygon points='100,20 140,30 160,60 140,85 100,75' fill='%23F44336' opacity='0.85' /%3E%3Cpolygon points='140,5 180,25 190,60 165,85 125,65 115,35' fill='%233F51B5' opacity='0.85' /%3E%3Cpolygon points='5,60 40,50 60,75 50,100 15,95 0,75' fill='%2300BCD4' opacity='0.85' /%3E%3C/svg%3E");
+    background-size: 120% 120%;
+    background-position: center;
+    transition: transform var(--transition-time) ease;
+}
+
+/* 激活动画效果 */
+.polygon-bg.active::after {
+    animation: polygon-drift 12s infinite alternate ease-in-out;
+}
+
+@keyframes polygon-drift {
+    0% {
+        transform: rotate(0deg) scale(2);
+        background-position: 0% 0%;
+    }
+    50% {
+        transform: rotate(90deg) scale(2.5);
+        background-position: -50% 150%;
+    }
+    100% {
+        transform: rotate(180deg) scale(3);
+        background-position: 100% -80%;
+    }
+}
+
+#theme-mode-notice {
+    transition: all 2s ease;
+    filter: blur(8px) saturate(150%);
+    opacity: 0;
+}
+
+@keyframes opacity-pulse {
+    0% { opacity: 0.1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 0.1; }
+}
+
+#theme-mode-notice.active {
+    animation: opacity-pulse 4s infinite ease-in-out;
 }
 
 /* 自定义的图文排版样式 */
@@ -1176,8 +1247,13 @@ input[value="1"]:checked ~ .slider {
 }
 
 /*文章自定义模板样式*/
-.diy-container h1,.diy-container h2,.diy-container p {
-    color: #fff;
+.diy-container h1, .diy-container h2, .diy-container p {
+    color: var(--diy3-text-color);
+}
+.diy-footer-logo-area p {
+    letter-spacing: 3px;
+    font-family: var(--defult-font-family) !important;
+    font-weight: 100;
 }
 .diy-container {
     width: 100%;
@@ -1196,7 +1272,7 @@ input[value="1"]:checked ~ .slider {
     position: relative;
 }
 .diy-title-main h1 {
-    font-size: 28px;
+    font-size: 28px!important;
     margin: 0 0 5px 0;
     font-weight: bold;
     letter-spacing: 1px;
@@ -1204,20 +1280,20 @@ input[value="1"]:checked ~ .slider {
 .diy-title-main p {
     font-size: 14px;
     margin: 0;
-    color: #fff;
+    color: var(--diy3-text-color);
 }
 .diy-credits {
     padding-top: 5px;
     border-top: solid;
     border-top-width: medium;
-    border-color: #fff;
+    border-color: var(--diy3-text-color);
 }
 .diy-credits p {
     margin: 0;
     text-align: right;
     font-size: 11px;
     line-height: 1.5;
-    color: #fff;
+    color: var(--diy3-text-color);
 }
 .diy-main-visual {
     width: 100%;
@@ -1227,8 +1303,11 @@ input[value="1"]:checked ~ .slider {
     width: 100%!important;
     height: auto!important;
     display: block;
-    border: 2px solid rgb(125 125 125 / 50%);
+    border: 2px solid var(--diy3-img-border);
     border-radius: 18px;
+}
+.diy-intro-content {
+    max-width: 75%;
 }
 .diy-project-intro {
     margin-bottom: 60px;
@@ -1252,13 +1331,14 @@ input[value="1"]:checked ~ .slider {
     bottom: 0;
     width: 100%;
     height: 3px;
-    background-color: #FFFFFF;
+    background-color: var(--diy3-text-color);
 }
 .diy-project-intro p {
     font-size: 16px;
     line-height: 1.9;
-    color: #D0D0D0;
+    color: var(--diy3-text-color);
     margin-bottom: 25px;
+    font-variation-settings: 'wght' 300, 'ROND' 0;
 }
 .diy-color-palette {
     display: flex;
@@ -1273,11 +1353,14 @@ input[value="1"]:checked ~ .slider {
     border: 1.5px solid #FFFFFF;
 }
 .diy-footer-logo-container {
+    display: flex;
     margin-bottom: 40px;
     text-align: center;
+    flex-direction: column;
+    gap: 30px;
 }
 .diy-footer-logo-container img {
-    max-width: 60%;
+    max-width: 50%;
     height: auto;
     display: block;
     margin: 0 auto;
@@ -1295,7 +1378,6 @@ input[value="1"]:checked ~ .slider {
     align-items: center;
 }
 .diy-visual-background {
-    transform: scale(1.1);
     position: absolute;
     top: 0;
     left: 0;
@@ -1309,9 +1391,12 @@ input[value="1"]:checked ~ .slider {
     height: 100% !important;
     object-fit: cover;
     filter: blur(8px);
+    scale: 1.1;
+    border-radius: 0;
 }
 .diy-container .image-box {
     height: 100%;
+    border-radius: 0;
 }
 .diy-visual-background::after {
     content: '';
@@ -1320,5 +1405,5 @@ input[value="1"]:checked ~ .slider {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to bottom, #000000a8, #000);
+    background: var(--diy3-background);
 }

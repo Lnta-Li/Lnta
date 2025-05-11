@@ -238,3 +238,6 @@ INSERT INTO `dede_uploads` VALUES('356','56','苏州官方手绘停车地图海�
 INSERT INTO `dede_uploads` VALUES('357','56','苏州官方手绘停车地图海报设计','/uploads/allimg/250509/1-1R34M019.jpg','1','2250','3000','0','1473352','1746787060','1');
 INSERT INTO `dede_uploads` VALUES('358','56','苏州官方手绘停车地图海报设计','/uploads/allimg/250509/1-1R3512110.jpg','1','2250','3000','0','1250664','1746787060','1');
 INSERT INTO `dede_uploads` VALUES('359','56','小尺寸缩略图(subpic_56)','/uploads/subpic/subpic_56.jpg','1','80','80','0','2777','1746842295','1');
+INSERT INTO `dede_uploads` VALUES('360','31','2024搜狐城市万有影力活动设计理念','/uploads/allimg/250511/1-250511191J0Z0.png','1','2803','1164','0','128632','1746962260','1');
+INSERT INTO `dede_uploads` VALUES('361','31','2024搜狐城市万有影力活动设计理念','/uploads/allimg/250511/1-250511191Pa45.png','1','2973','1687','0','106966','1746962289','1');
+INSERT INTO `dede_uploads` VALUES('362','31','2024搜狐城市万有影力活动设计理念','/uploads/allimg/250511/1-250511192R2V1.jpg','1','5334','2463','0','1578924','1746962902','1');
