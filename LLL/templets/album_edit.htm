@@ -165,6 +165,11 @@ function LoadTestDiv()
               <input type='checkbox' class='np' name='hide_thumb' value='1' <?php if(isset($arcRow["hide_thumb"]) && $arcRow["hide_thumb"]==1) echo "checked"; ?> />隐藏缩略图
               <input type='checkbox' class='np' name='small_img' value='1' <?php if(isset($arcRow["small_img"]) && $arcRow["small_img"]==1) echo "checked"; ?> />小图模式
               <input type='checkbox' class='np' name='make_subpic' value='1' checked />生成小尺寸缩略图
+              <div style="margin-top:5px;">
+                <input type='radio' class='np' name='theme_mode' value='3' <?php if(!isset($addRow["theme"]) || $addRow["theme"]==3 || $addRow["theme"]=='') echo "checked"; ?> />默认背景
+                <input type='radio' class='np' name='theme_mode' value='1' <?php if(isset($addRow["theme"]) && $addRow["theme"]==1) echo "checked"; ?> />深色背景
+                <input type='radio' class='np' name='theme_mode' value='0' <?php if(isset($addRow["theme"]) && $addRow["theme"]==0) echo "checked"; ?> />浅色背景
+              </div>
               </td>
             <td align="center"><img src="<?php if($arcRow["litpic"]!="") echo $arcRow["litpic"]; else echo "images/pview.gif";?>" width="150" height="100" id="picview" name="picview"></td>
           </tr>

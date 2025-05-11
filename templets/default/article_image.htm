@@ -7,6 +7,7 @@
 <meta name="keywords" content="{dede:field.keywords/}" />
 <meta name="description" content="{dede:field.description function='html2text(@me)'/}" />
 {dede:include filename="theme.htm"/}
+<meta name="theme_mode" content="{dede:theme_mode/}">
 <meta name="small_img" content="{dede:field.small_img/}">
 <meta name="hide_thumb" content="{dede:field.hide_thumb/}">
 <meta name="album_haspics" content="{dede:albumhaspics/}">
@@ -225,7 +226,7 @@ document.addEventListener('DOMContentLoaded', function () {
         </script>
 
         <div class="content-area">
-          <div class="fillwidth-3"></div>
+          <div class="fillwidth-4"></div>
           <h1><strong>{dede:field.title/}</strong></h1>
           <h2 class="project-description">{dede:field.description/}</h2>
           <div class="tags">

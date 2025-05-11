@@ -95,6 +95,19 @@ else if($dopost=='save')
         ShowMsg("文档为非指定的类型，请检查你发布内容的表单是否合法！","-1");
         exit();
     }
+    
+    // 获取频道模型附加表
+    $cInfos = $dsql->GetOne("SELECT addtable FROM `#@__channeltype` WHERE id='$channelid'");
+    if(!is_array($cInfos)) {
+        ShowMsg("获取频道模型信息失败！","javascript:;");
+        exit();
+    }
+    $addtable = $cInfos['addtable'];
+    if(empty($addtable)) {
+        ShowMsg("频道模型附加表不存在！","javascript:;");
+        exit();
+    }
+    
     if(!CheckChannel($typeid,$channelid))
     {
         ShowMsg("你所选择的栏目与当前模型不相符，请选择白色的选项！","-1");
@@ -167,6 +180,9 @@ else if($dopost=='save')
         require_once(DEDEINC.'/extend.func.php');
         $subpic = createSubPic($litpic, 0, 0, $id);
     }
+    
+    // 处理主题模式
+    $theme_mode = isset($theme_mode) ? intval($theme_mode) : '';
     
     //更新数据库的SQL语句
     $query = "
@@ -410,49 +426,49 @@ else if($dopost=='save')
                 {
                     continue;
                 }
-                $vs = explode(',',$v);
+                $vs = explode(',', $v);
                 if($vs[1]=='htmltext'||$vs[1]=='textdata') //HTML文本特殊处理
                 {
-                    ${$vs[0]} = AnalyseHtmlBody(${$vs[0]},$description,$litpic,$keywords,$vs[1]);
-                }else{
+                    ${$vs[0]} = AnalyseHtmlBody(${$vs[0]}, $description, $litpic, $keywords, $vs[1]);
+                }
+                else
+                {
                     if(!isset(${$vs[0]}))
                     {
                         ${$vs[0]} = '';
                     }
-                    ${$vs[0]} = GetFieldValueA(${$vs[0]},$vs[1],$id);
+                    ${$vs[0]} = GetFieldValueA(${$vs[0]}, $vs[1], $id);
                 }
-                $inadd_f .= ",`{$vs[0]}` = '".${$vs[0]}."'";
+                $inadd_f .= ',`'.$vs[0].'`';
+                $inadd_v .= ",'".${$vs[0]}."'";
             }
         }
     }
-
-    //更新附加表
-    $cts = $dsql->GetOne("SELECT `addtable` FROM `#@__channeltype` WHERE id='$channelid' ");
-    $addtable = trim($cts['addtable']);
-    if($addtable!='')
+    // 这两个字段禁止修改
+    $inColumn = '';
+    $has_picsColumn = '';
+    // 获取附加表数据
+    $dsql->SetQuery("SELECT has_pics FROM `{$addtable}` WHERE aid='{$id}'");
+    $hasRow = $dsql->GetOne();
+    if($hasRow)
     {
-        $useip = GetIP();
-        $query = "UPDATE `$addtable` SET
-            `typeid` = '{$typeid}',
-            `pagestyle` = '{$pagestyle}',
-            `body` = '{$body}',
-            `maxwidth` = '{$maxwidth}',
-            `ddmaxwidth` = '{$ddmaxwidth}',
-            `pagepicnum` = '{$pagepicnum}',
-            `imgurls` = '{$imgurls}',
-            `row` = '{$row}',
-            `col` = '{$col}',
-            `isrm` = '{$isrm}' {$inadd_f},
-            `redirecturl` = '{$redirecturl}',
-            `userip` = '{$useip}',
-            `has_pics` = '{$has_pics}',
-            `subpic` = '{$subpic}'
-            WHERE `aid` = '{$id}';";
-        if(!$dsql->ExecuteNoneQuery($query))
-        {
-            ShowMsg("更新附加表 `$addtable` 时出错，请检查原因！".$dsql->GetError(),"javascript:;");
-            exit();
-        }
+        $has_pics = $hasRow['has_pics'];
+    }
+    else
+    {
+        $has_pics = 0;
+    }
+
+    // 获取用户IP
+    $userip = GetIP();
+
+    //更新附加表SQL语句
+    $query = "UPDATE `$addtable` SET typeid='$typeid',pagestyle='$pagestyle',maxwidth='$maxwidth',
+            row='$row',col='$col',isrm='$isrm',ddmaxwidth='$ddmaxwidth',pagepicnum='$pagepicnum',body='$body',userip='$userip',redirecturl='$redirecturl',theme='$theme_mode'{$inColumn}{$inadd_f} WHERE aid='$id';";
+    if(!$dsql->ExecuteNoneQuery($query))
+    {
+        ShowMsg("更新附加表 `$addtable` 时出错，请检查原因！".$dsql->GetError(),"javascript:;");
+        exit();
     }
 
     // 文档日志

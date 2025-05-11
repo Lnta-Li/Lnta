@@ -12,16 +12,17 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         
         timeout: { // 延时配置
-            domComplete: 500, // DOM结构创建完成后的检查延时
-            noticeShow: 5000, // 提示条显示延时
-            noticeAutoHide: 10, // 提示条自动消失倒计时
-            noticeRemove: 1000 // 提示条消失后的延时
+            domComplete: 0.5, // DOM结构创建完成后的检查延时0.5秒
+            noticeShow: 5, // 提示条显示延时5秒
+            noticeAutoHide: 10, // 提示条自动消失倒计时10秒
+            noticeRemove: 1 // 提示条消失后的延时1秒销毁
         },
         
         selector: { // 选择器配置
             contentImages: '.Content-Type img', // 内容区域图片选择器
             longImg: 'img[id="long-img"]', // 长图选择器
             excludeImgId: 'no-title', // 不处理的图片ID
+            excludeContainer: '.diy-container', // 排除diy-container内的图片
         },
         
         longImg: { // 长图配置
@@ -115,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         box.classList.add('small-box');
                     }
                 });
-            }, CONFIG.timeout.domComplete);
+            }, CONFIG.timeout.domComplete * 1000);
         },
         
         toggleMode(toSmallMode) { // 切换图片显示模式
@@ -133,7 +134,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const normalImageProcessor = {
         process(isSmallImg) { // 处理普通图片
             const images = Array.from(document.querySelectorAll(CONFIG.selector.contentImages)) // 获取文章内容区域中的所有图片，并排除特定ID的图片
-                .filter(img => img.id !== CONFIG.selector.excludeImgId && img.id !== 'long-img');
+                .filter(img => {
+                    // 排除特定ID的图片
+                    if (img.id === CONFIG.selector.excludeImgId || img.id === 'long-img') {
+                        return false;
+                    }
+                    
+                    // 排除diy-container内部的图片
+                    if (CONFIG.selector.excludeContainer && img.closest(CONFIG.selector.excludeContainer)) {
+                        return false;
+                    }
+                    
+                    return true;
+                });
                 
             images.forEach(img => {
                 const wrapperClass = isSmallImg ? // 创建外层包裹div
@@ -326,7 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     smallImgMode.toggleMode(false);
                     this.hideNoticeBar(noticeBar, true);
                 });
-            }, CONFIG.timeout.noticeShow);
+            }, CONFIG.timeout.noticeShow * 1000);
         },
         
         hideNoticeBar(noticeBar, createFloat = false) { // 隐藏提示条并创建悬浮栏
@@ -336,7 +349,7 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 noticeBar.remove();
                 if (createFloat) this.createFloatBar();
-            }, CONFIG.timeout.noticeRemove);
+            }, CONFIG.timeout.noticeRemove * 1000);
         },
         
         createFloatBar() { // 创建悬浮栏
@@ -383,7 +396,19 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // 预先处理长图DOM结构
         const longImgs = Array.from(document.querySelectorAll(CONFIG.selector.longImg))
-            .filter(img => img.id !== CONFIG.selector.excludeImgId);
+            .filter(img => {
+                // 排除特定ID的图片
+                if (img.id === CONFIG.selector.excludeImgId) {
+                    return false;
+                }
+                
+                // 排除diy-container内部的图片
+                if (CONFIG.selector.excludeContainer && img.closest(CONFIG.selector.excludeContainer)) {
+                    return false;
+                }
+                
+                return true;
+            });
             
         if (longImgs.length > 0) {
             longImgs.forEach(longImg => longImageProcessor.prepareLongImage(longImg, isSmallImg));
@@ -399,7 +424,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // 使用window.onload确保在所有图片和资源加载完成后再处理长图尺寸
     window.addEventListener('load', () => {
         const longImgs = Array.from(document.querySelectorAll(CONFIG.selector.longImg))
-            .filter(img => img.id !== CONFIG.selector.excludeImgId);
+            .filter(img => {
+                // 排除特定ID的图片
+                if (img.id === CONFIG.selector.excludeImgId) {
+                    return false;
+                }
+                
+                // 排除diy-container内部的图片
+                if (CONFIG.selector.excludeContainer && img.closest(CONFIG.selector.excludeContainer)) {
+                    return false;
+                }
+                
+                return true;
+            });
             
         if (longImgs.length > 0) {
             longImgs.forEach(longImg => longImageProcessor.setDimensions(longImg));

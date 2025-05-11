@@ -1,12 +1,150 @@
 <script>
+// 主题模式UI配置
+const themeUIConfig = {
+    timeout: {
+        noticeShow: 5, // 提示条显示延时5秒
+        noticeAutoHide: 10, // 提示条自动消失倒计时10秒
+        noticeRemove: 1 // 提示条消失后的延时1秒销毁
+    },
+    transition: {
+        fadeInOut: '0.3s',
+        hide: '0.5s'
+    },
+    themeUI: {
+        noticeIcon: '&#xe651;', // 提示图标编码
+        darkModeText: "当前文章作者设置了深色模式，可以通过页面左侧菜单栏下方按钮切换", // 深色模式提示文本
+        lightModeText: "当前文章作者设置了浅色模式，可以通过页面左侧菜单栏下方按钮切换" // 浅色模式提示文本
+    }
+};
+
+// 工具函数
+const themeUtils = {
+    createElement(tag, attrs = {}, children = []) {
+        const element = document.createElement(tag);
+        
+        // 设置属性
+        Object.entries(attrs).forEach(([key, value]) => {
+            if (key === 'style' && typeof value === 'object') {
+                Object.entries(value).forEach(([prop, val]) => {
+                    element.style[prop] = val;
+                });
+            } else if (key === 'className') {
+                element.className = value;
+            } else if (key === 'innerHTML') {
+                element.innerHTML = value;
+            } else {
+                element.setAttribute(key, value);
+            }
+        });
+        
+        // 添加子元素
+        if (Array.isArray(children)) {
+            children.forEach(child => {
+                if (child) element.appendChild(child);
+            });
+        } else if (children) {
+            element.appendChild(children);
+        }
+        
+        return element;
+    }
+};
+
+// 主题模式提示条功能
+const themeNoticeUI = {
+    // 创建提示条
+    createNoticeBar(mode) {
+        const noticeText = mode === '1' ? themeUIConfig.themeUI.darkModeText : themeUIConfig.themeUI.lightModeText;
+        
+        const noticeBar = themeUtils.createElement('div', {
+            className: 'small-img-notice theme-mode-notice',
+            style: {
+                opacity: '0',
+                transition: `opacity ${themeUIConfig.transition.fadeInOut} ease`
+            }
+        });
+        
+        const noticeIcon = themeUtils.createElement('i', {
+            className: 'iconfontb',
+            innerHTML: themeUIConfig.themeUI.noticeIcon
+        });
+        
+        const noticeTextElement = themeUtils.createElement('div', {
+            className: 'notice-text'
+        }, [
+            noticeIcon,
+            document.createTextNode(noticeText)
+        ]);
+        
+        noticeBar.appendChild(noticeTextElement);
+        document.body.appendChild(noticeBar);
+        
+        // 延迟显示提示条
+        setTimeout(() => {
+            noticeBar.style.opacity = '1';
+            
+            // 为id为theme-mode-notice的元素添加polygon-bg active类
+            const themeNoticeElement = document.getElementById('theme-mode-notice');
+            if (themeNoticeElement) {
+                themeNoticeElement.classList.add('polygon-bg', 'active');
+            }
+            
+            // 倒计时自动隐藏
+            let countdown = themeUIConfig.timeout.noticeAutoHide;
+            const countdownInterval = setInterval(() => {
+                countdown--;
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    this.hideNoticeBar(noticeBar);
+                }
+            }, 1000);
+        }, themeUIConfig.timeout.noticeShow * 1000);
+    },
+    
+    // 隐藏提示条
+    hideNoticeBar(noticeBar) {
+        // 使用style.opacity代替fade-out类
+        noticeBar.style.opacity = '0';
+        
+        // 先设置theme-mode-notice的opacity为0
+        const themeNoticeElement = document.getElementById('theme-mode-notice');
+        if (themeNoticeElement) {
+            themeNoticeElement.style.opacity = '0';
+        }
+        
+        // 移除提示条，使用noticeRemove变量设置延时
+        setTimeout(() => {
+            noticeBar.remove();
+            
+            // 移除动画效果类
+            if (themeNoticeElement) {
+                themeNoticeElement.classList.remove('polygon-bg', 'active');
+            }
+        }, themeUIConfig.timeout.noticeRemove * 1000);
+    }
+};
+
 (function() {
     // 获取当前主题设置
     function getCurrentTheme() {
-        const themeCookie = document.cookie.split('; ').find(row => row.startsWith('theme='));
-        if (themeCookie) {
-            return themeCookie.split('=')[1];
+        // 首先检查是否有theme_mode的全局变量值
+        var themeMode = '{dede:theme_mode/}';
+        
+        // 检查具体的值
+        if(themeMode === '1') {
+            // 深色模式
+            return '1';
+        } else if(themeMode === '0') {
+            // 浅色模式
+            return '0';
+        } else {
+            // 值为3或为空时，使用原有逻辑
+            const themeCookie = document.cookie.split('; ').find(row => row.startsWith('theme='));
+            if (themeCookie) {
+                return themeCookie.split('=')[1];
+            }
+            return '{dede:global.cfg_Default_theme/}';
         }
-        return '{dede:global.cfg_Default_theme/}';
     }
 
     // 设置主题
@@ -30,6 +168,19 @@
     // 立即执行主题设置
     const currentTheme = getCurrentTheme();
     setTheme(currentTheme);
+    
+    // 判断是否需要显示主题模式提示条
+    document.addEventListener('DOMContentLoaded', function() {
+        var themeMode = '{dede:theme_mode/}';
+        if(themeMode === '1') {
+            // 显示深色模式提示条
+            themeNoticeUI.createNoticeBar('1');
+        } else if(themeMode === '0') {
+            // 显示浅色模式提示条
+            themeNoticeUI.createNoticeBar('0');
+        }
+        // 值为3或为空时不显示提示条
+    });
 })();
 </script>
 
