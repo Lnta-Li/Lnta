@@ -1112,11 +1112,10 @@ input[value="1"]:checked ~ .slider {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 0;
-    filter: blur(15px) saturate(150%);
-    opacity: 0.5;
+    filter: blur(15px) saturate(150%) brightness(var(--polygon-brightness));
     z-index: -1;
     background: var(--background-body);
+    opacity: 0.8; 
 }
 
 .polygon-bg::after {
@@ -1134,7 +1133,7 @@ input[value="1"]:checked ~ .slider {
 
 /* 激活动画效果 */
 .polygon-bg.active::after {
-    animation: polygon-drift 12s infinite alternate ease-in-out;
+    animation: polygon-drift 6s infinite alternate ease-in-out;
 }
 
 @keyframes polygon-drift {
@@ -1153,11 +1152,15 @@ input[value="1"]:checked ~ .slider {
 }
 
 #theme-mode-notice {
-    transition: all 2s ease;
-    filter: blur(8px) saturate(150%);
     opacity: 0;
+    transition: opacity 2s cubic-bezier(0.07, 0.61, 0.58, 1);
 }
 
+.switch-wrapper:hover #theme-mode-notice {
+    opacity: 1;
+}
+
+/* 闪烁动画和透明度渐变显示和隐藏会产生冲突所以启用
 @keyframes opacity-pulse {
     0% { opacity: 0; }
     50% { opacity: 0.5; }
@@ -1167,7 +1170,7 @@ input[value="1"]:checked ~ .slider {
 #theme-mode-notice.active {
     animation: opacity-pulse 5s infinite ease-in-out;
 }
-
+*/
 /* 自定义的图文排版样式 */
 .diy-1 {
    display: flex;

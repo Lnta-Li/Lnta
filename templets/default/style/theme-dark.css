@@ -34,4 +34,5 @@
     --diy3-background: linear-gradient(to bottom, rgb(0 0 0 / 0.7), var(--background-body)); /*主视觉模板背景*/
     --diy3-text-color: #fff; /*主视觉模板文字颜色*/
     --diy3-img-border: rgba(0, 0, 0, 0.3); /*主视觉模板图片边框*/
+    --polygon-brightness: 1 ; /* 彩色多边形背景亮度 */
 }   

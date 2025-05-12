@@ -14,8 +14,8 @@ const NoticeManager = (function() {
             remove: 0.5        // 隐藏后销毁延时（秒）
         },
         transition: {
-            fadeInOut: '0.3s', // 淡入淡出过渡时间
-            hide: '0.5s'       // 隐藏元素过渡时间
+            fadeInOut: '3s', // 淡入淡出过渡时间
+            hide: '3s'       // 隐藏元素过渡时间
         },
         ui: {
             noticeIcon: '&#xe651;', // 默认图标编码
@@ -98,7 +98,7 @@ const NoticeManager = (function() {
                         break;
                     case 'below-left':
                         // 放置在目标元素下方，左对齐
-                        noticeElement.style.top = `${rect.bottom + 50}px`;
+                        noticeElement.style.top = `${rect.bottom + 20}px`;
                         noticeElement.style.left = `${rect.left}px`;
                         break;
                     case 'above-left':
@@ -108,12 +108,22 @@ const NoticeManager = (function() {
                         break;
                     case 'below-right':
                         // 放置在目标元素下方，右对齐
-                        noticeElement.style.top = `${rect.bottom + 50}px`;
+                        noticeElement.style.top = `${rect.bottom + 20}px`;
                         noticeElement.style.left = `${rect.right - noticeElement.offsetWidth}px`;
+                        break;
+                    case 'above-center':
+                        // 放置在目标元素上方，水平居中
+                        noticeElement.style.top = `${rect.top - 70}px`;
+                        noticeElement.style.left = `${rect.left + (rect.width / 2) - (noticeElement.offsetWidth / 2)}px`;
+                        break;
+                    case 'below-center':
+                        // 放置在目标元素下方，水平居中
+                        noticeElement.style.top = `${rect.bottom + 20}px`;
+                        noticeElement.style.left = `${rect.left + (rect.width / 2) - (noticeElement.offsetWidth / 2)}px`;
                         break;
                     default:
                         // 默认放置在目标元素下方，左对齐
-                        noticeElement.style.top = `${rect.bottom + 50}px`;
+                        noticeElement.style.top = `${rect.bottom + 20}px`;
                         noticeElement.style.left = `${rect.left}px`;
                         break;
                 }
