@@ -98,7 +98,7 @@ const NoticeManager = (function() {
                         break;
                     case 'below-left':
                         // 放置在目标元素下方，左对齐
-                        noticeElement.style.top = `${rect.bottom + 20}px`;
+                        noticeElement.style.top = `${rect.bottom + 50}px`;
                         noticeElement.style.left = `${rect.left}px`;
                         break;
                     case 'above-left':
@@ -108,7 +108,7 @@ const NoticeManager = (function() {
                         break;
                     case 'below-right':
                         // 放置在目标元素下方，右对齐
-                        noticeElement.style.top = `${rect.bottom + 20}px`;
+                        noticeElement.style.top = `${rect.bottom + 50}px`;
                         noticeElement.style.left = `${rect.right - noticeElement.offsetWidth}px`;
                         break;
                     case 'above-center':
@@ -118,12 +118,12 @@ const NoticeManager = (function() {
                         break;
                     case 'below-center':
                         // 放置在目标元素下方，水平居中
-                        noticeElement.style.top = `${rect.bottom + 20}px`;
+                        noticeElement.style.top = `${rect.bottom + 50}px`;
                         noticeElement.style.left = `${rect.left + (rect.width / 2) - (noticeElement.offsetWidth / 2)}px`;
                         break;
                     default:
                         // 默认放置在目标元素下方，左对齐
-                        noticeElement.style.top = `${rect.bottom + 20}px`;
+                        noticeElement.style.top = `${rect.bottom + 50}px`;
                         noticeElement.style.left = `${rect.left}px`;
                         break;
                 }
