@@ -1159,13 +1159,13 @@ input[value="1"]:checked ~ .slider {
 }
 
 @keyframes opacity-pulse {
-    0% { opacity: 0.1; }
+    0% { opacity: 0; }
     50% { opacity: 0.5; }
-    100% { opacity: 0.1; }
+    100% { opacity: 0; }
 }
 
 #theme-mode-notice.active {
-    animation: opacity-pulse 4s infinite ease-in-out;
+    animation: opacity-pulse 5s infinite ease-in-out;
 }
 
 /* 自定义的图文排版样式 */
@@ -1199,20 +1199,6 @@ input[value="1"]:checked ~ .slider {
     max-height: 800px;
 }
 
-/* 小图模式提示条样式 */
-.small-img-notice {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--background-color);
-    padding: 12px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 999;
-}
-
 .notice-text {
     color: var(--solid-color);
     font-size: var(--fontsize-a);
@@ -1221,29 +1207,26 @@ input[value="1"]:checked ~ .slider {
     gap: 8px;
 }
 
-.countdown-text {
-    color: var(--Key-color);
-    font-size: 0.9em;
-}
-
-.notice-buttons {
+/* 通用通知气泡样式 */
+.notice-bubble {
+    position: fixed;
+    z-index: 999;
+    background-color: rgba(200, 200, 200, 0.15);
+    backdrop-filter: blur(var(--blur-carouseltitle));
+    border-radius: 8px;
+    padding: 10px 16px;
+    max-width: 300px;
     display: flex;
-    gap: 10px;
+    align-items: center;
 }
 
-.notice-btn {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: var(--fontsize-a);
-    background: rgb(255 255 255 / 30%);
-    color: var(--faint-color-3);
+.notice-bubble .iconfontb {
+    margin-right: 8px;
+    font-size: 18px;
 }
 
-.notice-btn:hover {
-    background: var(--Key-color);
-    color: #fff;
+.notice-bubble .notice-text-content {
+    font-size: 14px;
 }
 
 /*文章自定义模板样式*/

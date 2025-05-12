@@ -1,28 +1,23 @@
 /**
  * 图片处理模块
- * 处理文章中的图片显示、长图展开收起、小图模式提示等功能
+ * 处理文章中的图片显示、长图展开收起、小图模式等功能
  */
 document.addEventListener('DOMContentLoaded', () => {
     // 配置常量
     const CONFIG = {
         transition: { // 过渡时间配置
             base: 2000, // 过渡时间计算基数（2000px/1s）
-            fadeInOut: '0.3s', // 淡入淡出过渡时间
-            hide: '0.5s' // 隐藏元素过渡时间
         },
         
         timeout: { // 延时配置
             domComplete: 0.5, // DOM结构创建完成后的检查延时0.5秒
-            noticeShow: 5, // 提示条显示延时5秒
-            noticeAutoHide: 10, // 提示条自动消失倒计时10秒
-            noticeRemove: 1 // 提示条消失后的延时1秒销毁
         },
         
         selector: { // 选择器配置
             contentImages: '.Content-Type img', // 内容区域图片选择器
             longImg: 'img[id="long-img"]', // 长图选择器
-            excludeImgId: 'no-title', // 不处理的图片ID
-            excludeContainer: '.diy-container', // 排除diy-container内的图片
+            excludeImgId: 'no-title', // 小图模式、长图模式 不处理的图片ID
+            excludeContainer: '.diy-container', // 小图模式排除diy-container内的图片
         },
         
         longImg: { // 长图配置
@@ -32,14 +27,19 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         
         smallImgUI: { // 小图模式UI配置
-            noticeIcon: '&#xe651;', // 提示图标编码
-            noticeText: '  当前文章作者设置了小图预览模式', // 提示文本
             keepIcon: '&#xe6d2;', // 保持预览按钮图标编码
-            keepText: '  保持预览模式', // 保持预览按钮文本
             switchIcon: '&#xe628;', // 切换大图按钮图标编码
-            switchText: '  切换大图浏览', // 切换大图按钮文本
             floatKeepTitle: '保持预览模式', // 悬浮栏保持预览按钮标题
-            floatSwitchTitle: '切换大图浏览' // 悬浮栏切换大图按钮标题
+            floatSwitchTitle: '切换大图浏览', // 悬浮栏切换大图按钮标题
+            floatBarId: 'img-mode-control' // 悬浮栏的ID
+        },
+
+        noticeUI: { // 通知栏配置
+            noticeShow: 5, // 提示条显示延时5秒
+            noticeAutoHide: 10, // 提示条自动消失倒计时10秒
+            noticeRemove: 3, // 提示条消失后的延时3秒销毁（预留给退出动画的时间）
+            noticeIcon: '&#xe651;', // 提示图标编码
+            noticeText: "当前文章作者设置了缩略图预览模式，可以点击这里切换" // 提示文本
         }
     };
     
@@ -116,6 +116,22 @@ document.addEventListener('DOMContentLoaded', () => {
                         box.classList.add('small-box');
                     }
                 });
+                
+                // 检查是否为移动设备
+                const isMobile = window.matchMedia('(max-width: 768px)').matches;
+                
+                // 当应用小图模式且不是移动设备时，显示通知
+                if (!isMobile && typeof NoticeManager !== 'undefined') {
+                    NoticeManager.show({
+                        text: CONFIG.noticeUI.noticeText,
+                        icon: CONFIG.noticeUI.noticeIcon,
+                        targetId: CONFIG.smallImgUI.floatBarId,
+                        positionMode: 'above-right', // 在目标元素上方右对齐
+                        showDelay: CONFIG.noticeUI.noticeShow,
+                        autoHideDelay: CONFIG.noticeUI.noticeAutoHide,
+                        removeDelay: CONFIG.noticeUI.noticeRemove
+                    });
+                }
             }, CONFIG.timeout.domComplete * 1000);
         },
         
@@ -255,108 +271,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // 小图模式UI模块
     const smallImgUI = {
         create(isSmallImg) { // 创建小图模式UI
-            if (!isSmallImg) return;
-            this.createNoticeBar();
-        },
-        
-        createNoticeBar() { // 创建提示条
-            const noticeBar = utils.createElement('div', { // 创建提示条容器
-                className: 'small-img-notice',
-                style: {
-                    opacity: '0',
-                    transition: `opacity ${CONFIG.transition.fadeInOut} ease`
-                }
-            });
+            // 检查是否为移动设备
+            const isMobile = window.matchMedia('(max-width: 768px)').matches;
             
-            const noticeIcon = utils.createElement('i', { // 创建左侧文本
-                className: 'iconfontb',
-                innerHTML: CONFIG.smallImgUI.noticeIcon
-            });
+            // 如果不是小图模式或是移动设备，则不创建UI
+            if (!isSmallImg || isMobile) return;
             
-            const noticeText = utils.createElement('div', {
-                className: 'notice-text'
-            }, [
-                noticeIcon,
-                document.createTextNode(CONFIG.smallImgUI.noticeText)
-            ]);
-            
-            const buttonContainer = utils.createElement('div', { // 创建按钮容器
-                className: 'notice-buttons'
-            });
-            
-            const keepPreviewIcon = utils.createElement('i', { // 创建保持预览按钮
-                className: 'iconfontb',
-                innerHTML: CONFIG.smallImgUI.keepIcon
-            });
-            
-            const keepPreviewBtn = utils.createElement('button', {
-                className: 'notice-btn keep-preview'
-            }, [
-                keepPreviewIcon,
-                document.createTextNode(CONFIG.smallImgUI.keepText)
-            ]);
-            
-            const switchLargeIcon = utils.createElement('i', { // 创建切换大图按钮
-                className: 'iconfontb',
-                innerHTML: CONFIG.smallImgUI.switchIcon
-            });
-            
-            const switchLargeBtn = utils.createElement('button', {
-                className: 'notice-btn switch-large'
-            }, [
-                switchLargeIcon,
-                document.createTextNode(CONFIG.smallImgUI.switchText)
-            ]);
-            
-            buttonContainer.appendChild(keepPreviewBtn); // 组装提示条
-            buttonContainer.appendChild(switchLargeBtn);
-            noticeBar.appendChild(noticeText);
-            noticeBar.appendChild(buttonContainer);
-            
-            document.body.appendChild(noticeBar); // 添加到页面
-            
-            setTimeout(() => { // 延迟显示
-                noticeBar.style.opacity = '1';
-                
-                let countdown = CONFIG.timeout.noticeAutoHide; // 设置倒计时
-                const countdownInterval = setInterval(() => {
-                    countdown--;
-                    if (countdown <= 0) {
-                        clearInterval(countdownInterval);
-                        this.hideNoticeBar(noticeBar, true);
-                    }
-                }, 1000);
-                
-                const handleButtonClick = () => clearInterval(countdownInterval); // 添加按钮事件
-                
-                keepPreviewBtn.addEventListener('click', () => {
-                    handleButtonClick();
-                    this.hideNoticeBar(noticeBar, true);
-                });
-                
-                switchLargeBtn.addEventListener('click', () => {
-                    handleButtonClick();
-                    smallImgMode.toggleMode(false);
-                    this.hideNoticeBar(noticeBar, true);
-                });
-            }, CONFIG.timeout.noticeShow * 1000);
-        },
-        
-        hideNoticeBar(noticeBar, createFloat = false) { // 隐藏提示条并创建悬浮栏
-            noticeBar.style.opacity = '0';
-            noticeBar.style.transition = `opacity ${CONFIG.transition.hide} ease`;
-            
-            setTimeout(() => {
-                noticeBar.remove();
-                if (createFloat) this.createFloatBar();
-            }, CONFIG.timeout.noticeRemove * 1000);
+            this.createFloatBar();
         },
         
         createFloatBar() { // 创建悬浮栏
             if (document.querySelector('.img-float-bar')) return;
             
             const floatBar = utils.createElement('div', { // 创建悬浮栏
-                className: 'img-float-bar'
+                className: 'img-float-bar',
+                id: CONFIG.smallImgUI.floatBarId
             });
             
             const floatKeepIcon = utils.createElement('i', { // 创建保持预览按钮
