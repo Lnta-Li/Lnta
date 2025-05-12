@@ -434,5 +434,10 @@
     .diy-visual-background {
         height: 100vh;
     }
+    .notice-bubble {
+        margin: 0 10%;
+        max-width: 100%;
+        border-radius: 50px;
+    }
 
 }
