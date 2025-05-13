@@ -13,10 +13,6 @@ const NoticeManager = (function() {
             autoHide: 5,       // 自动隐藏时间（秒）
             remove: 0.5        // 隐藏后销毁延时（秒）
         },
-        transition: {
-            fadeInOut: '3s', // 淡入淡出过渡时间
-            hide: '3s'       // 隐藏元素过渡时间
-        },
         ui: {
             noticeIcon: '&#xe651;', // 默认图标编码
             noticeText: '通知消息'   // 默认文本
@@ -175,10 +171,6 @@ const NoticeManager = (function() {
         // 创建通知容器
         const noticeElement = createElement('div', {
             className: 'notice-bubble',
-            style: {
-                opacity: '0',
-                transition: `opacity ${config.transition.fadeInOut} ease`
-            }
         });
         
         // 创建图标
@@ -213,7 +205,8 @@ const NoticeManager = (function() {
         return new Promise((resolve) => {
             // 延迟显示
             setTimeout(() => {
-                noticeElement.style.opacity = '1';
+                // 添加active类来显示通知
+                noticeElement.classList.add('active');
                 
                 // 如果设置了自动隐藏时间
                 if (config.timeout.autoHide > 0) {
@@ -228,7 +221,8 @@ const NoticeManager = (function() {
 
     // 隐藏通知
     function hideNotice(noticeElement, removeDelay = 0.5) {
-        noticeElement.style.opacity = '0';
+        // 移除active类来隐藏通知
+        noticeElement.classList.remove('active');
         
         // 延迟销毁DOM
         setTimeout(() => {
