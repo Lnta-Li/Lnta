@@ -3,7 +3,7 @@
 .header-image:hover {
     cursor: url({dede:global.cfg_cursor/}), pointer;
 }
-/* PT Mono本地字体正常加载，因为nav使用了这个字体且字体包文件仅17kb需要保证外观不产生变化，阿里妈妈方圆体字体文件较大，使用异步加载字体 */
+/* PT Mono本地字体正常加载，因为nav使用了这个字体需要优先加载且字体包文件仅17kb，阿里妈妈方圆体字体文件较大，使用异步加载字体 */
 @font-face {
   font-family: 'PT Mono';
   src: url('{dede:global.cfg_templets_skin/}/fonts/PTMono-Regular.ttf') format('truetype');
@@ -21,8 +21,7 @@
   </div>
   <nav class="navigation navwidth mobile-nav">
     <a class="home" href="{dede:global.cfg_indexurl/}">Home</a>
-    {dede:channel type='top' row='10' currentstyle="<a class='active' href='~typelink~'
-      ~rel~><span>~typename~</span></a>"}
+    {dede:channel type='top' row='10' currentstyle="<a class='active' href='~typelink~' ~rel~><span>~typename~</span></a>"}
     <a class="" href="[field:typeurl/]">[field:typename/]</a>
     {/dede:channel}
 

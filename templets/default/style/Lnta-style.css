@@ -698,6 +698,7 @@ h2 {
 
 .Content-Type img:hover, .Content-Type video:hover {
     filter: var(--img-brightness-hover);
+    cursor: pointer;
 }
 
 .waterfall-img {
