@@ -176,15 +176,8 @@ function LoadTestDiv()
                   <input type="button" name="Submit2" value="裁剪" style="margin-left:8px;" onClick="imageCut('picname');" class='np coolbg'/>
                   <br/>
                   <input type='checkbox' class='np' name='ddisremote' value='1' id='ddisremote'/>远程
-                  <input type='checkbox' class='np' name='hide_thumb' value='1' />隐藏缩略图
-                  <input type='checkbox' class='np' name='small_img' value='1' />小图模式
                   <input type='checkbox' class='np' name='ddisfirst' value='1' />使用图集的第一幅图
                   <input type='checkbox' class='np' name='make_subpic' value='1' checked />生成小尺寸缩略图
-                  <div style="margin-top:5px;">
-                    <input type='radio' class='np' name='theme_mode' value='3' checked />默认背景
-                    <input type='radio' class='np' name='theme_mode' value='1' />深色背景
-                    <input type='radio' class='np' name='theme_mode' value='0' />浅色背景
-                  </div>
                   </td>
                 </tr>
               </table>
@@ -246,6 +239,39 @@ function LoadTestDiv()
       <td><?php PrintAutoFieldsAdd($cInfos['fieldset'],'autofield'); ?></td>
     </tr>
     <tr>
+      <td height="24"  bgcolor="#F9FCEF" class="bline2">&nbsp;<strong>页面样式：</strong></td>
+    </tr>
+    <tr>
+      <td height="24" colspan="4" class="bline">
+        <table width="800" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="90">&nbsp;显示选项：</td>
+            <td>
+              <input type='checkbox' class='np' name='hide_thumb' value='1' />隐藏缩略图
+              <input type='checkbox' class='np' name='small_img' value='1' />小图模式
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td height="24" colspan="4" class="bline">
+        <table width="800" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="90">&nbsp;页面配色：</td>
+            <td>
+              <div style="margin-top:5px;">
+                <input type='radio' class='np' name='theme_mode' value='3' checked />默认背景
+                <input type='radio' class='np' name='theme_mode' value='1' />深色背景
+                <input type='radio' class='np' name='theme_mode' value='0' />浅色背景
+              </div>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr>
       <td height="24"  bgcolor="#F9FCEF" class="bline2">&nbsp;<strong>图集选项：</strong></td>
     </tr>
     <tr>
@@ -258,11 +284,13 @@ function LoadTestDiv()
             <input name="pagestyle" class="np" type="radio" id="pagestyle1" onClick="checkMuList()" value="1"<?php if($cfg_album_style==1) echo " checked='checked'"; ?> />
             <img src='images/alb2.gif' alt='单页多图样式' title='单页多图样式' />
             &nbsp;&nbsp;
+            <!-- 注释掉2和3的表现方式
             <input name="pagestyle" class="np" type="radio" id="pagestyle2" onClick="checkMuList()" value="2"<?php if($cfg_album_style==2) echo " checked='checked'"; ?> />
             <img src='images/alb1.gif' alt='幻灯片样式' title='幻灯片样式' />
             &nbsp;&nbsp;
             <input name="pagestyle" class="np" type="radio" id="pagestyle3" onClick="checkMuList()" value="3"<?php if($cfg_album_style==3) echo " checked='checked'"; ?>/>
             <img src='images/alb3.gif' alt='多缩略图样式' title='多缩略图样式' />
+            -->
             </td>
           </tr>
       </table>
@@ -288,14 +316,14 @@ function LoadTestDiv()
           </tr>
       </table></td>
     </tr>
-    <tr id='spagelist' style='display:none'>
+    <tr>
       <td height="24" colspan="4" class="bline">
       	<table width="800" border="0" cellspacing="0" cellpadding="0">
           <tr>
-            <td width="95">&nbsp;每页图片数：</td>
+            <td width="95">&nbsp;最多显示图片数：</td>
             <td>
               <input name='pagepicnum' type='text' id='pagpicnum' size='10' value='<?php echo $cfg_album_pagesize; ?>' />
-              单页多图显示需要设置此参数，这种模式下系统不会为每张图单独生成缩略图。
+              单页多图显示模式下，一个页面上最多显示的图片数量，设置为0表示不限制。
             </td>
           </tr>
         </table>
@@ -378,10 +406,8 @@ function LoadTestDiv()
     <tr>
       <td height="24" colspan="4">
       	<table width="800" border="0" cellspacing="0" cellpadding="0">
-        <tr>
-          <td width="90">&nbsp;图集内容：</td>
-          <td> <?php GetEditor("body","",450,"Diy"); ?></td>
-        </tr>
+        <tr><td width="90">&nbsp;图集内容：</td></tr>
+        <tr></tr><td> <?php GetEditor("body","",450,"Diy"); ?></td></tr>
       </table>
       </td>
     </tr>

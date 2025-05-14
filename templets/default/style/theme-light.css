@@ -28,7 +28,7 @@
     --header-text-color: rgb(131 142 172); /* 头部文本颜色 */
     --header-text-color-strong: rgb(33, 36, 44); /* 头部文本颜色2 */
     --img-brightness: brightness(1); /*默认图片亮度*/
-    --img-brightness-hover: brightness(0.9); /*鼠标悬停图片亮度*/
+    --img-brightness-hover: brightness(0.95); /*鼠标悬停图片亮度*/
     --code-control-bar: rgb(35 36 39); /*代码块标题背景色*/
     --code-block-bar: rgb(22 22 22); /*代码块背景色*/
     --diy3-background: linear-gradient(to bottom, rgba(255, 255, 255, 0.7), var(--background-body)); /*主视觉模板背景*/
