@@ -21,10 +21,25 @@
         <header class="header col-9 offset-3 nested artheader mobile-full mobile-no-offset">
             <div class="col-7 mobile-full">
                 <div class="header-image design">
-                    <img alt="{dede:field.title/}" src="{dede:field.typebigimg /}">
+                    {dede:field.typebigimg runphp='yes'}
+                    $mediaUrl = @me;
+                    $ext = strtolower(pathinfo($mediaUrl, PATHINFO_EXTENSION));
+                    $videoExts = array('mp4', 'webm', 'ogg');
+                    
+                    if(in_array($ext, $videoExts)) {
+                        @me = '<video src="'.$mediaUrl.'" autoplay loop muted playsinline style="width:100%;"></video>';
+                    } else {
+                        @me = '<img alt="{dede:field.title/}" src="'.$mediaUrl.'">';
+                    }
+                    {/dede:field.typebigimg}
                 </div>
             </div>
         </header>
+        
+        <div class="channel-title col-9 offset-3 mobile-full mobile-no-offset">
+            <h1>{dede:field.typename/}<span class="translation"> {dede:field.typeenglishname /}</span></h1>
+        </div>
+        
         <section class="projects-wrapper tra-bg-color">
             <div class="projects-container">
                 <ul class="projects col-10 offset-2 nested mobile-full mobile-no-offset">
