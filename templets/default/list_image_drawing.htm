@@ -1,0 +1,262 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset={dede:global.cfg_soft_lang/}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{dede:field.title/}_{dede:global.cfg_webname/}</title>
+    <meta name="keywords" content="{dede:field name='keywords'/}" />
+    <meta name="description" content="{dede:field name='description' function='html2text(@me)'/}" />
+    {dede:include filename="theme.htm"/}
+    <link href="{dede:global.cfg_templets_skin/}/style/Lnta-style.css" rel="stylesheet" media="screen" type="text/css" />
+    <link href="{dede:global.cfg_templets_skin/}/style/Lnta-mobile.css" rel="stylesheet" media="screen" type="text/css" />
+    <script src="{dede:global.cfg_templets_skin/}/js/page-loader.js"></script>
+    <style>
+        .header-image {
+            overflow: hidden;
+        }
+    
+        .parallax-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.05s ease-out, opacity 0.05s ease-out;
+        }
+        .parallax-layer img {
+            width: auto;
+            height: 100%;
+            object-fit: cover;
+        }
+        .header-image:hover {
+            cursor: url(/uploads/250317/1-250323225050496.png), pointer !important;
+        }
+
+        .parallax-layer img {
+            overflow: visible !important;
+        }
+        
+        .header-image {
+            background: #000;
+        }
+
+        /* 移动端特定样式 */
+        @media screen and (max-width: 768px) {
+            .header-image {
+                touch-action: none; /* 防止页面滚动干扰 */
+                -webkit-overflow-scrolling: touch;
+            }
+            .parallax-layer {
+                will-change: transform; /* 优化性能 */
+            }
+        }
+    </style>
+</head>
+
+<body huaban_pin_injected="true" class="tra-bg-color">
+    {dede:include filename="head.htm"/}
+    <div id="pagebody">
+    <div class="page-wrapper">
+        <header class="header col-9 offset-3 nested artheader mobile-full mobile-no-offset">
+            <div class="col-7 mobile-full">
+                <div class="header-image design">
+                    <div class="parallax-layer" id="layer1"><img src="{dede:global.cfg_cmspath/}/uploads/allimg/drawing/1.png" alt="图层1"></div>
+                    <div class="parallax-layer" id="layer2"><img src="{dede:global.cfg_cmspath/}/uploads/allimg/drawing/2.png" alt="图层2"></div>
+                    <div class="parallax-layer" id="layer3"><img src="{dede:global.cfg_cmspath/}/uploads/allimg/drawing/3.png" alt="图层3"></div>
+                    <div class="parallax-layer" id="layer4"><img src="{dede:global.cfg_cmspath/}/uploads/allimg/drawing/4.png" alt="图层4"></div>
+                    <div class="parallax-layer" id="layer5"><img src="{dede:global.cfg_cmspath/}/uploads/allimg/drawing/5.png" alt="图层5"></div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="channel-title col-9 offset-3 mobile-full mobile-no-offset">
+            <h1>{dede:field.typename/}</h1>
+        </div>
+        
+        <section class="projects-wrapper tra-bg-color">
+            <div class="projects-container">
+                <ul class="projects col-10 offset-2 nested mobile-full mobile-no-offset">
+                    {dede:list pagesize='10'}
+                    <li class="project col-8 nested mobile-full mob-over"><a
+                            class="project-link fixed mobile-flex-column" href="[field:arcurl/]">
+                            <div class="project-number col-1 mobile-full">
+                                <h3>[field:global.autoindex runphp='yes'] if(@me < 10) { @me="0" .@me; }
+                                        [/field:global.autoindex]</h3>
+                            </div>
+                            <div class="col-3 project-thumb-fixed mobile-full">
+                                <img class="project-thumb" alt="[field:title/]" src="[field:litpic/]">
+                            </div>
+                            <div class="col-4 project-title mobile-full">
+                                <h6 class="active">[field:pubdate function="MyDate('Y-m-d',@me)"/]</h6>
+                                <h2>[field:title function="cutStr(@me,60)"/]</h2>
+                                <p>[field:description function="cutStr(@me,120)"/]</p>
+                                <span class="clickico listicon">
+                                    <i class="iconfontb">&#xe8d4;</i>&ensp;[field:click/]&ensp;&ensp;
+                                    <i class="iconfontb">&#xe616;</i>&ensp;[field:goodpost/]&ensp;&ensp;
+                                    <i class="iconfontb">&#xe60e;</i>&ensp;[field:id runphp='yes'] global $dsql; $row = $dsql->GetOne("SELECT COUNT(*) AS num FROM dede_feedback WHERE aid=@me"); @me=$row['num']; [/field:id]
+                                </span>
+                            </div>
+                        </a></li>
+                    {/dede:list}
+                </ul>
+                <div class="fillwidth-3"></div>
+                <div class="projects col-10 offset-2 nested mobile-full mobile-no-offset">
+                    <ul class="col-8 nested next-shelf pagelist mobile-full">
+                        {dede:pagelist listitem="index,end,pre,next,pageno,option" listsize="5"/}
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+    </div>
+
+    <script src="{dede:global.cfg_templets_skin/}/js/mobile-menu.js"></script>
+    <script>
+    // 视差效果配置 - 所有图层参数统一管理
+    const parallaxConfig = {
+        // 各图层配置
+        layers: {
+            layer1: {
+                position: { x: -40, y: -40 },      // 初始位置
+                scale: 1.3,                    // 缩放值
+                opacity: 1.0,                  // 透明度
+                speed: { x: 0.2, y: 0.1 }      // 移动速度 (x方向和y方向)
+            },
+            layer2: {
+                position: { x: 150, y: 0 },
+                scale: 0.9,
+                opacity: 1,
+                speed: { x: 0.4, y: 0.2 }
+            },
+            layer3: {
+                position: { x: -100, y: -50 },
+                scale: 0.7,
+                opacity: 1,
+                speed: { x: 0.6, y: 0.3 }
+            },
+            layer4: {
+                position: { x: 0, y: 0 },
+                scale: 0.9,
+                opacity: 1,
+                speed: { x: 0.8, y: 0.4 }
+            },
+            layer5: {
+                position: { x: 0, y: 0 },
+                scale: 0.9,
+                opacity: 1,
+                speed: { x: 1.0, y: 0.5 }
+            }
+        },
+        // 一般配置
+        sensitivity: 100, // 移动灵敏度
+        transitionSpeed: 0.05, // 过渡速度
+        resetTransitionSpeed: 0.3, // 移出区域后复位的动画速度
+        // 移动端配置
+        mobileConfig: {
+            sensitivity: 50, // 移动端灵敏度降低
+            maxTilt: 15 // 最大倾斜角度
+        }
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const headerImage = document.querySelector('.header-image.design');
+        const parallaxLayers = document.querySelectorAll('.parallax-layer');
+        let isMobile = window.innerWidth <= 768;
+        
+        // 应用初始样式到所有图层
+        parallaxLayers.forEach(layer => {
+            const id = layer.id;
+            const config = parallaxConfig.layers[id];
+            
+            if (config) {
+                layer.style.transform = `translate(${config.position.x}px, ${config.position.y}px) scale(${config.scale})`;
+                layer.style.opacity = config.opacity;
+                layer.style.transition = `transform ${parallaxConfig.transitionSpeed}s ease-out, opacity ${parallaxConfig.transitionSpeed}s ease-out`;
+            }
+        });
+
+        // 处理视差效果的函数
+        function handleParallax(x, y, rect) {
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const offsetX = (x - centerX) / centerX;
+            const offsetY = (y - centerY) / centerY;
+            
+            parallaxLayers.forEach(layer => {
+                const id = layer.id;
+                const config = parallaxConfig.layers[id];
+                
+                if (config) {
+                    const sensitivity = isMobile ? parallaxConfig.mobileConfig.sensitivity : parallaxConfig.sensitivity;
+                    const moveX = offsetX * sensitivity * config.speed.x;
+                    const moveY = offsetY * sensitivity * config.speed.y;
+                    
+                    layer.style.transform = `translate(${config.position.x + moveX}px, ${config.position.y + moveY}px) scale(${config.scale})`;
+                }
+            });
+        }
+
+        // 鼠标移动事件
+        headerImage.addEventListener('mousemove', function(e) {
+            if (isMobile) return; // 移动端不处理鼠标事件
+            const rect = headerImage.getBoundingClientRect();
+            handleParallax(e.clientX - rect.left, e.clientY - rect.top, rect);
+        });
+
+        // 触摸事件处理
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        headerImage.addEventListener('touchstart', function(e) {
+            if (!isMobile) return;
+            const touch = e.touches[0];
+            const rect = headerImage.getBoundingClientRect();
+            touchStartX = touch.clientX - rect.left;
+            touchStartY = touch.clientY - rect.top;
+        });
+
+        headerImage.addEventListener('touchmove', function(e) {
+            if (!isMobile) return;
+            e.preventDefault(); // 防止页面滚动
+            const touch = e.touches[0];
+            const rect = headerImage.getBoundingClientRect();
+            handleParallax(touch.clientX - rect.left, touch.clientY - rect.top, rect);
+        });
+
+        // 重置位置
+        function resetPosition() {
+            parallaxLayers.forEach(layer => {
+                const id = layer.id;
+                const config = parallaxConfig.layers[id];
+                
+                if (config) {
+                    layer.style.transition = `transform ${parallaxConfig.resetTransitionSpeed}s ease-out, opacity ${parallaxConfig.resetTransitionSpeed}s ease-out`;
+                    layer.style.transform = `translate(${config.position.x}px, ${config.position.y}px) scale(${config.scale})`;
+                }
+            });
+        }
+
+        // 鼠标离开事件
+        headerImage.addEventListener('mouseleave', resetPosition);
+        
+        // 触摸结束事件
+        headerImage.addEventListener('touchend', resetPosition);
+        
+        // 鼠标进入事件
+        headerImage.addEventListener('mouseenter', function() {
+            parallaxLayers.forEach(layer => {
+                layer.style.transition = `transform ${parallaxConfig.transitionSpeed}s ease-out, opacity ${parallaxConfig.transitionSpeed}s ease-out`;
+            });
+        });
+
+        // 窗口大小改变时更新移动端状态
+        window.addEventListener('resize', function() {
+            isMobile = window.innerWidth <= 768;
+        });
+    });
+    </script>
+</body>
+
+</html>

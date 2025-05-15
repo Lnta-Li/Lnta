@@ -146,9 +146,8 @@ h6.active {
     display: flex;
     padding: 2vw 0;
     margin-left: 384px;
-    width: 1152px;
+    width: 1130px;
     z-index: 3;
-    margin-bottom: 32px;
     align-items: center;
     box-sizing: border-box;
 }
@@ -172,6 +171,7 @@ h6.active {
     max-width: 100% !important;
     box-sizing: border-box;
     font-family: var(--headtext-font-family);
+    font-weight: 500;
 }
 
 .highlighter strong {
@@ -183,23 +183,17 @@ h6.active {
 }
 
 .header-image-wrapper {
-    padding: 0 16px;
-    margin-left: -128px;
-    width: 44.4444%;
+    margin-left: -70px;
+    width: 36%;
     box-sizing: border-box;
-    overflow: hidden;
     z-index: 1;
 }
 
 .header-text-link {
-    width: fit-content;
     padding: 10px 16px;
-    border-radius: 20px;
-    box-sizing: border-box;
     text-align: center;
     margin: 0 auto;
     position: relative;
-    overflow: hidden;
 }
 
 .header-text-link a {
@@ -211,9 +205,70 @@ h6.active {
 }
 
 .header-text-link a:hover {
-    /*background: var(--Key-color);*/
     font-size: var(--fontsize-p);
 }
+
+.btn-shine {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 12px 48px;
+    background: var(--readmore-button);
+    background-position: 0;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shine 3s infinite linear;
+    animation-fill-mode: forwards;
+    -webkit-text-size-adjust: none;
+    font-size: 16px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  @-moz-keyframes shine {
+    0% {
+      background-position: 0;
+    }
+    60% {
+      background-position: 180px;
+    }
+    100% {
+      background-position: 180px;
+    }
+  }
+  @-webkit-keyframes shine {
+    0% {
+      background-position: 0;
+    }
+    60% {
+      background-position: 180px;
+    }
+    100% {
+      background-position: 180px;
+    }
+  }
+  @-o-keyframes shine {
+    0% {
+      background-position: 0;
+    }
+    60% {
+      background-position: 180px;
+    }
+    100% {
+      background-position: 180px;
+    }
+  }
+  @keyframes shine {
+    0% {
+      background-position: 0;
+    }
+    60% {
+      background-position: 180px;
+    }
+    100% {
+      background-position: 180px;
+    }
+  }
 
 /* 文本选中样式 */
 ::selection {
@@ -238,7 +293,7 @@ h6.active {
 
 .sparkle {
     position: relative;
-    right: -384px;
+    right: -280px;
     top: -150px;
     width: 150px;
     vertical-align: baseline;
@@ -251,10 +306,15 @@ h6.active {
     position: absolute;
     left: 0;
     right: 0;
-    padding-top: 90px;
+    padding-top: 200px;
     padding-bottom: 90px;
-    margin-top: -115px;
+    margin-top: -173px;
     z-index: -1;
+}
+
+.home-active .projects-wrapper {
+    padding-top: 160px !important;
+    margin-top: -130px !important;
 }
 
 .projects-container {
@@ -408,7 +468,7 @@ h6 strong {
 .pagtag .content-width {
     max-width: 1024px;
     width: 70vw; 
-    padding: 0 20px;
+    padding: 0 16px;
 }
 
 .pagtype-arc .content-width {
@@ -797,7 +857,9 @@ p {
 
 .artheader  {
     padding: 2vw 0px;
-    margin-bottom: 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .about-header {
@@ -999,7 +1061,7 @@ iframe {
 }
 
 .translation {
-    color: var(--Aux-colors-1);
+    color: var(--Aux-colors-2);
     font-size: 0.9em;
     font-weight: revert;
     font-family: 'PT Mono', sans-serif;
@@ -1135,6 +1197,7 @@ input[value="1"]:checked ~ .slider {
 /* 激活动画效果 */
 .polygon-bg.active::after {
     animation: polygon-drift 6s infinite alternate ease-in-out;
+    opacity: 1;
 }
 
 @keyframes polygon-drift {
@@ -1405,4 +1468,22 @@ input[value="1"]:checked ~ .slider {
     width: 100%;
     height: 100%;
     background: var(--diy3-background);
+}
+
+/* 栏目标题样式 */
+.channel-title {
+    display: flex;
+    padding: 0 16px;
+    z-index: 2;
+    position: relative;
+}
+
+.channel-title h1 {
+    font-family: var(--h1-font-family);
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--solid-color);
+    line-height: 1.2;
+    position: relative;
+    padding-bottom: 10px;
 }

@@ -1,6 +1,0 @@
-INSERT INTO `dede_feedback` VALUES('1','35','0','游客','','112.0.134.101','1','1743516679','0','0','0','feedback','0','天圆地方、刚柔并济👍');
-INSERT INTO `dede_feedback` VALUES('3','35','0','✨Lntano.Li','','222.92.76.226','1','1743661315','1','0','0','feedback','0','💪💪💪');
-INSERT INTO `dede_feedback` VALUES('8','38','0','游客','','49.78.1.217','1','1743685754','0','0','0','feedback','0','👍👍👍太强了');
-INSERT INTO `dede_feedback` VALUES('7','35','0','✨Lntano.Li','','222.92.76.226','1','1743661475','1','0','0','feedback','0','「钱币」与「凤凰」的品牌理念');
-INSERT INTO `dede_feedback` VALUES('10','38','0','游客','','112.22.30.26','1','1743686641','0','0','0','feedback','0','厉害了');
-INSERT INTO `dede_feedback` VALUES('11','32','0','游客','','49.94.155.114','1','1745577154','0','0','0','feedback','0','nice(ʘ▽ʘ)👍');

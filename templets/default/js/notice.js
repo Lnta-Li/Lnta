@@ -117,6 +117,11 @@ const NoticeManager = (function() {
                         noticeElement.style.top = `${rect.bottom + 50}px`;
                         noticeElement.style.left = `${rect.left + (rect.width / 2) - (noticeElement.offsetWidth / 2)}px`;
                         break;
+                    case 'center':
+                        // 放置在目标元素中央，水平居中
+                        noticeElement.style.top = `${rect.top + (rect.height / 2) - (noticeElement.offsetHeight / 2)}px`;
+                        noticeElement.style.left = `${rect.left + (rect.width / 2) - (noticeElement.offsetWidth / 2)}px`;
+                        break;
                     default:
                         // 默认放置在目标元素下方，左对齐
                         noticeElement.style.top = `${rect.bottom + 50}px`;
