@@ -124,6 +124,7 @@
             autoplaySpeed: 1,       // 自动播放速度 (帧/刷新，值越大速度越快)
             autoplayDirection: 1,      // 播放方向：1 为正向，-1 为反向
             pingpongMode: true,        // 是否开启循环回放模式（到达边界后自动反向）
+            autoplayResumeDelay: 3,    // 交互结束后恢复自动播放的延迟时间(秒)
         };
         
         const viewer = document.getElementById('three-d-viewer');
@@ -143,6 +144,7 @@
         let currentDirection = config.autoplayDirection; // 当前播放方向
         let loadedFrames = 0; // 已加载的帧数
         let isLoadingComplete = false; // 是否加载完成
+        let autoplayResumeTimer = null; // 添加自动播放恢复定时器变量
         
         // 设置初始加载状态
         frameElement.classList.add('loading');
@@ -266,12 +268,32 @@
         
         // 开始自动播放
         const startAutoplay = () => {
+            // 清除可能存在的恢复定时器
+            if (autoplayResumeTimer) {
+                clearTimeout(autoplayResumeTimer);
+                autoplayResumeTimer = null;
+            }
+            
             // 只有在加载完成后才开始自动播放
             if (config.autoplay && !autoplayId && !isDragging && isLoadingComplete) {
                 // 重置播放方向为初始配置方向
                 currentDirection = config.autoplayDirection;
                 autoplayAnimation();
             }
+        };
+        
+        // 修改 startAutoplayWithDelay 函数
+        const startAutoplayWithDelay = () => {
+            // 清除可能存在的恢复定时器
+            if (autoplayResumeTimer) {
+                clearTimeout(autoplayResumeTimer);
+            }
+            
+            // 设置延迟恢复自动播放
+            autoplayResumeTimer = setTimeout(() => {
+                startAutoplay();
+                autoplayResumeTimer = null;
+            }, config.autoplayResumeDelay * 1000);
         };
         
         // 惯性动画
@@ -282,8 +304,8 @@
                 cancelAnimationFrame(animationId);
                 animationId = null;
                 
-                // 惯性结束后，恢复自动播放
-                startAutoplay();
+                // 惯性结束后，延迟恢复自动播放
+                startAutoplayWithDelay();
                 return;
             }
             
@@ -342,8 +364,8 @@
                 if (isLoadingComplete && config.inertiaEnabled && Math.abs(velocityX) > config.initialSpeedThreshold) {
                     animationId = requestAnimationFrame(applyMomentum);
                 } else {
-                    // 如果没有足够的速度启动惯性，直接恢复自动播放
-                    startAutoplay();
+                    // 如果没有足够的速度启动惯性，延迟恢复自动播放
+                    startAutoplayWithDelay();
                 }
             }
         });
@@ -422,8 +444,8 @@
                 if (isLoadingComplete && config.inertiaEnabled && Math.abs(velocityX) > config.initialSpeedThreshold) {
                     animationId = requestAnimationFrame(applyMomentum);
                 } else {
-                    // 如果没有足够的速度启动惯性，直接恢复自动播放
-                    startAutoplay();
+                    // 如果没有足够的速度启动惯性，延迟恢复自动播放
+                    startAutoplayWithDelay();
                 }
             }
         });
