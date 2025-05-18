@@ -143,6 +143,7 @@ a:hover {
 
 a img {
 	border-style: none;
+	object-fit: contain;
 }
 
 b a {
