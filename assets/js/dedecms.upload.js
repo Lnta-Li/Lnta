@@ -14,11 +14,11 @@ function dedecmsAlbumDelete(that) {
     let div = $(that).parent().parent().parent().parent();
     let id = div.attr("id");
 
-    $(`#${id} .uk-card-body input:hidden`).each(function () {
-        div.after($(this));
-    });
-
+    // 删除div，不保留input字段
     div.remove();
+    
+    // 更新ID数据
+    dedecmsAlbumDataUpdate();
 }
 
 // 图集 编辑
