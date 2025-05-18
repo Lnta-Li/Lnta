@@ -258,10 +258,6 @@
     .home-active .header-image {
         height: 300px !important;
     }
-    
-    .design {
-        height: 240px !important;
-    }
 
     .mobile-nav.active {
         left: 0;

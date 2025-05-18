@@ -875,6 +875,10 @@ class ListView
                     $GLOBALS['autoindex']++;
                     $ids[$row['id']] = $row['id'];
 
+                    // Add autolitpic logic
+                    // If heimg exists and is not empty, use heimg, otherwise use litpic.
+                    $row['autolitpic'] = !empty($row['heimg']) ? $row['heimg'] : $row['litpic'];
+
                     //处理一些特殊字段
                     $row['infos'] = cn_substr($row['description'],$infolen);
                     $row['id'] =  $row['id'];

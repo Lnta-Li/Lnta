@@ -151,6 +151,75 @@ else if($dopost=='save')
         $ddisremote = 0;
     }
     $litpic = GetDDImage('none', $picname, $ddisremote);
+
+    // 处理横板缩略图上传 (编辑逻辑)
+    $existing_heimg = isset($arcRow['heimg']) ? $arcRow['heimg'] : ''; 
+    $final_heimg_path = $existing_heimg; 
+    $heimg_path_from_form = isset($_POST['heimg_path']) ? trim($_POST['heimg_path']) : '';
+    $current_aid = $id; // 在编辑时，$id 就是文章ID
+
+    if (isset($_FILES['heimg_file']) && $_FILES['heimg_file']['error'] !== UPLOAD_ERR_NO_FILE) {
+        if ($_FILES['heimg_file']['error'] === UPLOAD_ERR_OK) {
+            $heimg_base_upload_dir = '/uploads/heimg'; // 相对于网站根
+            $heimg_upload_dir_abs = rtrim($cfg_basedir, '/') . $heimg_base_upload_dir;
+
+            if (!is_dir($heimg_upload_dir_abs)) {
+                CreateDir($heimg_upload_dir_abs);
+            }
+            if (!is_dir($heimg_upload_dir_abs) || !is_writable($heimg_upload_dir_abs)) {
+                ShowMsg("横板缩略图主目录创建失败或不可写！请检查路径：{$heimg_upload_dir_abs} 的权限。", "-1");
+                exit();
+            }
+            
+            $heimg_extension = strtolower(pathinfo($_FILES['heimg_file']['name'], PATHINFO_EXTENSION));
+            $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif'];
+
+            if (in_array($heimg_extension, $allowed_extensions)) {
+                $heimg_filename = 'heimg_' . $current_aid . '.' . $heimg_extension;
+                $heimg_target_file_abs = $heimg_upload_dir_abs . '/' . $heimg_filename;
+                $heimg_target_file_rel = $heimg_base_upload_dir . '/' . $heimg_filename;
+
+                // 如果旧的 heimg 存在且与新的不同（或者旧heimg存在，新heimg路径虽然相同但上传了新文件），先删除旧文件
+                if (!empty($existing_heimg) && file_exists($cfg_basedir.$existing_heimg)) {
+                    if ($existing_heimg != $heimg_target_file_rel || ($existing_heimg == $heimg_target_file_rel && $_FILES['heimg_file']['size'] > 0) ) {
+                         @unlink($cfg_basedir.$existing_heimg);
+                    }
+                }
+
+                if (move_uploaded_file($_FILES['heimg_file']['tmp_name'], $heimg_target_file_abs)) {
+                    $final_heimg_path = $heimg_target_file_rel;
+                } else {
+                    $error_message = "上传横板缩略图失败！PHP报告文件已成功接收，但移动到最终位置 ({$heimg_target_file_abs}) 时失败。";
+                    $error_message .= " 请重点检查目标目录 {$heimg_upload_dir_abs} 的写入权限。";
+                    $error_message .= " PHP `move_uploaded_file`函数返回失败。临时文件: {$_FILES['heimg_file']['tmp_name']}";
+                    ShowMsg($error_message, "-1");
+                    exit();
+                }
+            } else {
+                ShowMsg("横板缩略图格式不正确！仅支持jpg, jpeg, png, gif. 您上传的文件类型是: " . $heimg_extension, "-1");
+                exit();
+            }
+        } else {
+            $upload_error_code = $_FILES['heimg_file']['error'];
+            $error_message = "横板缩略图上传时发生错误！错误代码: {$upload_error_code}. ";
+             switch ($upload_error_code) {
+                case UPLOAD_ERR_INI_SIZE: $error_message .= "文件大小超过了 php.ini 中 upload_max_filesize 的限制。"; break;
+                case UPLOAD_ERR_FORM_SIZE: $error_message .= "文件大小超过了 HTML 表单中 MAX_FILE_SIZE 的限制。"; break;
+                case UPLOAD_ERR_PARTIAL: $error_message .= "文件只有部分被上传。"; break;
+                case UPLOAD_ERR_NO_TMP_DIR: $error_message .= "找不到PHP临时文件夹。请检查 php.ini 中的 upload_tmp_dir 设置。"; break;
+                case UPLOAD_ERR_CANT_WRITE: $error_message .= "PHP文件写入磁盘失败（可能在临时目录）。"; break;
+                case UPLOAD_ERR_EXTENSION: $error_message .= "一个PHP扩展停止了文件上传。"; break;
+                default: $error_message .= "未知的PHP上传错误。";
+            }
+            ShowMsg($error_message, "-1");
+            exit();
+        }
+    } else {
+        $final_heimg_path = $heimg_path_from_form;
+        if (empty($final_heimg_path) && !empty($existing_heimg) && file_exists($cfg_basedir.$existing_heimg)) {
+             @unlink($cfg_basedir.$existing_heimg);
+        }
+    }
     
     //分析body里的内容
     $body = AnalyseHtmlBody($body, $description, $litpic, $keywords, 'htmltext');
@@ -200,6 +269,7 @@ else if($dopost=='save')
     source='$source',
     writer='$writer',
     litpic='$litpic',
+    heimg='$final_heimg_path',
     subpic='$subpic',
     pubdate='$pubdate',
     notpost='$notpost',

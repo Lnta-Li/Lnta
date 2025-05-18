@@ -64,6 +64,22 @@ function LoadTestDiv()
 	?>
 	DedeXHTTP = null;
 }
+
+function previewImage(fileInputId, previewContainerId) {
+    var fileInput = document.getElementById(fileInputId);
+    var previewContainer = document.getElementById(previewContainerId);
+    if (!fileInput || !previewContainer) return;
+
+    if (fileInput.files && fileInput.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            previewContainer.innerHTML = '<img src="' + e.target.result + '" style="max-width:150px; max-height:100px;" />';
+        }
+        reader.readAsDataURL(fileInput.files[0]);
+    } else {
+        previewContainer.innerHTML = ''; 
+    }
+}
 </script>
 </head>
 <body topmargin="8" background="images/allbg.gif">
@@ -168,10 +184,10 @@ function LoadTestDiv()
             	<table width="100%" border="0" cellspacing="1" cellpadding="1">
                 <tr>
                   <td height="30">
-                  <input name="picname" type="text" id="picname" style="width:240px" />
-                  <input type="button"  value="本地上传" style="width:70px;cursor:pointer;" />
+                  <input name="picname" type="text" id="picname" style="width:350px" placeholder="必填，任意比例，用于首页、瀑布流或没有横版缩略图的情况" />
+                  <input type="button"  value="本地上传" style="width:70px;cursor:pointer;" onclick="document.getElementById('litpic').click();" />
                   <iframe name='uplitpicfra' id='uplitpicfra' src='' style='display:none'></iframe>
-                  <span class="litpic_span"><input name="litpic" type="file" id="litpic"  onChange="seePicNewAlb(this, 'divpicview', 'uplitpicfra', 165, 'album_add.php');" size="1" class='np coolbg'/></span>
+                  <span class="litpic_span" style="display:none;"><input name="litpic" type="file" id="litpic"  onChange="seePicNewAlb(this, 'divpicview', 'uplitpicfra', 165, 'album_add.php');" size="1" class='np coolbg'/></span>
                   <input type="button" name="Submit2" value="站内选择" style="margin-left:8px;" onClick="SelectImage('form1.picname','small');" class='np coolbg'/>
                   <input type="button" name="Submit2" value="裁剪" style="margin-left:8px;" onClick="imageCut('picname');" class='np coolbg'/>
                   <br/>
@@ -187,6 +203,30 @@ function LoadTestDiv()
             </td>
           </tr>
         </table></td>
+    </tr>
+    <tr>
+      <td height="24" colspan="4" class="bline">
+        <table width="800" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="90"> &nbsp;横板缩略图：</td>
+            <td>
+              <table width="100%" border="0" cellspacing="1" cellpadding="1">
+                <tr>
+                  <td height="30">
+                    <input name="heimg_path" type="text" id="heimg_path" style="width:350px" placeholder="选填，16:9，用于列表页固定显示比例" value="" />
+                    <input name="heimg_file" type="file" id="heimg_file" style="display:none;" onChange="previewImage('heimg_file', 'div_heimg_picview');" />
+                    <input type="button" value="本地上传" style="width:70px;cursor:pointer;" onclick="document.getElementById('heimg_file').click();" class='np coolbg' />
+                    <input type="button" name="btn_heimg_select" value="站内选择" style="margin-left:8px;" onClick="SelectImage('form1.heimg_path','small');" class='np coolbg'/>
+                  </td>
+                </tr>
+              </table>
+            </td>
+            <td width="150" align="center">
+              <div id='div_heimg_picview' class='divpre'></div>
+            </td>
+          </tr>
+        </table>
+      </td>
     </tr>
     <tr>
       <td height="24" colspan="4" class="bline">

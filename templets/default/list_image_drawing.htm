@@ -19,6 +19,10 @@
         width: 100%;
         height: 100%;
         pointer-events: none;
+        transition: transform 0.1s ease-out;
+    }
+    .design:hover {
+        cursor: url('/uploads/250317/1-250323225050496.png'), pointer;
     }
     #layer1 { z-index: 1; scale: 1.2; }
     #layer2 { z-index: 2; }
@@ -29,6 +33,12 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+    }
+    
+    @media screen and (max-width: 768px) {
+        .parallax-layer {
+            will-change: transform;
+        }
     }
     </style>
     <script src="{dede:global.cfg_templets_skin/}/js/page-loader.js"></script>
@@ -65,7 +75,7 @@
                                         [/field:global.autoindex]</h3>
                             </div>
                             <div class="col-3 project-thumb-fixed mobile-full">
-                                <img class="project-thumb" alt="[field:title/]" src="[field:litpic/]">
+                                <img class="project-thumb" alt="[field:title/]" src="[field:autolitpic/]">
                             </div>
                             <div class="col-4 project-title mobile-full">
                                 <h6 class="active">[field:pubdate function="MyDate('Y-m-d',@me)"/]</h6>
@@ -93,7 +103,8 @@
 
     <script src="{dede:global.cfg_templets_skin/}/js/mobile-menu.js"></script>
     <script>
-    document.addEventListener('mousemove', function(e) {
+    document.addEventListener('DOMContentLoaded', function() {
+        const design = document.querySelector('.design');
         const layers = [
             {el: document.getElementById('layer1'), speed: 10},
             {el: document.getElementById('layer2'), speed: 20},
@@ -101,12 +112,84 @@
             {el: document.getElementById('layer4'), speed: 40},
             {el: document.getElementById('layer5'), speed: 50}
         ];
-        const x = e.clientX / window.innerWidth - 0.5;
-        const y = e.clientY / window.innerHeight - 0.5;
-        layers.forEach(layer => {
-            const moveX = -x * layer.speed;
-            const moveY = -y * layer.speed;
-            layer.el.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        
+        // 鼠标移动事件处理（桌面端）
+        document.addEventListener('mousemove', function(e) {
+            const x = e.clientX / window.innerWidth - 0.5;
+            const y = e.clientY / window.innerHeight - 0.5;
+            layers.forEach(layer => {
+                const moveX = -x * layer.speed;
+                const moveY = -y * layer.speed;
+                layer.el.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            });
+        });
+        
+        // 触摸事件处理（移动端）
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let lastPosX = 0;
+        let lastPosY = 0;
+        let isMoving = false;
+        
+        design.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            isMoving = true;
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            lastPosX = touchStartX;
+            lastPosY = touchStartY;
+        }, {passive: false});
+        
+        design.addEventListener('touchmove', function(e) {
+            if (!isMoving) return;
+            e.preventDefault();
+            
+            const touchX = e.touches[0].clientX;
+            const touchY = e.touches[0].clientY;
+            
+            // 计算触摸移动的距离
+            const deltaX = (touchX - lastPosX) / window.innerWidth;
+            const deltaY = (touchY - lastPosY) / window.innerHeight;
+            
+            layers.forEach(layer => {
+                // 获取当前变换
+                const currentTransform = window.getComputedStyle(layer.el).transform;
+                let currentX = 0;
+                let currentY = 0;
+                
+                // 如果有现有变换，提取当前X和Y位置
+                if (currentTransform && currentTransform !== 'none') {
+                    const matrix = new DOMMatrix(currentTransform);
+                    currentX = matrix.e;
+                    currentY = matrix.f;
+                }
+                
+                // 计算新位置，移动方向与触摸方向相同，乘以速度系数
+                const moveX = currentX + deltaX * layer.speed * 10;
+                const moveY = currentY + deltaY * layer.speed * 10;
+                
+                // 限制移动范围在合理区间内
+                const limitX = Math.max(-100, Math.min(100, moveX));
+                const limitY = Math.max(-100, Math.min(100, moveY));
+                
+                layer.el.style.transform = `translate(${limitX}px, ${limitY}px)`;
+            });
+            
+            lastPosX = touchX;
+            lastPosY = touchY;
+        }, {passive: false});
+        
+        design.addEventListener('touchend', function(e) {
+            isMoving = false;
+            
+            // 可选：添加惯性效果，让图层逐渐回到原位
+            layers.forEach(layer => {
+                layer.el.style.transition = 'transform 0.8s ease-out';
+                layer.el.style.transform = 'translate(0px, 0px)';
+                setTimeout(() => {
+                    layer.el.style.transition = 'transform 0.1s ease-out';
+                }, 800);
+            });
         });
     });
     </script>

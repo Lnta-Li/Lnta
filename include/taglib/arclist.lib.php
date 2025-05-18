@@ -504,6 +504,14 @@ function lib_arclistDone(&$refObj, &$ctag, $typeid=0, $notypeid=0, $row=10, $col
                 $row['info'] = $row['infos'] = cn_substr($row['description'],$infolen);
                 $row['id'] =  $row['id'];
 
+                // 新增 autolitpic 逻辑 Start
+                if (!empty($row['heimg'])) {
+                    $row['autolitpic'] = $row['heimg'];
+                } else {
+                    $row['autolitpic'] = $row['litpic'];
+                }
+                // 新增 autolitpic 逻辑 End
+
                 if($row['corank'] > 0 && $row['arcrank']==0)
                 {
                     $row['arcrank'] = $row['corank'];
