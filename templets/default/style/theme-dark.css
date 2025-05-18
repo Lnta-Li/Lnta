@@ -35,6 +35,6 @@
     --diy3-text-color: #fff; /*主视觉模板文字颜色*/
     --diy3-img-border: rgba(0, 0, 0, 0.3); /*主视觉模板图片边框*/
     --polygon-brightness: 0.5 ; /* 彩色多边形背景亮度 */
-    --color-noticebubble: rgb(52 52 52 / 50%); /* 通知气泡背景色 */
+    --color-noticebubble: rgb(52 52 52 / 80%); /* 通知气泡背景色 */
     --readmore-button: linear-gradient(to right, #9f9f9f 0, #fff 10%, #868686 20%); /* 阅读更多按钮背景色 */
 }   
