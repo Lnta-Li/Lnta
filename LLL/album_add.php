@@ -120,6 +120,80 @@ else if($dopost=='save')
     }
     $litpic = GetDDImage('none',$picname,$ddisremote);
 
+    // 提前生成 $arcID 以便用于文件名
+    $arcID = GetIndexKey($arcrank,$typeid,$sortrank,$channelid,$senddate,$adminid);
+    if(empty($arcID))
+    {
+        ShowMsg("无法获得主键(arcID)，因此无法进行后续操作！","-1");
+        exit();
+    }
+
+    // 处理横板缩略图上传
+    $final_heimg_path = '';
+    $heimg_path_from_form = isset($_POST['heimg_path']) ? trim($_POST['heimg_path']) : '';
+
+    if (isset($_FILES['heimg_file']) && $_FILES['heimg_file']['error'] !== UPLOAD_ERR_NO_FILE) {
+        if ($_FILES['heimg_file']['error'] === UPLOAD_ERR_OK) {
+            // 新的保存路径：直接在 uploads/heimg/ 下
+            // 假设 cfg_uploads_dir 是 'uploads' 或者 DedeCMS 有类似配置项，或者直接硬编码
+            // 为了简单且符合您的目录结构，我们直接构建基于 cfg_basedir 的路径
+            $heimg_base_upload_dir = '/uploads/heimg'; // 相对于网站根
+            $heimg_upload_dir_abs = rtrim($cfg_basedir, '/') . $heimg_base_upload_dir;
+
+            // 确保 uploads/heimg 目录存在且可写
+            if (!is_dir($heimg_upload_dir_abs)) {
+                CreateDir($heimg_upload_dir_abs); // 尝试创建 uploads/heimg
+            }
+            if (!is_dir($heimg_upload_dir_abs) || !is_writable($heimg_upload_dir_abs)) {
+                ShowMsg("横板缩略图主目录创建失败或不可写！请检查路径：{$heimg_upload_dir_abs} 的权限。", "-1");
+                exit();
+            }
+            
+            $heimg_extension = strtolower(pathinfo($_FILES['heimg_file']['name'], PATHINFO_EXTENSION));
+            $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif'];
+
+            if (in_array($heimg_extension, $allowed_extensions)) {
+                $heimg_filename = 'heimg_' . $arcID . '.' . $heimg_extension;
+                $heimg_target_file_abs = $heimg_upload_dir_abs . '/' . $heimg_filename;
+                $heimg_target_file_rel = $heimg_base_upload_dir . '/' . $heimg_filename; // 相对路径保存到数据库
+
+                // 如果文件已存在，先删除旧文件 (处理重复提交或覆盖)
+                if (file_exists($heimg_target_file_abs)) {
+                    @unlink($heimg_target_file_abs);
+                }
+
+                if (move_uploaded_file($_FILES['heimg_file']['tmp_name'], $heimg_target_file_abs)) {
+                    $final_heimg_path = $heimg_target_file_rel;
+                } else {
+                    $error_message = "上传横板缩略图失败！PHP报告文件已成功接收，但移动到最终位置 ({$heimg_target_file_abs}) 时失败。";
+                    $error_message .= " 请重点检查目标目录 {$heimg_upload_dir_abs} 的写入权限。";
+                    $error_message .= " PHP `move_uploaded_file`函数返回失败。临时文件: {$_FILES['heimg_file']['tmp_name']}";
+                    ShowMsg($error_message, "-1");
+                    exit();
+                }
+            } else {
+                ShowMsg("横板缩略图格式不正确！仅支持jpg, jpeg, png, gif. 您上传的文件类型是: " . $heimg_extension, "-1");
+                exit();
+            }
+        } else {
+            $upload_error_code = $_FILES['heimg_file']['error'];
+            $error_message = "横板缩略图上传时发生错误！错误代码: {$upload_error_code}. ";
+             switch ($upload_error_code) {
+                case UPLOAD_ERR_INI_SIZE: $error_message .= "文件大小超过了 php.ini 中 upload_max_filesize 的限制。"; break;
+                case UPLOAD_ERR_FORM_SIZE: $error_message .= "文件大小超过了 HTML 表单中 MAX_FILE_SIZE 的限制。"; break;
+                case UPLOAD_ERR_PARTIAL: $error_message .= "文件只有部分被上传。"; break;
+                case UPLOAD_ERR_NO_TMP_DIR: $error_message .= "找不到PHP临时文件夹。请检查 php.ini 中的 upload_tmp_dir 设置。"; break;
+                case UPLOAD_ERR_CANT_WRITE: $error_message .= "PHP文件写入磁盘失败（可能在临时目录）。"; break;
+                case UPLOAD_ERR_EXTENSION: $error_message .= "一个PHP扩展停止了文件上传。"; break;
+                default: $error_message .= "未知的PHP上传错误。";
+            }
+            ShowMsg($error_message, "-1");
+            exit();
+        }
+    } else {
+        $final_heimg_path = $heimg_path_from_form;
+    }
+
     //使用第一张图作为缩略图
     if($ddisfirst==1 && $litpic=='')
     {
@@ -141,15 +215,7 @@ else if($dopost=='save')
         }
     }
     
-    //生成文档ID
-    $arcID = GetIndexKey($arcrank,$typeid,$sortrank,$channelid,$senddate,$adminid);
-    if(empty($arcID))
-    {
-        ShowMsg("无法获得主键，因此无法进行后续操作！","-1");
-        exit();
-    }
-
-    // 生成小尺寸缩略图
+    //生成小尺寸缩略图
     $subpic = '';
     if(!empty($picname) && isset($make_subpic) && $make_subpic==1) {
         require_once(DEDEINC.'/extend.func.php');
@@ -364,11 +430,10 @@ else if($dopost=='save')
     
     //加入主档案表
     $okdd = 0;
-    $litpic = $picname;
     $inQuery = "INSERT INTO `#@__archives`(id,typeid,typeid2,sortrank,flag,ismake,channel,arcrank,click,money,title,shorttitle,
-    color,writer,source,litpic,subpic,pubdate,senddate,mid,notpost,description,keywords,filename,dutyadmin,weight,hide_thumb,small_img)
+    color,writer,source,litpic,heimg,subpic,pubdate,senddate,mid,notpost,description,keywords,filename,dutyadmin,weight,hide_thumb,small_img)
     VALUES ('$arcID','$typeid','$typeid2','$sortrank','$flag','$ismake','$channelid','$arcrank','$click','$money',
-    '$title','$shorttitle','$color','$writer','$source','$litpic','$subpic','$pubdate','$senddate',
+    '$title','$shorttitle','$color','$writer','$source','$litpic','$final_heimg_path','$subpic','$pubdate','$senddate',
     '$adminid','$notpost','$description','$keywords','$filename','$adminid','$weight','$hide_thumb','$small_img');";
     if(!$dsql->ExecuteNoneQuery($inQuery))
     {

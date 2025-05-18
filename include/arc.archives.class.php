@@ -82,6 +82,16 @@ class Archives
                           LEFT JOIN #@__channeltype as ch on arc.channel = ch.id
                           WHERE arc.id='$aid' ";
                 $this->Fields = $this->dsql->GetOne($query);
+
+                // Add autolitpic logic
+                // If heimg exists and is not empty, use heimg, otherwise use litpic.
+                if(isset($this->Fields['heimg']) && !empty($this->Fields['heimg'])) {
+                    $this->Fields['autolitpic'] = $this->Fields['heimg'];
+                } else if (isset($this->Fields['litpic'])) {
+                    $this->Fields['autolitpic'] = $this->Fields['litpic'];
+                } else {
+                    $this->Fields['autolitpic'] = ''; // Default to empty if neither exists
+                }
             }
             else
             {

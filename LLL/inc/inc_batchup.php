@@ -30,6 +30,10 @@ function DelArc($aid, $type='ON', $onlyfile=FALSE,$recycle=0)
     if(empty($aid)) return ;
     $aid = preg_replace("#[^0-9]#i", '', $aid);
     $arctitle = $arcurl = '';
+    // --- 新增：先查询并缓存一次主档案信息，包括litpic, subpic, heimg ---
+    $archive_info_for_delete = $dsql->GetOne("SELECT litpic, subpic, heimg FROM `#@__archives` WHERE id='{$aid}'");
+    // --- 结束新增 ---
+
     if($recycle == 1) $whererecycle = "AND arcrank = '-2'";
 	else $whererecycle = "";
 
@@ -107,6 +111,23 @@ function DelArc($aid, $type='ON', $onlyfile=FALSE,$recycle=0)
         //删除数据库记录
         if(!$onlyfile)
         {
+            // --- 新增：删除 litpic, subpic, heimg 文件 ---
+            if ($archive_info_for_delete) {
+                if (!empty($archive_info_for_delete['litpic']) && !preg_match("#^http(s)?://#i", $archive_info_for_delete['litpic'])) {
+                    $litpic_file = $cfg_basedir . $archive_info_for_delete['litpic'];
+                    if (@file_exists($litpic_file)) @unlink($litpic_file);
+                }
+                if (!empty($archive_info_for_delete['subpic']) && !preg_match("#^http(s)?://#i", $archive_info_for_delete['subpic'])) {
+                    $subpic_file = $cfg_basedir . $archive_info_for_delete['subpic'];
+                    if (@file_exists($subpic_file)) @unlink($subpic_file);
+                }
+                if (!empty($archive_info_for_delete['heimg']) && !preg_match("#^http(s)?://#i", $archive_info_for_delete['heimg'])) {
+                    $heimg_file = $cfg_basedir . $archive_info_for_delete['heimg'];
+                    if (@file_exists($heimg_file)) @unlink($heimg_file);
+                }
+            }
+            // --- 结束新增 ---
+
             $query = "Delete From `#@__arctiny` where id='$aid' $whererecycle";
             if($dsql->ExecuteNoneQuery($query))
             {
