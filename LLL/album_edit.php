@@ -296,60 +296,62 @@ else if($dopost=='save')
     //检查旧的图片是否有更新，并保存
     //-----------------------------------------
     $ids = json_decode(stripslashes($albumIds), true);
-    foreach ($ids as $i) {
-        $i = (int) $i;
+    if (!empty($ids)) {
+        foreach ($ids as $i) {
+            $i = (int) $i;
 
-        $iurl = stripslashes(${'imgurl'.$i});
-        $ddurl = stripslashes(${'imgddurl'.$i});
-        if(preg_match("#swfupload#i", $ddurl)) $ddurl = '';
-        $imgfile = $cfg_basedir.$iurl;
-        $litimgfile = $cfg_basedir.$ddurl;
-        if( !isset(${'imgfile'.$i}) ) {
-            unlink($imgfile);
-            $dsql->ExecuteNoneQuery("DELETE FROM `#@__uploads` WHERE `url` = '{$iurl}';");
-            continue;
-        }
-        $info = '';
-        $iinfo = str_replace("'", "`", stripslashes(${'imgmsg'.$i}));
-        //有上传文件的情况
-        if( isset(${'imgfile'.$i}) && is_uploaded_file(${'imgfile'.$i}) )
-        {
-            $tmpFile = ${'imgfile'.$i};
-            //检测上传的图片， 如果类型不对，保留原来图片
-            $imgInfos = @GetImageSize($tmpFile, $info);
-            if(!is_array($imgInfos))
-            {
-                $imgInfos = @GetImageSize($imgfile, $info);
-                $imgurls .= "{dede:img ddimg='$ddurl' text='$iinfo' width='".$imgInfos[0]."' height='".$imgInfos[1]."'} $iurl {/dede:img}\r\n";
-                continue;
-            }
-            move_uploaded_file($tmpFile, $imgfile);
-            $imgInfos = @GetImageSize($imgfile, $info);
-            if($ddurl==$iurl)
-            {
-                $litpicname = $pagestyle > 2 ? GetImageMapDD($iurl, $cfg_ddimg_width) : $iurl;
-                $litimgfile = $cfg_basedir.$litpicname;
-            }
-            else
-            {
-                if($cfg_ddimg_full=='Y') ImageResizeNew($imgfile, $cfg_ddimg_width, $cfg_ddimg_height, $litimgfile);
-                else ImageResize($imgfile, $cfg_ddimg_width, $cfg_ddimg_height, $litimgfile);
-                $litpicname = $ddurl;
-            }
-            $imgurls .= "{dede:img ddimg='$litpicname' text='$iinfo' width='".$imgInfos[0]."' height='".$imgInfos[1]."'} $iurl {/dede:img}\r\n";
-        }
-        //没上传图片(只修改msg信息)
-        else
-        {
-            $iinfo = str_replace("'", "`", stripslashes(${'imgmsg'.$i}));
             $iurl = stripslashes(${'imgurl'.$i});
             $ddurl = stripslashes(${'imgddurl'.$i});
-            if(preg_match("#swfupload#i", $ddurl))
-            {
-                $ddurl = $pagestyle > 2 ? GetImageMapDD($iurl, $cfg_ddimg_width) : $iurl;
+            if(preg_match("#swfupload#i", $ddurl)) $ddurl = '';
+            $imgfile = $cfg_basedir.$iurl;
+            $litimgfile = $cfg_basedir.$ddurl;
+            if( !isset(${'imgurl'.$i}) ) {
+                unlink($imgfile);
+                $dsql->ExecuteNoneQuery("DELETE FROM `#@__uploads` WHERE `url` = '{$iurl}';");
+                continue;
             }
-            $imgInfos = @GetImageSize($imgfile, $info);
-            $imgurls .= "{dede:img ddimg='$ddurl' text='$iinfo' width='".$imgInfos[0]."' height='".$imgInfos[1]."'} $iurl {/dede:img}\r\n";
+            $info = '';
+            $iinfo = str_replace("'", "`", stripslashes(${'imgmsg'.$i}));
+            //有上传文件的情况
+            if( isset(${'imgfile'.$i}) && is_uploaded_file(${'imgfile'.$i}) )
+            {
+                $tmpFile = ${'imgfile'.$i};
+                //检测上传的图片， 如果类型不对，保留原来图片
+                $imgInfos = @GetImageSize($tmpFile, $info);
+                if(!is_array($imgInfos))
+                {
+                    $imgInfos = @GetImageSize($imgfile, $info);
+                    $imgurls .= "{dede:img ddimg='$ddurl' text='$iinfo' width='".$imgInfos[0]."' height='".$imgInfos[1]."'} $iurl {/dede:img}\r\n";
+                    continue;
+                }
+                move_uploaded_file($tmpFile, $imgfile);
+                $imgInfos = @GetImageSize($imgfile, $info);
+                if($ddurl==$iurl)
+                {
+                    $litpicname = $pagestyle > 2 ? GetImageMapDD($iurl, $cfg_ddimg_width) : $iurl;
+                    $litimgfile = $cfg_basedir.$litpicname;
+                }
+                else
+                {
+                    if($cfg_ddimg_full=='Y') ImageResizeNew($imgfile, $cfg_ddimg_width, $cfg_ddimg_height, $litimgfile);
+                    else ImageResize($imgfile, $cfg_ddimg_width, $cfg_ddimg_height, $litimgfile);
+                    $litpicname = $ddurl;
+                }
+                $imgurls .= "{dede:img ddimg='$litpicname' text='$iinfo' width='".$imgInfos[0]."' height='".$imgInfos[1]."'} $iurl {/dede:img}\r\n";
+            }
+            //没上传图片(只修改msg信息)
+            else
+            {
+                $iinfo = str_replace("'", "`", stripslashes(${'imgmsg'.$i}));
+                $iurl = stripslashes(${'imgurl'.$i});
+                $ddurl = stripslashes(${'imgddurl'.$i});
+                if(preg_match("#swfupload#i", $ddurl))
+                {
+                    $ddurl = $pagestyle > 2 ? GetImageMapDD($iurl, $cfg_ddimg_width) : $iurl;
+                }
+                $imgInfos = @GetImageSize($imgfile, $info);
+                $imgurls .= "{dede:img ddimg='$ddurl' text='$iinfo' width='".$imgInfos[0]."' height='".$imgInfos[1]."'} $iurl {/dede:img}\r\n";
+            }
         }
     }
 
@@ -534,7 +536,7 @@ else if($dopost=='save')
 
     //更新附加表SQL语句
     $query = "UPDATE `$addtable` SET typeid='$typeid',pagestyle='$pagestyle',maxwidth='$maxwidth',
-            row='$row',col='$col',isrm='$isrm',ddmaxwidth='$ddmaxwidth',pagepicnum='$pagepicnum',body='$body',userip='$userip',redirecturl='$redirecturl',theme='$theme_mode'{$inColumn}{$inadd_f} WHERE aid='$id';";
+            row='$row',col='$col',isrm='$isrm',ddmaxwidth='$ddmaxwidth',pagepicnum='$pagepicnum',body='$body',userip='$userip',redirecturl='$redirecturl',theme='$theme_mode',has_pics='$has_pics',imgurls='$imgurls'{$inColumn}{$inadd_f} WHERE aid='$id';";
     if(!$dsql->ExecuteNoneQuery($query))
     {
         ShowMsg("更新附加表 `$addtable` 时出错，请检查原因！".$dsql->GetError(),"javascript:;");
