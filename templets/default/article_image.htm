@@ -213,7 +213,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // 没有图集但允许显示缩略图，插入.default-img结构
             var defaultImgHTML = `
             <div class="default-img">
-              <img class="project-header" alt="{dede:field.title/}" src="{dede:field.litpic/}">
+              <img class="project-header" alt="{dede:field.title/}" src="{dede:field.autolitpic/}">
             </div>`;
             placeholder.insertAdjacentHTML('beforeend', defaultImgHTML);
             pagtype.classList.remove('pagtype-img');
