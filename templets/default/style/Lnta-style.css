@@ -553,6 +553,11 @@ h4 {
 .design {
     z-index: 2;
     position: relative;
+    border-radius: 8px;
+    height: auto;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
 }
 
 .design img, .design video  {
@@ -560,11 +565,7 @@ h4 {
     height: 100%;
     object-fit: cover;
     object-position: center;
-    overflow: hidden;
-    border-radius: 8px;
 }
-
-
 
 .col-4 {
     width: 512px;
@@ -698,7 +699,8 @@ h4 {
 }
 
 .project-thumb-fixed .project-thumb {
-    height: 210px;
+    height: auto;
+    aspect-ratio: 16 / 9;
     object-fit: cover;
 }
 
@@ -1064,7 +1066,7 @@ iframe {
     color: var(--Aux-colors-2);
     font-size: 0.9em;
     font-weight: revert;
-    font-family: 'PT Mono', sans-serif;
+    font-family: var(--defult-font-family);
 }
 
 .tag-list {
