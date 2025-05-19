@@ -68,8 +68,8 @@
                     <li class="project col-8 nested mobile-full mob-over"><a
                             class="project-link fixed mobile-flex-column" href="[field:arcurl/]">
                             <div class="project-number col-1 mobile-full">
-                                <h3>[field:global.autoindex runphp='yes'] if(@me < 10) { @me="0" .@me; }
-                                        [/field:global.autoindex]</h3>
+                                <span class="project-number">[field:global.autoindex runphp='yes'] if(@me < 10) { @me="0" .@me; }
+                                        [/field:global.autoindex]</span>
                             </div>
                             <div class="col-3 project-thumb-fixed mobile-full">
                                 <img class="project-thumb" alt="[field:title/]" src="[field:autolitpic/]">
@@ -110,7 +110,7 @@
             coverFrame: 0,              // 封面帧索引 (优先加载并显示)
             
             // 移动敏感度
-            moveSensitivity: 20,       // 移动多少像素切换一帧 (值越大越不敏感)
+            moveSensitivity: 5,       // 移动多少像素切换一帧 (值越大越不敏感)
             
             // 惯性配置
             inertiaEnabled: true,      // 是否启用惯性
@@ -124,7 +124,7 @@
             autoplaySpeed: 1,       // 自动播放速度 (帧/刷新，值越大速度越快)
             autoplayDirection: 1,      // 播放方向：1 为正向，-1 为反向
             pingpongMode: true,        // 是否开启循环回放模式（到达边界后自动反向）
-            autoplayResumeDelay: 3,    // 交互结束后恢复自动播放的延迟时间(秒)
+            autoplayResumeDelay: 5,    // 交互结束后恢复自动播放的延迟时间(秒)
         };
         
         const viewer = document.getElementById('three-d-viewer');
@@ -255,7 +255,7 @@
             // 设置下一次更新
             autoplayId = setTimeout(() => {
                 requestAnimationFrame(autoplayAnimation);
-            }, 1000 / (24 * config.autoplaySpeed)); // 基于24fps计算间隔时间
+            }, 1000 / (30 * config.autoplaySpeed)); // 基于30ps计算间隔时间
         };
         
         // 停止自动播放

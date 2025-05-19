@@ -208,6 +208,24 @@ h6.active {
     font-size: var(--fontsize-p);
 }
 
+.project-link:hover .text-shine {
+    background: var(--readmore-button);
+    background-position: 0;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: var(--text-bacolor);
+    animation: shine-t 20s infinite linear;
+    animation-fill-mode: forwards;
+    -webkit-text-size-adjust: none;
+}
+@keyframes shine-t {
+    0% {
+      background-position: 0;
+    }
+    100% {
+      background-position: 100vw;
+    }
+  }
+
 .btn-shine {
     position: absolute;
     top: 50%;
@@ -217,48 +235,15 @@ h6.active {
     background: var(--readmore-button);
     background-position: 0;
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: shine 3s infinite linear;
+    -webkit-text-fill-color: var(--text-bacolor);
+    animation: shine-b 3s infinite linear;
     animation-fill-mode: forwards;
     -webkit-text-size-adjust: none;
     font-size: 16px;
     text-decoration: none;
     white-space: nowrap;
   }
-  @-moz-keyframes shine {
-    0% {
-      background-position: 0;
-    }
-    60% {
-      background-position: 180px;
-    }
-    100% {
-      background-position: 180px;
-    }
-  }
-  @-webkit-keyframes shine {
-    0% {
-      background-position: 0;
-    }
-    60% {
-      background-position: 180px;
-    }
-    100% {
-      background-position: 180px;
-    }
-  }
-  @-o-keyframes shine {
-    0% {
-      background-position: 0;
-    }
-    60% {
-      background-position: 180px;
-    }
-    100% {
-      background-position: 180px;
-    }
-  }
-  @keyframes shine {
+  @keyframes shine-b {
     0% {
       background-position: 0;
     }
@@ -520,7 +505,7 @@ h6 strong {
 .next-shelf a, .next-shelf h6 {
     font-family: var(--index-h6-font-family);
 }
-.project-number h3 {
+.project-number, .project-number h3 {
     color: var(--Key-color);
     font-family: var(--index-h3-font-family);
     font-size: 26px;
