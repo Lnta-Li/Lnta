@@ -1428,9 +1428,7 @@
                 }
             } else if (currentImg.closest('.Content-Type')) {
                 // 如果是普通图片，滚动到图片位置，使图片位于视口中间
-                const imgRect = currentImg.getBoundingClientRect();
-                const windowHeight = window.innerHeight;
-                const scrollTop = window.scrollY + imgRect.top - (windowHeight / 2) + (imgRect.height / 2);
+                const scrollTop = currentImg.offsetTop - (window.innerHeight - currentImg.offsetHeight) / 2;
                 window.scrollTo(0, scrollTop);
             }
         },
