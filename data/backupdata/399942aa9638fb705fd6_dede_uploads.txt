@@ -229,7 +229,7 @@ INSERT INTO `dede_uploads` VALUES('347','56','苏州官方手绘停车地图海�
 INSERT INTO `dede_uploads` VALUES('348','56','苏州官方手绘停车地图海报设计','/uploads/allimg/250509/1-2505091S64Q01.jpg','1','716','870','0','154172','1746787008','1');
 INSERT INTO `dede_uploads` VALUES('349','56','苏州官方手绘停车地图海报设计','/uploads/allimg/250509/1-1R33035E.jpg','1','2250','3000','0','456005','1746787059','1');
 INSERT INTO `dede_uploads` VALUES('350','56','苏州官方手绘停车地图海报设计','/uploads/allimg/250509/1-1R351UL.jpg','1','2250','3000','0','1330833','1746787060','1');
-INSERT INTO `dede_uploads` VALUES('351','56','苏州官方手绘停车地图海报设计','/uploads/allimg/250509/1-1R3512D1.jpg','1','2250','3000','0','1304712','1746787060','1');
+INSERT INTO `dede_uploads` VALUES('383','41','小尺寸缩略图(subpic_41)','/uploads/subpic/subpic_41.png','1','80','80','0','16733','1747551008','1');
 INSERT INTO `dede_uploads` VALUES('352','56','苏州官方手绘停车地图海报设计','/uploads/allimg/250509/1-1R34L4A.jpg','1','2250','3000','0','1293092','1746787060','1');
 INSERT INTO `dede_uploads` VALUES('353','56','苏州官方手绘停车地图海报设计','/uploads/allimg/250509/1-1R3515G8.jpg','1','2250','3000','0','1530371','1746787060','1');
 INSERT INTO `dede_uploads` VALUES('354','56','苏州官方手绘停车地图海报设计','/uploads/allimg/250509/1-1R34T434.jpg','1','2250','3000','0','1306558','1746787060','1');
@@ -261,3 +261,13 @@ INSERT INTO `dede_uploads` VALUES('379','31','2024搜狐城市万有影力活动
 INSERT INTO `dede_uploads` VALUES('380','47','企业文化展厅空间文化墙设计','/uploads/allimg/250514/1-25051410425G20.jpg','1','1792','1080','0','223263','1747190577','1');
 INSERT INTO `dede_uploads` VALUES('381','0','250514/1-2505141J1034L.jpg','/uploads/allimg/250514/1-2505141J1034L.jpg','1','1920','1280','0','137858','1747215663','1');
 INSERT INTO `dede_uploads` VALUES('382','0','250514/1-2505141K325492.jpg','/uploads/allimg/250514/1-2505141K325492.jpg','1','3000','1985','0','874621','1747216405','1');
+INSERT INTO `dede_uploads` VALUES('384','57','logo设计合集','/uploads/allimg/250519/1-250519155011444.jpg','1','3570','5052','0','910059','1747641011','1');
+INSERT INTO `dede_uploads` VALUES('385','57','logo设计合集','/uploads/allimg/250519/1-250519155111234.jpg','1','1500','2123','0','249268','1747641071','1');
+INSERT INTO `dede_uploads` VALUES('386','57','小尺寸缩略图(subpic_57)','/uploads/subpic/subpic_57.jpg','1','80','80','0','1956','1747641264','1');
+INSERT INTO `dede_uploads` VALUES('387','57','logo设计合集','/uploads/allimg/250519/1-250519155Tb48.jpg','1','595','842','0','38159','1747641529','1');
+INSERT INTO `dede_uploads` VALUES('388','57','logo设计合集','/uploads/allimg/250519/1-25051916001MI.jpg','1','2480','3508','0','334109','1747641617','1');
+INSERT INTO `dede_uploads` VALUES('389','57','logo设计合集','/uploads/allimg/250519/1-250519160032438.jpg','1','2480','3508','0','354120','1747641632','1');
+INSERT INTO `dede_uploads` VALUES('390','57','logo设计合集','/uploads/allimg/250519/1-25051916004UD.jpg','1','2480','3508','0','327140','1747641648','1');
+INSERT INTO `dede_uploads` VALUES('391','0','250519/1-2505191I606433.png','/uploads/allimg/250519/1-2505191I606433.png','1','3600','1662','0','762735','1747647366','1');
+INSERT INTO `dede_uploads` VALUES('392','57','logo设计合集','/uploads/allimg/250519/1-2505191K255330.png','1','1080','790','0','695050','1747648375','1');
+INSERT INTO `dede_uploads` VALUES('393','57','小尺寸缩略图(subpic_57)','/uploads/subpic/subpic_57.png','1','80','80','0','8226','1747648556','1');

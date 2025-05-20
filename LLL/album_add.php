@@ -439,7 +439,7 @@ else if($dopost=='save')
     {
         $gerr = $dsql->GetError();
         $dsql->ExecuteNoneQuery("DELETE FROM `#@__arctiny` WHERE id='$arcID'");
-        ShowMsg("把数据保存到数据库主表 `#@__archives` 时出错，请联系管理员。","javascript:;");
+        ShowMsg("把数据保存到数据库主表 `#@__archives` 时出错，请联系管理员。<br>错误详情：".str_replace('"','',$gerr),"javascript:;");
         exit();
     }
 
@@ -456,8 +456,8 @@ else if($dopost=='save')
     $daccess = isset($daccess) && is_numeric($daccess) ? $daccess : 0;
     $useip = GetIP();
     
-    $inQuery = "INSERT INTO `{$addtable}`(aid,typeid,redirecturl,userip,pagestyle,maxwidth,imgurls,row,col,isrm,ddmaxwidth,pagepicnum,body,theme)
-          VALUES ('$arcID','$typeid','','$useip','$pagestyle','$maxwidth','$imgurls','$row','$col','$isrm','$ddmaxwidth','$pagepicnum','$body','$theme_mode');";
+    $inQuery = "INSERT INTO `{$addtable}`(aid,typeid,redirecturl,userip,pagestyle,maxwidth,imgurls,row,col,isrm,ddmaxwidth,pagepicnum,body,theme,has_pics)
+          VALUES ('$arcID','$typeid','','$useip','$pagestyle','$maxwidth','$imgurls','$row','$col','$isrm','$ddmaxwidth','$pagepicnum','$body','$theme_mode','$has_pics');";
     if(!$dsql->ExecuteNoneQuery($inQuery))
     {
         $gerr = $dsql->GetError();
@@ -520,14 +520,5 @@ else if($dopost=='save')
     $winform = $win->GetWindow("hand","&nbsp;",FALSE);
     $win->Display();
 
-    if(empty($rowfiles->picnames))
-    {
-        $inQuery = "INSERT INTO `#@__addonimages`(aid,typeid,pagestyle,maxwidth,imgurls,row,col,isrm,ddmaxwidth,ddmaxheight,body,redirecturl,templet,userip,subpic,has_pics)
-          VALUES ('$arcID','$typeid','$pagestyle','$maxwidth','$imgurls','$row','$col','$isrm','$ddmaxwidth','$ddmaxheight','$body','','','$userip','$subpic','$has_pics');";
-    }
-    else
-    {
-        $inQuery = "INSERT INTO `#@__addonimages`(aid,typeid,pagestyle,maxwidth,imgurls,row,col,isrm,ddmaxwidth,ddmaxheight,body,redirecturl,templet,userip,subpic,has_pics)
-          VALUES ('$arcID','$typeid','$pagestyle','$maxwidth','$imgurls','$row','$col','$isrm','$ddmaxwidth','$ddmaxheight','$body','','','$userip','$subpic','$has_pics');";
-    }
+
 }
