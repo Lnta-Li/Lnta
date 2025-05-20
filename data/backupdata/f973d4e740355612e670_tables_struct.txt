@@ -177,6 +177,7 @@ CREATE TABLE `dede_archives` (
   `writer` char(20) NOT NULL DEFAULT '',
   `source` char(30) NOT NULL DEFAULT '',
   `litpic` char(100) NOT NULL DEFAULT '',
+  `heimg` varchar(255) DEFAULT NULL COMMENT '横板缩略图路径',
   `subpic` varchar(100) NOT NULL DEFAULT '',
   `pubdate` int(10) unsigned NOT NULL DEFAULT '0',
   `senddate` int(10) unsigned NOT NULL DEFAULT '0',

@@ -519,17 +519,6 @@ else if($dopost=='save')
     // 这两个字段禁止修改
     $inColumn = '';
     $has_picsColumn = '';
-    // 获取附加表数据
-    $dsql->SetQuery("SELECT has_pics FROM `{$addtable}` WHERE aid='{$id}'");
-    $hasRow = $dsql->GetOne();
-    if($hasRow)
-    {
-        $has_pics = $hasRow['has_pics'];
-    }
-    else
-    {
-        $has_pics = 0;
-    }
 
     // 获取用户IP
     $userip = GetIP();
