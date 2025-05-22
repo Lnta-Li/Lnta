@@ -919,8 +919,8 @@ q::after {
 
 .project-area p, .Content-Type p {
     margin-bottom: var(--line-height-after);
-    font-family: var(--content-font-family) !important;
-    font-variation-settings: 'wght' 380, 'ROND' 0;
+    font-family: var(--content-font-family);
+    font-variation-settings: 'wght' 400, 'ROND' 0;
 }
 
 blockquote p {
@@ -1478,6 +1478,7 @@ input[value="1"]:checked ~ .slider {
     width: 28%;
     font-size: 14px;
     color: var(--Key-color);
+    font-family: var(--tt-font-family) !important;
 }
 /* 清除浮动 */
 .clearfix::after {
