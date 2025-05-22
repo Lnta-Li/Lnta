@@ -461,6 +461,16 @@
     .diy-visual-background {
         height: 100vh;
     }
+
+    .left-content {
+        width: 100%;
+    }
+
+    .right-content {
+        width: 70%;
+        text-align: right;
+    }
+
     .notice-bubble {
         margin: 0 auto;
         left: 0;
