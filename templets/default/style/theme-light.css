@@ -17,7 +17,7 @@
     --faint-color-1: rgb(0 0 0 / 5%); /* 浅浅色1 */
     --faint-color-2: rgb(0 0 0 / 10%); /* 浅浅色2 */
     --faint-color-3: rgb(0 0 0 / 50%); /* 半透色 */
-    --faint-color-4: rgba(33, 36, 44, 0.64); /* 首页描述、文章页描述 */
+    --faint-color-4: rgba(33, 36, 44, 0.84); /* 首页描述、文章页描述 */
     --color-border: rgba(0,0,0,0.08); /* 边框颜色 */
     --comment-color: rgb(64, 65, 66); /* 评论区颜色 */
     --comment-bg-color: #e3ede4; /* 评论区背景色 */

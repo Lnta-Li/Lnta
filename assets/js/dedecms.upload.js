@@ -90,7 +90,7 @@ function dedecmsAlbumPreview(that) {
                 return;
             }
 
-            if (file.size > fileSize * 1024 * 1024) {
+            if (file.size > fileSize * 4096 * 4096) {
                 UIkit.notification({
                     message: `[${file.name}] 图片大小超过${fileSize}MB`,
                     status: "danger",
@@ -263,7 +263,7 @@ function dedecmsAlbumPreviewEdit(that) {
             return;
         }
 
-        if (file.size > fileSize * 1024 * 1024) {
+        if (file.size > fileSize * 4096 * 4096) {
             UIkit.notification({
                 message: `[${file.name}] 图片大小超过${fileSize}MB`,
                 status: "danger",

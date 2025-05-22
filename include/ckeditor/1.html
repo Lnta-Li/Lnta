@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>左右布局示例</title>
+    <style>
+        .container {
+            width: 100%;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+        .left-content {
+            float: left;
+            width: 60%;
+            font-size: 18px;
+            color: #333;
+        }
+        .right-content {
+            float: right;
+            width: 30%;
+            font-size: 14px;
+            color: #666;
+        }
+        /* 清除浮动 */
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+    <div class="container clearfix">
+        <p class="left-content">这是左侧内容，占据60%宽度，字体较大且颜色较深。</p>
+        <p class="right-content">这是右侧内容，占据30%宽度，字体较小且颜色较浅。</p>
+    </div>
+</body>
+</html>
