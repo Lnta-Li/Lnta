@@ -34,6 +34,12 @@ body {
     font-family: var(--defult-font-family);
 }
 
+.no-style, .no-style:hover {
+    background: none !important;
+    padding: 0 !important;
+    display: contents !important;
+}
+
 a:focus-visible {
     outline: none; 
 }
@@ -744,7 +750,7 @@ h2 {
 }
 
 .Content-Type img:hover, .Content-Type video:hover {
-    filter: var(--img-brightness-hover);
+    /*filter: var(--img-brightness-hover);*/
     cursor: pointer;
 }
 
