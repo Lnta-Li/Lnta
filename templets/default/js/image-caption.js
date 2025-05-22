@@ -177,11 +177,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 wrapper.appendChild(img);
                 
                 const titleText = img.getAttribute('title'); // 获取图片的title属性内容并创建标题（如果存在）
-                if (titleText) {
-                    const caption = utils.createElement('div', {
+                if (titleText) { // 获取图片的style.width设置
+                    const imgWidth = img.style.width;
+                    const captionAttrs = {
                         className: 'image-caption',
                         textContent: titleText
-                    });
+                    };
+                    
+                    if (imgWidth) { // 如果图片设置了width，则同步到caption的style中
+                        captionAttrs.style = {
+                            width: imgWidth
+                        };
+                    }
+                    
+                    const caption = utils.createElement('div', captionAttrs);
                     wrapper.appendChild(caption);
                 }
             });

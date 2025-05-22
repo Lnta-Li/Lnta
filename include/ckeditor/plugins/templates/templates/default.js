@@ -36,6 +36,15 @@ CKEDITOR.addTemplates('default', {
                   '</div>'
         },
         {
+            title: '左右分栏模板',
+            image: 'diy4.png',
+            description: '左右分栏布局模板，左侧占60%宽度，右侧占30%宽度',
+            html: '<div class="container clearfix">' +
+                  '<p class="left-content">这是左侧内容，占据60%宽度，字体较大且颜色较深。</p>' +
+                  '<p class="right-content">这是右侧内容，占据30%宽度，字体较小且颜色较浅。</p>' +
+                  '</div>'
+        },
+        {
             title: '主视觉模板',
             image: 'diy3.png',
             description: '主视觉及元素展示模板，替换页面文字及图片，虚化背景图在发布后自动替换为上传的图片，色值在发布后自动获取图片前6个主要配色。',
