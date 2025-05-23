@@ -805,7 +805,7 @@ p {
     font-family: var(--defult-font-family);
 }
 /* 文章页、栏目封面页、后台编辑器 */
-.Content-Type p, .project-area p, .cke_show_borders p {
+.Content-Type p, .project-area p, .cke_show_borders p, .Content-Type ul, .project-area ul, .cke_show_borders ul {
     line-height: var(--line-height-content);
 }
 
@@ -917,7 +917,7 @@ q::after {
     font-family: var(--content-font-family);
 }
 
-.project-area p, .Content-Type p {
+.project-area p, .Content-Type p, .project-area ul, .Content-Type ul, .cke_show_borders ul {
     margin-bottom: var(--line-height-after);
     font-family: var(--content-font-family);
     font-variation-settings: 'wght' 400, 'ROND' 0;
