@@ -432,7 +432,7 @@ h6 strong {
 }
 
 .fillwidth-archeader {
-    height: 25px;
+    height: 50px;
 }
 
 .fillwidth-1 {
@@ -1020,7 +1020,7 @@ iframe {
     flex-wrap: wrap;
     gap: 10px;
     list-style: none;
-    padding: 0;
+    padding: 10px 0;
     margin: 0;
 }
 

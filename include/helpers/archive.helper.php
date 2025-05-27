@@ -199,7 +199,7 @@ if ( ! function_exists('UpIndexKey'))
             foreach($tagss as $tag)
             {
                 $tag = trim($tag);
-                if(isset($tag[12]) || $tag!=stripslashes($tag))
+                if(isset($tag[250]) || $tag!=stripslashes($tag))
                 {
                     continue;
                 }
@@ -241,7 +241,7 @@ if ( ! function_exists('InsertTags'))
         foreach($tags as $tag)
         {
             $tag = trim($tag);
-            if(isset($tag[12]) || $tag!=stripslashes($tag))
+            if(isset($tag[250]) || $tag!=stripslashes($tag))
             {
                 continue;
             }
