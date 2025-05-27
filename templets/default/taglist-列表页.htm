@@ -23,9 +23,8 @@
                 <h1>{dede:field.title /}<span class="translation"> {dede:field.title function='auto_translate(@me)'
                         /}</span></h1>
                 <div class="tags mobile-full">
-                    <h6><i class="iconfont icon-tag">&#xe66e;</i></h6>
-                    <h3>热门标签</h3>
-                    <ul>{dede:tag row='35' getall='1' sort='month'}<li><a href='[field:link/]'>[field:tag/]</a></li>
+                    <h3>作品分类</h3>
+                    <ul>{dede:tag row='35' getall='1' sort='total'}<li><a href='[field:link/]'>[field:tag/]</a></li>
                         {/dede:tag}</ul>
                 </div>
             </div>

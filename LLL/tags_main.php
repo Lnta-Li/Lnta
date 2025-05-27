@@ -141,7 +141,7 @@ else if($action == 'fetch')
         foreach($keyarr as $keyword)
         {
             $keyword = trim($keyword);
-            if($keyword != '' && strlen($keyword)<13 )
+            if($keyword != '' && strlen($keyword)<251 )
             {
                 $keyword = addslashes($keyword);
                 $row = $dsql->GetOne("SELECT id FROM `#@__tagindex` WHERE tag LIKE '$keyword'");
