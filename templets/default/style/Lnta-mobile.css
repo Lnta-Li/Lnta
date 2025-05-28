@@ -113,7 +113,8 @@
 
     .diy-2 .image-box {
         display: block;
-        margin-bottom: var(--line-height-after);
+        margin-bottom: var(--line-height-after)!important;
+        padding-right: 0;
     }
 
     .mobile-half {
@@ -392,6 +393,10 @@
     .fillwidth-archeader {
         height: 0;
     }
+    
+    .fillwidth-5 {
+        height: 50px;
+    }
 
     .content-area {
        padding: 0 4vw!important;
@@ -403,6 +408,7 @@
 
     .default-img {
         border-radius: 0!important; 
+        margin-bottom: -20px;
     }
 
     .pagtype-arc .content-width {

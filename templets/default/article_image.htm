@@ -68,21 +68,27 @@
             // 两者都不显示
             pagtype.classList.remove('pagtype-img');
             pagtype.classList.add('pagtype-arc');
+            
+            // 添加填充div
+            const contentArea = document.querySelector('.content-area');
+            const fillDiv = document.createElement('div');
+            fillDiv.className = 'fillwidth-5';
+            contentArea.insertBefore(fillDiv, contentArea.firstChild);
           }
         </script>
 
         <div class="content-area">
-          <div class="fillwidth-3"></div>
+          <div class="fillwidth-5"></div>
           <h1><strong>{dede:field.title/}</strong></h1>
           <h2 class="project-description">{dede:field.description/}</h2>
           <div class="tags">
             <ul>{dede:tag}<li><a href='[field:link/]'>[field:tag /]</a></li>{/dede:tag}</ul>
           </div>
-          <div class="fillwidth-2"></div>
+          <div class="fillwidth-3"></div>
           <section class="Content-Type content-icon">
             {dede:field.body/}
           </section>
-          <div class="fillwidth-2"></div>
+          <div class="fillwidth-3"></div>
           <!--- 随机推荐 -->
           <div class="conversation-starters">
             <h3>ReadMore</h3>
