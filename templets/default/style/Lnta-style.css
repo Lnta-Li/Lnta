@@ -451,6 +451,10 @@ h6 strong {
     height: 30px;
 }
 
+.fillwidth-5 {
+    height: 30px;
+}
+
 .pagtype-img .content-width {
     max-width: 880px;
     width: 70vw; 
