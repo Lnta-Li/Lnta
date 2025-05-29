@@ -113,7 +113,7 @@
 
     .diy-2 .image-box {
         display: block;
-        margin-bottom: var(--line-height-after)!important;
+        margin-bottom: var(--line-height-after);
         padding-right: 0;
     }
 
@@ -487,6 +487,10 @@
         justify-content: center;
         bottom: 20px;
         position: fixed;
+    }
+
+    .file-name {
+        max-width: 30vw;
     }
 
 }
