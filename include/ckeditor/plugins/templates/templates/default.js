@@ -71,9 +71,9 @@ CKEDITOR.addTemplates('default', {
                   '<section class="diy-project-intro">' +
                   '<h2>项目介绍</h2>' +
                   '<div class="diy-intro-content">' +
-                  '<p>1.双击替换↑上面的图片来更改主画面，发布后虚化的背景图会同步变更；<br>' +
+                  '<p>1.双击替换↑上面的图片来更改主画面，虚化背景在源代码模式修改；<br>' +
                   '2.修改页面的文字内容和字体logo等元素，不需要可删除；<br>' +
-                  '3.下方↓的配色圆点为辅助示意，无需修改，发布后自动从图片中提取；<br>' +
+                  '3.下方↓的配色圆点为辅助示意，F12选取元素修改或者源代码模式修改；<br>' +
                   '4.编辑器中展示效果仅供参考，实际样式稍有差异以发布页面为准。</p>' +
                   '<div class="diy-color-palette">' +
                   '<span class="diy-color-dot" style="background-color: #FF3E9A;">&nbsp;</span>' +
@@ -93,6 +93,21 @@ CKEDITOR.addTemplates('default', {
                   '</footer>' +
                   '</div>'
         },
+        {
+          title: '附件下载模板',
+          image: 'download.png',
+          description: '文件附件下载模板，包含文件图标、文件名称和下载按钮。',
+          html: '<a href="#" class="attachment-box">' +
+                '<span class="file-icon">' +
+                '<i class="iconfont">&#xe64d;</i>' +
+                '</span>' +
+                '<span class="file-name">file_name.zip</span>' +
+                '<span class="download-btn">' +
+                '<i class="iconfontb download-icon">&#xe600;</i>' +
+                '下载' +
+                '</span>' +
+                '</a>'
+      },
         {
             title: 'Image and Title',
             image: 'template1.gif',
