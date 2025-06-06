@@ -1517,10 +1517,13 @@ input[value="1"]:checked ~ .slider {
     background-color: var(--faint-color-0);
     width: fit-content;
     text-decoration: none!important;
+    transition: scale var(--transition-time) ease, background-color var(--transition-time) ease;
+    -webkit-transition: scale var(--transition-time) ease, background-color var(--transition-time) ease;
 }
 
 .attachment-box:hover {
     background-color: var(--faint-color-1) !important;
+    scale: 1.02;
 }
 
 .file-icon {
