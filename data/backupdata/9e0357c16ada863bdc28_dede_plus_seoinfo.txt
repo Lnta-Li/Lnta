@@ -108,3 +108,5 @@ INSERT INTO `dede_plus_seoinfo` VALUES('107','1749087082','0','0','0','0','0');
 INSERT INTO `dede_plus_seoinfo` VALUES('108','1749117385','0','0','0','0','0');
 INSERT INTO `dede_plus_seoinfo` VALUES('109','1749179265','0','0','0','0','0');
 INSERT INTO `dede_plus_seoinfo` VALUES('110','1749202944','0','0','0','0','0');
+INSERT INTO `dede_plus_seoinfo` VALUES('111','1749272363','0','0','0','0','0');
+INSERT INTO `dede_plus_seoinfo` VALUES('112','1749441608','0','0','0','0','0');
