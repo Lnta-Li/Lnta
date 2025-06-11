@@ -808,6 +808,28 @@ p {
     color: var(--faint-color-4);
     font-family: var(--defult-font-family);
 }
+
+.ICP-text {
+    font-size: 12px;
+    bottom: 0;
+    padding: 10px 0;
+    position: absolute;
+    text-align: center;
+    width: -webkit-fill-available;
+    flex-wrap: nowrap;
+    display: flex;
+    justify-content: center;
+    background: var(--background-carousel);
+    color: var(--faint-color-3);
+    opacity: 0;
+}
+
+.ICP-text a {
+    font-size: 12px;
+    margin-bottom: 0;
+    color: var(--faint-color-3);
+}
+
 /* 文章页、栏目封面页、后台编辑器 */
 .Content-Type p, .project-area p, .cke_show_borders p, .Content-Type ul, .project-area ul, .cke_show_borders ul {
     line-height: var(--line-height-content);
@@ -1112,12 +1134,13 @@ iframe {
 .switch-wrapper {
     position: relative;
     display: inline-block;
-    width: 65px;
-    height: 35px;
+    width: 4.4em;
+    height: 2.4em;
     background-color: var(--faint-color-1);
-    border-radius: 50px;
+    border-radius: 2em;
     cursor: pointer;
     overflow: hidden;
+    font-size: 15px; /* 控制整个组件的大小 */
 }
 
 .switch-wrapper input {
@@ -1128,12 +1151,11 @@ iframe {
 
 .switch-wrapper label {
     position: absolute;
-    width: 29px;
-    height: 29px;
-    margin: 3px;
-    line-height: 30px;
+    width: 2em;
+    height: 2em;
+    margin: 0.2em;
+    line-height: 2em;
     text-align: center;
-    font-size: 16px;
     z-index: 3;
     cursor: pointer;
     color: var(--faint-color-4);
@@ -1146,9 +1168,9 @@ iframe {
     position: absolute;
     top: 0;
     left: 0;
-    width: 29px;
-    height: 29px;
-    margin: 3px;
+    width: 2em;
+    height: 2em;
+    margin: 0.2em;
     background-color: var(--background-body);
     border-radius: 50%;
     transition: background-color var(--transition-time) ease,
@@ -1159,7 +1181,7 @@ iframe {
 }
 
 input[value="1"]:checked ~ .slider {
-    transform: translateX(30px);
+    transform: translateX(2em);
 }
 
 #hide_thumb {
