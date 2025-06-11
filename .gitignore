@@ -8,7 +8,7 @@
 .DS_Store
 Thumbs.db
 
-#超过限制大文件
+# 超过限制大文件
 !/files/id74/源文件.zip
 
 # 日志和缓存文件
