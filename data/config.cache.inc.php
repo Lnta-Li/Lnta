@@ -28,7 +28,7 @@ $cfg_fck_xhtml = 'N';
 $cfg_df_style = 'default';
 $cfg_multi_site = 'N';
 $cfg_dede_log = 'N';
-$cfg_powerby = 'Copyright &copy; 2004-2025 Lntano版权所有';
+$cfg_powerby = '<a title=\"Lntano_ICP备\" href=\"//beian.miit.gov.cn/\" target=\"_blank\" class=\"icp-text\">ICP备000000号</a> | © 2004-2025 Lntano版权所有';
 $cfg_arcsptitle = 'N';
 $cfg_arcautosp = 'N';
 $cfg_arcautosp_size = 5;
